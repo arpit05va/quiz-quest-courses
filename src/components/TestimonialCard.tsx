@@ -25,7 +25,7 @@ const TestimonialCard = ({ testimonial, index }: TestimonialCardProps) => {
           ))}
         </div>
         
-        <blockquote className="text-gray-700 mb-6 leading-relaxed">
+        <blockquote className="text-muted-foreground mb-6 leading-relaxed">
           "{testimonial.content}"
         </blockquote>
         
@@ -36,8 +36,8 @@ const TestimonialCard = ({ testimonial, index }: TestimonialCardProps) => {
             className="w-12 h-12 rounded-full object-cover mr-4"
           />
           <div>
-            <p className="font-semibold text-gray-900">{testimonial.name}</p>
-            <p className="text-sm text-gray-600">{testimonial.role}</p>
+            <p className="font-semibold text-foreground">{testimonial.name}</p>
+            <p className="text-sm text-muted-foreground">{testimonial.role}</p>
           </div>
         </div>
       </CardContent>

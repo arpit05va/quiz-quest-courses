@@ -127,8 +127,8 @@ const Index = () => {
       <section id="about" className="py-20 px-4 bg-background">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Our Platform?</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-4xl font-bold text-foreground mb-4">Why Choose Our Platform?</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               We provide the most comprehensive and engaging learning experience with cutting-edge technology
             </p>
           </div>
@@ -142,7 +142,7 @@ const Index = () => {
                   <CardTitle className="text-xl font-semibold">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -154,19 +154,19 @@ const Index = () => {
       <section id="courses" className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Popular Courses</h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <h2 className="text-4xl font-bold text-foreground mb-4">Popular Courses</h2>
+            <p className="text-xl text-muted-foreground mb-8">
               Discover our most popular courses designed by industry experts
             </p>
             
             {/* Search Bar */}
             <div className="max-w-md mx-auto mb-8">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                   type="text"
                   placeholder="Search courses..."
-                  className="pl-10 pr-4 py-3 w-full rounded-full border-2 border-gray-200 focus:border-primary-500"
+                  className="pl-10 pr-4 py-3 w-full rounded-full border-2 border-border focus:border-primary-500"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -186,8 +186,8 @@ const Index = () => {
       <section id="testimonials" className="py-20 px-4 bg-background">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">What Our Students Say</h2>
-            <p className="text-xl text-gray-600">
+            <h2 className="text-4xl font-bold text-foreground mb-4">What Our Students Say</h2>
+            <p className="text-xl text-muted-foreground">
               Join thousands of satisfied learners who achieved their goals
             </p>
           </div>
