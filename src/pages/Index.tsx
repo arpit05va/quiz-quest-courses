@@ -119,10 +119,12 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       <Header />
-      <HeroSection />
+      <div id="home">
+        <HeroSection />
+      </div>
       
       {/* Features Section */}
-      <section className="py-20 px-4 bg-background">
+      <section id="about" className="py-20 px-4 bg-background">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Our Platform?</h2>
@@ -149,7 +151,7 @@ const Index = () => {
       </section>
 
       {/* Course Highlights Section */}
-      <section className="py-20 px-4 bg-muted/30">
+      <section id="courses" className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Popular Courses</h2>
@@ -181,7 +183,7 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 px-4 bg-background">
+      <section id="testimonials" className="py-20 px-4 bg-background">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">What Our Students Say</h2>
@@ -198,7 +200,7 @@ const Index = () => {
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-primary-600 to-secondary-600">
+      <section id="blog" className="py-20 px-4 bg-gradient-to-r from-primary-600 to-secondary-600">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-bold text-white mb-4">Stay Updated</h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
@@ -217,7 +219,9 @@ const Index = () => {
         </div>
       </section>
 
-      <Footer />
+      <div id="contact">
+        <Footer />
+      </div>
     </div>
   );
 };

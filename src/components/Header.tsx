@@ -3,13 +3,15 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { BookOpen, Menu, User } from 'lucide-react';
+import { BookOpen, Menu } from 'lucide-react';
+import LoginDialog from '@/components/LoginDialog';
+import SignupDialog from '@/components/SignupDialog';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navigation = [
-    { name: 'Home', href: '#' },
+    { name: 'Home', href: '#home' },
     { name: 'Courses', href: '#courses' },
     { name: 'About Us', href: '#about' },
     { name: 'Testimonials', href: '#testimonials' },
@@ -45,12 +47,8 @@ const Header = () => {
           {/* Desktop Auth Buttons & Theme Toggle */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
-            <Button variant="ghost" className="text-muted-foreground hover:text-primary-600">
-              Login
-            </Button>
-            <Button className="bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white">
-              Sign Up
-            </Button>
+            <LoginDialog />
+            <SignupDialog />
           </div>
 
           {/* Mobile Menu Button */}
@@ -75,12 +73,8 @@ const Header = () => {
                     </a>
                   ))}
                   <div className="pt-6 border-t border-border space-y-4">
-                    <Button variant="outline" className="w-full">
-                      Login
-                    </Button>
-                    <Button className="w-full bg-gradient-to-r from-primary-500 to-secondary-500">
-                      Sign Up
-                    </Button>
+                    <LoginDialog />
+                    <SignupDialog />
                   </div>
                 </div>
               </SheetContent>
