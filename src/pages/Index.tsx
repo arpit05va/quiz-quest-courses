@@ -117,31 +117,42 @@ const Index = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 relative overflow-hidden">
+      {/* Animated background particles */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary-500/20 rounded-full animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-secondary-500/20 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-3/4 w-3 h-3 bg-primary-500/10 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+      </div>
+      
       <Header />
       <div id="home">
         <HeroSection />
       </div>
       
-      {/* Features Section */}
-      <section id="about" className="py-20 px-4 bg-background">
+      {/* Features Section with enhanced animations */}
+      <section id="about" className="py-20 px-4 bg-background relative">
         <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-foreground mb-4">Why Choose Our Platform?</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-4xl font-bold text-foreground mb-4 animate-bounce-in">Why Choose Our Platform?</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in" style={{ animationDelay: '0.2s' }}>
               We provide the most comprehensive and engaging learning experience with cutting-edge technology
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="text-center border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in">
-                <CardHeader>
-                  <div className="mx-auto w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mb-4">
-                    <feature.icon className="w-8 h-8 text-white" />
+              <Card key={index} className="text-center border-none shadow-lg hover:shadow-xl transition-all duration-500 animate-fade-in hover-lift group relative overflow-hidden" style={{ animationDelay: `${index * 0.1 + 0.3}s` }}>
+                {/* Card shimmer effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="absolute inset-0 animate-shimmer"></div>
+                </div>
+                <CardHeader className="relative z-10">
+                  <div className="mx-auto w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mb-4 animate-gradient group-hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
+                    <feature.icon className="w-8 h-8 text-white group-hover:animate-bounce" />
                   </div>
-                  <CardTitle className="text-xl font-semibold">{feature.title}</CardTitle>
+                  <CardTitle className="text-xl font-semibold group-hover:text-primary-600 transition-colors duration-300">{feature.title}</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
@@ -150,23 +161,23 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Course Highlights Section */}
-      <section id="courses" className="py-20 px-4 bg-muted/30">
+      {/* Course Highlights Section with staggered animations */}
+      <section id="courses" className="py-20 px-4 bg-muted/30 relative">
         <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-foreground mb-4">Popular Courses</h2>
-            <p className="text-xl text-muted-foreground mb-8">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-4xl font-bold text-foreground mb-4 animate-bounce-in">Popular Courses</h2>
+            <p className="text-xl text-muted-foreground mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Discover our most popular courses designed by industry experts
             </p>
             
-            {/* Search Bar */}
-            <div className="max-w-md mx-auto mb-8">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+            {/* Animated Search Bar */}
+            <div className="max-w-md mx-auto mb-8 animate-scale-in" style={{ animationDelay: '0.3s' }}>
+              <div className="relative group">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 group-focus-within:text-primary-500 transition-colors duration-300" />
                 <Input
                   type="text"
                   placeholder="Search courses..."
-                  className="pl-10 pr-4 py-3 w-full rounded-full border-2 border-border focus:border-primary-500"
+                  className="pl-10 pr-4 py-3 w-full rounded-full border-2 border-border focus:border-primary-500 transition-all duration-300 hover:shadow-lg focus:shadow-xl"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -182,38 +193,42 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 px-4 bg-background">
+      {/* Testimonials Section with parallax effect */}
+      <section id="testimonials" className="py-20 px-4 bg-background relative">
         <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-foreground mb-4">What Our Students Say</h2>
-            <p className="text-xl text-muted-foreground">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-4xl font-bold text-foreground mb-4 animate-bounce-in">What Our Students Say</h2>
+            <p className="text-xl text-muted-foreground animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Join thousands of satisfied learners who achieved their goals
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <TestimonialCard key={index} testimonial={testimonial} index={index} />
+              <div key={index} className="hover-lift">
+                <TestimonialCard testimonial={testimonial} index={index} />
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section id="blog" className="py-20 px-4 bg-gradient-to-r from-primary-600 to-secondary-600">
-        <div className="container mx-auto text-center">
-          <h2 className="text-4xl font-bold text-white mb-4">Stay Updated</h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+      {/* Newsletter Section with enhanced gradient animation */}
+      <section id="blog" className="py-20 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-secondary-600 animate-gradient"></div>
+        <div className="container mx-auto text-center relative z-10">
+          <h2 className="text-4xl font-bold text-white mb-4 animate-bounce-in">Stay Updated</h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '0.2s' }}>
             Subscribe to our newsletter for the latest courses, tips, and educational content
           </p>
-          <div className="max-w-md mx-auto flex gap-4">
+          <div className="max-w-md mx-auto flex gap-4 animate-scale-in" style={{ animationDelay: '0.3s' }}>
             <Input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-blue-200"
+              className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-blue-200 focus:bg-white/20 transition-all duration-300"
             />
-            <Button className="bg-white text-primary-600 hover:bg-blue-50 font-semibold px-8">
-              Subscribe
+            <Button className="bg-white text-primary-600 hover:bg-blue-50 font-semibold px-8 hover-lift group relative overflow-hidden">
+              <span className="relative z-10">Subscribe</span>
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 animate-shimmer transition-opacity duration-300"></div>
             </Button>
           </div>
         </div>

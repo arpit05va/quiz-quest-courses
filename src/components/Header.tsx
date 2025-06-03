@@ -20,35 +20,43 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
+    <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 animate-slide-in">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-              <BookOpen className="w-6 h-6 text-white" />
+          {/* Animated Logo */}
+          <div className="flex items-center space-x-2 group cursor-pointer">
+            <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center animate-gradient hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
+              <BookOpen className="w-6 h-6 text-white animate-float" />
             </div>
-            <span className="text-2xl font-bold text-foreground">EduPlatform</span>
+            <span className="text-2xl font-bold text-foreground group-hover:text-primary-600 transition-colors duration-300">
+              EduPlatform
+            </span>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
+            {navigation.map((item, index) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="text-muted-foreground hover:text-primary-600 transition-colors duration-200 font-medium"
+                className="text-muted-foreground hover:text-primary-600 transition-all duration-300 font-medium relative group animate-fade-in hover:scale-105"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {item.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 group-hover:w-full transition-all duration-300"></span>
               </a>
             ))}
           </nav>
 
           {/* Desktop Auth Buttons & Theme Toggle */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-4 animate-fade-in" style={{ animationDelay: '0.6s' }}>
             <ThemeToggle />
-            <LoginDialog />
-            <SignupDialog />
+            <div className="hover-lift">
+              <LoginDialog />
+            </div>
+            <div className="hover-lift">
+              <SignupDialog />
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -56,25 +64,30 @@ const Header = () => {
             <ThemeToggle />
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="hover:animate-pulse">
                   <Menu className="w-6 h-6" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-80">
                 <div className="flex flex-col space-y-6 mt-8">
-                  {navigation.map((item) => (
+                  {navigation.map((item, index) => (
                     <a
                       key={item.name}
                       href={item.href}
-                      className="text-lg font-medium text-muted-foreground hover:text-primary-600 transition-colors"
+                      className="text-lg font-medium text-muted-foreground hover:text-primary-600 transition-all duration-300 animate-slide-in hover:translate-x-2"
+                      style={{ animationDelay: `${index * 0.1}s` }}
                       onClick={() => setIsOpen(false)}
                     >
                       {item.name}
                     </a>
                   ))}
                   <div className="pt-6 border-t border-border space-y-4">
-                    <LoginDialog />
-                    <SignupDialog />
+                    <div className="animate-bounce-in" style={{ animationDelay: '0.7s' }}>
+                      <LoginDialog />
+                    </div>
+                    <div className="animate-bounce-in" style={{ animationDelay: '0.8s' }}>
+                      <SignupDialog />
+                    </div>
                   </div>
                 </div>
               </SheetContent>
