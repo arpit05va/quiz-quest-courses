@@ -28,7 +28,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-muted/50 dark:bg-gray-900 text-foreground dark:text-white">
       <div className="container mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
@@ -39,19 +39,19 @@ const Footer = () => {
               </div>
               <span className="text-2xl font-bold">EduPlatform</span>
             </div>
-            <p className="text-gray-400 mb-6 leading-relaxed">
+            <p className="text-muted-foreground mb-6 leading-relaxed">
               Empowering learners worldwide with high-quality education and innovative learning experiences.
             </p>
             <div className="space-y-3">
-              <div className="flex items-center space-x-3 text-gray-400">
+              <div className="flex items-center space-x-3 text-muted-foreground">
                 <Mail className="w-5 h-5" />
                 <span>hello@eduplatform.com</span>
               </div>
-              <div className="flex items-center space-x-3 text-gray-400">
+              <div className="flex items-center space-x-3 text-muted-foreground">
                 <Phone className="w-5 h-5" />
                 <span>+1 (555) 123-4567</span>
               </div>
-              <div className="flex items-center space-x-3 text-gray-400">
+              <div className="flex items-center space-x-3 text-muted-foreground">
                 <MapPin className="w-5 h-5" />
                 <span>123 Education St, Learning City</span>
               </div>
@@ -67,7 +67,7 @@ const Footer = () => {
                   <li key={link.name}>
                     <a
                       href={link.href}
-                      className="text-gray-400 hover:text-white transition-colors duration-200"
+                      className="text-muted-foreground hover:text-foreground transition-colors duration-200"
                     >
                       {link.name}
                     </a>
@@ -79,22 +79,22 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-800 mt-12 pt-8">
+        <div className="border-t border-border mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-center md:text-left">
+            <p className="text-muted-foreground text-center md:text-left">
               © 2024 EduPlatform. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
+              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
                 Facebook
               </Button>
-              <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
+              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
                 Twitter
               </Button>
-              <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
+              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
                 LinkedIn
               </Button>
-              <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
+              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
                 Instagram
               </Button>
             </div>

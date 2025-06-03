@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -118,12 +117,12 @@ const Index = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       <Header />
       <HeroSection />
       
       {/* Features Section */}
-      <section className="py-20 px-4 bg-white">
+      <section className="py-20 px-4 bg-background">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Our Platform?</h2>
@@ -150,7 +149,7 @@ const Index = () => {
       </section>
 
       {/* Course Highlights Section */}
-      <section className="py-20 px-4 bg-gray-50">
+      <section className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Popular Courses</h2>
@@ -182,7 +181,7 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 px-4 bg-white">
+      <section className="py-20 px-4 bg-background">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">What Our Students Say</h2>
