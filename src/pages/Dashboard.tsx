@@ -1,5 +1,5 @@
-
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -9,6 +9,7 @@ import CourseCard from '@/components/CourseCard';
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const courses = [
     {
@@ -94,6 +95,10 @@ const Dashboard = () => {
     // Add logout logic here
     console.log('User logged out');
     window.location.href = '/';
+  };
+
+  const handleEnrollCourse = (courseId: number) => {
+    navigate(`/course/${courseId}`);
   };
 
   return (
@@ -204,7 +209,59 @@ const Dashboard = () => {
           {/* Courses Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCourses.map((course, index) => (
-              <CourseCard key={course.id} course={course} index={index} />
+              <Card key={course.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in hover-lift" style={{ animationDelay: `${0.1 * index}s` }}>
+                <div className="relative overflow-hidden rounded-t-lg">
+                  <img 
+                    src={course.image} 
+                    alt={course.title}
+                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                      {course.category}
+                    </Badge>
+                  </div>
+                  <div className="absolute top-4 right-4">
+                    <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                      {course.level}
+                    </Badge>
+                  </div>
+                </div>
+                
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary-600 transition-colors duration-300">
+                    {course.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                    {course.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                    <div className="flex items-center space-x-1">
+                      <Clock className="w-4 h-4" />
+                      <span>{course.duration}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Users className="w-4 h-4" />
+                      <span>{course.students.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <span>{course.rating}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-bold text-primary-600">{course.price}</span>
+                    <Button 
+                      onClick={() => handleEnrollCourse(course.id)}
+                      className="bg-primary hover:bg-primary/90 transform transition-all duration-200 hover:scale-105"
+                    >
+                      Enroll Now
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
 
