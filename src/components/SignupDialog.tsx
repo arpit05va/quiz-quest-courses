@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -79,6 +78,8 @@ const SignupDialog = () => {
         password: '',
         confirmPassword: ''
       });
+      // Redirect to dashboard on successful signup
+      window.location.href = '/dashboard';
     }
   };
 

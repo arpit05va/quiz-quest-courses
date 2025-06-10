@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -23,12 +22,16 @@ const LoginDialog = () => {
     console.log('Email login:', { email, password });
     // Add login logic here
     setIsOpen(false);
+    // Redirect to dashboard on successful login
+    window.location.href = '/dashboard';
   };
 
   const handleGoogleLogin = () => {
     console.log('Google login');
     // Add Google login logic here
     setIsOpen(false);
+    // Redirect to dashboard on successful login
+    window.location.href = '/dashboard';
   };
 
   return (
