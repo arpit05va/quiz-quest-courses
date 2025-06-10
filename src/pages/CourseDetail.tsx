@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -8,14 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Play, 
   BookOpen, 
   CheckCircle, 
   Clock, 
   Users, 
   Star, 
   ArrowLeft,
-  PlayCircle,
   FileText,
   Award
 } from 'lucide-react';
@@ -26,7 +23,7 @@ const CourseDetail = () => {
   const [currentLesson, setCurrentLesson] = useState(0);
   const [completedLessons, setCompletedLessons] = useState(new Set([0, 1]));
 
-  // Mock course data - in real app, this would come from API
+  // Mock course data - this will be replaced with backend data
   const course = {
     id: parseInt(id || '1'),
     title: 'Introduction to Web Development',
@@ -44,26 +41,85 @@ const CourseDetail = () => {
       {
         id: 1,
         title: 'Introduction to HTML',
-        duration: '15 min',
-        type: 'video',
+        duration: '15 min read',
+        type: 'text',
         completed: true,
-        videoUrl: 'https://example.com/video1'
+        content: `
+          <h3>What is HTML?</h3>
+          <p>HTML (HyperText Markup Language) is the standard markup language for creating web pages. It describes the structure of a web page using markup.</p>
+          
+          <h4>Basic HTML Structure</h4>
+          <p>Every HTML document follows a basic structure:</p>
+          <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Page Title&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;This is a Heading&lt;/h1&gt;
+    &lt;p&gt;This is a paragraph.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+          </pre>
+          
+          <h4>HTML Elements</h4>
+          <p>HTML elements are the building blocks of HTML pages. An HTML element is defined by a start tag, some content, and an end tag.</p>
+        `
       },
       {
         id: 2,
         title: 'HTML Elements and Structure',
-        duration: '20 min',
-        type: 'video',
+        duration: '20 min read',
+        type: 'text',
         completed: true,
-        videoUrl: 'https://example.com/video2'
+        content: `
+          <h3>Common HTML Elements</h3>
+          <p>Here are some of the most commonly used HTML elements:</p>
+          
+          <h4>Headings</h4>
+          <p>HTML headings are defined with the &lt;h1&gt; to &lt;h6&gt; tags:</p>
+          <pre>
+&lt;h1&gt;This is heading 1&lt;/h1&gt;
+&lt;h2&gt;This is heading 2&lt;/h2&gt;
+&lt;h3&gt;This is heading 3&lt;/h3&gt;
+          </pre>
+          
+          <h4>Paragraphs</h4>
+          <p>HTML paragraphs are defined with the &lt;p&gt; tag:</p>
+          <pre>&lt;p&gt;This is a paragraph.&lt;/p&gt;</pre>
+          
+          <h4>Links</h4>
+          <p>HTML links are defined with the &lt;a&gt; tag:</p>
+          <pre>&lt;a href="https://www.example.com"&gt;This is a link&lt;/a&gt;</pre>
+        `
       },
       {
         id: 3,
         title: 'CSS Basics',
-        duration: '25 min',
-        type: 'video',
+        duration: '25 min read',
+        type: 'text',
         completed: false,
-        videoUrl: 'https://example.com/video3'
+        content: `
+          <h3>Introduction to CSS</h3>
+          <p>CSS (Cascading Style Sheets) is used to style and layout web pages. It describes how HTML elements should be displayed.</p>
+          
+          <h4>CSS Syntax</h4>
+          <p>CSS is made up of style rules. Here's the basic syntax:</p>
+          <pre>
+selector {
+  property: value;
+}
+          </pre>
+          
+          <h4>Adding CSS to HTML</h4>
+          <p>There are three ways to add CSS to HTML:</p>
+          <ul>
+            <li><strong>Inline:</strong> Using the style attribute inside HTML elements</li>
+            <li><strong>Internal:</strong> Using a &lt;style&gt; element in the HTML head</li>
+            <li><strong>External:</strong> Using an external CSS file</li>
+          </ul>
+        `
       },
       {
         id: 4,
@@ -76,18 +132,58 @@ const CourseDetail = () => {
       {
         id: 5,
         title: 'JavaScript Introduction',
-        duration: '30 min',
-        type: 'video',
+        duration: '30 min read',
+        type: 'text',
         completed: false,
-        videoUrl: 'https://example.com/video4'
+        content: `
+          <h3>What is JavaScript?</h3>
+          <p>JavaScript is a programming language that enables interactive web pages. It's an essential part of web applications.</p>
+          
+          <h4>JavaScript Syntax</h4>
+          <p>JavaScript statements are composed of values, operators, expressions, keywords, and comments:</p>
+          <pre>
+// This is a comment
+let message = "Hello, World!";
+console.log(message);
+          </pre>
+          
+          <h4>Variables</h4>
+          <p>Variables are containers for storing data values. In JavaScript, you can create variables using var, let, or const:</p>
+          <pre>
+let name = "John";
+const age = 30;
+var city = "New York";
+          </pre>
+        `
       },
       {
         id: 6,
         title: 'Variables and Functions',
-        duration: '35 min',
-        type: 'video',
+        duration: '35 min read',
+        type: 'text',
         completed: false,
-        videoUrl: 'https://example.com/video5'
+        content: `
+          <h3>JavaScript Functions</h3>
+          <p>A JavaScript function is a block of code designed to perform a particular task. A JavaScript function is executed when "something" invokes it (calls it).</p>
+          
+          <h4>Function Syntax</h4>
+          <pre>
+function functionName(parameters) {
+  // code to be executed
+  return value;
+}
+          </pre>
+          
+          <h4>Example Function</h4>
+          <pre>
+function greet(name) {
+  return "Hello, " + name + "!";
+}
+
+let greeting = greet("Alice");
+console.log(greeting); // Output: Hello, Alice!
+          </pre>
+        `
       },
       {
         id: 7,
@@ -154,23 +250,28 @@ const CourseDetail = () => {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Video Player / Content Area */}
+            {/* Content Area */}
             <Card className="border-none shadow-lg">
-              <CardContent className="p-0">
-                {currentLessonData.type === 'video' ? (
-                  <div className="aspect-video bg-black rounded-t-lg relative group">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Button 
-                        size="lg"
-                        className="bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full w-16 h-16"
-                      >
-                        <Play className="w-8 h-8 text-white ml-1" />
-                      </Button>
+              <CardContent className="p-6">
+                {currentLessonData.type === 'text' ? (
+                  <div className="prose max-w-none">
+                    <div className="mb-4">
+                      <h2 className="text-2xl font-bold text-foreground mb-2">{currentLessonData.title}</h2>
+                      <div className="flex items-center space-x-4 text-sm text-muted-foreground mb-6">
+                        <div className="flex items-center space-x-1">
+                          <Clock className="w-4 h-4" />
+                          <span>{currentLessonData.duration}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <FileText className="w-4 h-4" />
+                          <span>Reading Material</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="absolute bottom-4 left-4 text-white">
-                      <h3 className="text-lg font-semibold">{currentLessonData.title}</h3>
-                      <p className="text-sm opacity-80">{currentLessonData.duration}</p>
-                    </div>
+                    <div 
+                      className="text-foreground leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: currentLessonData.content || '' }}
+                    />
                   </div>
                 ) : currentLessonData.type === 'quiz' ? (
                   <div className="p-8 text-center">
@@ -329,8 +430,8 @@ const CourseDetail = () => {
                       <div className="flex-shrink-0">
                         {completedLessons.has(index) ? (
                           <CheckCircle className="w-5 h-5 text-green-600" />
-                        ) : lesson.type === 'video' ? (
-                          <PlayCircle className="w-5 h-5 text-muted-foreground" />
+                        ) : lesson.type === 'text' ? (
+                          <FileText className="w-5 h-5 text-muted-foreground" />
                         ) : lesson.type === 'quiz' ? (
                           <Award className="w-5 h-5 text-muted-foreground" />
                         ) : (

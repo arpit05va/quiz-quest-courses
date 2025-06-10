@@ -4,11 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Search, BookOpen, Clock, Users, Star, LogOut, User } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Zap } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
+import UserProfile from '@/components/UserProfile';
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('courses');
   const navigate = useNavigate();
 
   const courses = [
@@ -86,13 +89,99 @@ const Dashboard = () => {
     }
   ];
 
+  const tutorials = [
+    {
+      id: 1,
+      title: 'Getting Started with React',
+      description: 'Learn the basics of React and component-based development.',
+      duration: '30 min',
+      difficulty: 'Beginner',
+      image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=250&fit=crop'
+    },
+    {
+      id: 2,
+      title: 'CSS Grid Layout Mastery',
+      description: 'Master CSS Grid for creating responsive layouts.',
+      duration: '45 min',
+      difficulty: 'Intermediate',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=250&fit=crop'
+    },
+    {
+      id: 3,
+      title: 'JavaScript ES6+ Features',
+      description: 'Explore modern JavaScript features and best practices.',
+      duration: '60 min',
+      difficulty: 'Intermediate',
+      image: 'https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=400&h=250&fit=crop'
+    }
+  ];
+
+  const articles = [
+    {
+      id: 1,
+      title: '10 Web Development Trends in 2024',
+      excerpt: 'Discover the latest trends shaping the future of web development...',
+      author: 'John Smith',
+      readTime: '5 min read',
+      publishedDate: '2024-01-15',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop'
+    },
+    {
+      id: 2,
+      title: 'The Future of AI in Education',
+      excerpt: 'How artificial intelligence is transforming online learning...',
+      author: 'Jane Doe',
+      readTime: '7 min read',
+      publishedDate: '2024-01-10',
+      image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=250&fit=crop'
+    },
+    {
+      id: 3,
+      title: 'Building Responsive Websites',
+      excerpt: 'Best practices for creating websites that work on all devices...',
+      author: 'Mike Johnson',
+      readTime: '6 min read',
+      publishedDate: '2024-01-08',
+      image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=250&fit=crop'
+    }
+  ];
+
+  const quizzes = [
+    {
+      id: 1,
+      title: 'HTML Fundamentals Quiz',
+      description: 'Test your knowledge of HTML basics and semantics.',
+      questions: 15,
+      difficulty: 'Beginner',
+      timeLimit: '20 min',
+      completed: false
+    },
+    {
+      id: 2,
+      title: 'CSS Selectors Challenge',
+      description: 'Master CSS selectors and specificity rules.',
+      questions: 20,
+      difficulty: 'Intermediate',
+      timeLimit: '25 min',
+      completed: true
+    },
+    {
+      id: 3,
+      title: 'JavaScript Array Methods',
+      description: 'Test your understanding of JavaScript array manipulation.',
+      questions: 12,
+      difficulty: 'Intermediate',
+      timeLimit: '15 min',
+      completed: false
+    }
+  ];
+
   const filteredCourses = courses.filter(course =>
     course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     course.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleLogout = () => {
-    // Add logout logic here
     console.log('User logged out');
     window.location.href = '/';
   };
@@ -109,12 +198,56 @@ const Dashboard = () => {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center space-x-2 group cursor-pointer">
-              <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center animate-gradient hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
+              <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center animate-gradient hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
                 <BookOpen className="w-6 h-6 text-white animate-float" />
               </div>
-              <span className="text-2xl font-bold text-foreground group-hover:text-primary-600 transition-colors duration-300">
+              <span className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
                 EduPlatform
               </span>
+            </div>
+
+            {/* Navigation Tabs */}
+            <div className="hidden md:flex items-center space-x-6">
+              <Button
+                variant={activeTab === 'courses' ? 'default' : 'ghost'}
+                onClick={() => setActiveTab('courses')}
+                className="flex items-center space-x-2"
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>Courses</span>
+              </Button>
+              <Button
+                variant={activeTab === 'tutorials' ? 'default' : 'ghost'}
+                onClick={() => setActiveTab('tutorials')}
+                className="flex items-center space-x-2"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Tutorials</span>
+              </Button>
+              <Button
+                variant={activeTab === 'articles' ? 'default' : 'ghost'}
+                onClick={() => setActiveTab('articles')}
+                className="flex items-center space-x-2"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Articles</span>
+              </Button>
+              <Button
+                variant={activeTab === 'quizzes' ? 'default' : 'ghost'}
+                onClick={() => setActiveTab('quizzes')}
+                className="flex items-center space-x-2"
+              >
+                <Award className="w-4 h-4" />
+                <span>Quizzes</span>
+              </Button>
+              <Button
+                variant={activeTab === 'profile' ? 'default' : 'ghost'}
+                onClick={() => setActiveTab('profile')}
+                className="flex items-center space-x-2"
+              >
+                <User className="w-4 h-4" />
+                <span>Profile</span>
+              </Button>
             </div>
 
             {/* User Menu */}
@@ -133,146 +266,288 @@ const Dashboard = () => {
               </Button>
             </div>
           </div>
+
+          {/* Mobile Navigation */}
+          <div className="md:hidden pb-4">
+            <div className="flex space-x-2 overflow-x-auto">
+              {[
+                { key: 'courses', label: 'Courses', icon: BookOpen },
+                { key: 'tutorials', label: 'Tutorials', icon: FileText },
+                { key: 'articles', label: 'Articles', icon: FileText },
+                { key: 'quizzes', label: 'Quizzes', icon: Award },
+                { key: 'profile', label: 'Profile', icon: User }
+              ].map((tab) => (
+                <Button
+                  key={tab.key}
+                  variant={activeTab === tab.key ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setActiveTab(tab.key)}
+                  className="flex items-center space-x-1 whitespace-nowrap"
+                >
+                  <tab.icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </Button>
+              ))}
+            </div>
+          </div>
         </div>
       </header>
 
       {/* Dashboard Content */}
       <main className="container mx-auto px-4 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8 animate-fade-in">
-          <h1 className="text-4xl font-bold text-foreground mb-2 animate-bounce-in">
-            Your Learning Dashboard
-          </h1>
-          <p className="text-xl text-muted-foreground animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            Continue your educational journey with our curated courses
-          </p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift" style={{ animationDelay: '0.1s' }}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Enrolled Courses</CardTitle>
-              <BookOpen className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-primary-600">3</div>
-              <p className="text-xs text-muted-foreground">2 in progress</p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift" style={{ animationDelay: '0.2s' }}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Completed</CardTitle>
-              <Star className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-secondary-600">1</div>
-              <p className="text-xs text-muted-foreground">With certificate</p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift" style={{ animationDelay: '0.3s' }}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Study Hours</CardTitle>
-              <Clock className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-600">47</div>
-              <p className="text-xs text-muted-foreground">This month</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Course Discovery Section */}
-        <section className="mb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-            <h2 className="text-3xl font-bold text-foreground mb-4 md:mb-0 animate-bounce-in">
-              Discover New Courses
-            </h2>
-            
-            {/* Search Bar */}
-            <div className="max-w-md w-full md:w-auto animate-scale-in" style={{ animationDelay: '0.4s' }}>
-              <div className="relative group">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 group-focus-within:text-primary-500 transition-colors duration-300" />
-                <Input
-                  type="text"
-                  placeholder="Search courses..."
-                  className="pl-10 pr-4 py-3 w-full rounded-full border-2 border-border focus:border-primary-500 transition-all duration-300 hover:shadow-lg focus:shadow-xl"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
+        {activeTab === 'profile' ? (
+          <UserProfile />
+        ) : (
+          <>
+            {/* Welcome Section */}
+            <div className="mb-8 animate-fade-in">
+              <h1 className="text-4xl font-bold text-foreground mb-2 animate-bounce-in">
+                Your Learning Dashboard
+              </h1>
+              <p className="text-xl text-muted-foreground animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                Continue your educational journey with our curated content
+              </p>
             </div>
-          </div>
 
-          {/* Courses Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredCourses.map((course, index) => (
-              <Card key={course.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in hover-lift" style={{ animationDelay: `${0.1 * index}s` }}>
-                <div className="relative overflow-hidden rounded-t-lg">
-                  <img 
-                    src={course.image} 
-                    alt={course.title}
-                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
-                      {course.category}
-                    </Badge>
-                  </div>
-                  <div className="absolute top-4 right-4">
-                    <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
-                      {course.level}
-                    </Badge>
+            {/* Stats Cards */}
+            {activeTab === 'courses' && (
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift" style={{ animationDelay: '0.1s' }}>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Enrolled Courses</CardTitle>
+                    <BookOpen className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-primary">3</div>
+                    <p className="text-xs text-muted-foreground">2 in progress</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift" style={{ animationDelay: '0.2s' }}>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Completed</CardTitle>
+                    <Star className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-secondary">1</div>
+                    <p className="text-xs text-muted-foreground">With certificate</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift" style={{ animationDelay: '0.3s' }}>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Study Hours</CardTitle>
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-green-600">47</div>
+                    <p className="text-xs text-muted-foreground">This month</p>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* Content Sections */}
+            {activeTab === 'courses' && (
+              <section className="mb-8">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                  <h2 className="text-3xl font-bold text-foreground mb-4 md:mb-0 animate-bounce-in">
+                    Discover New Courses
+                  </h2>
+                  
+                  {/* Search Bar */}
+                  <div className="max-w-md w-full md:w-auto animate-scale-in" style={{ animationDelay: '0.4s' }}>
+                    <div className="relative group">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 group-focus-within:text-primary transition-colors duration-300" />
+                      <Input
+                        type="text"
+                        placeholder="Search courses..."
+                        className="pl-10 pr-4 py-3 w-full rounded-full border-2 border-border focus:border-primary transition-all duration-300 hover:shadow-lg focus:shadow-xl"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                    </div>
                   </div>
                 </div>
-                
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary-600 transition-colors duration-300">
-                    {course.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                    {course.description}
-                  </p>
-                  
-                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                    <div className="flex items-center space-x-1">
-                      <Clock className="w-4 h-4" />
-                      <span>{course.duration}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Users className="w-4 h-4" />
-                      <span>{course.students.toLocaleString()}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span>{course.rating}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-primary-600">{course.price}</span>
-                    <Button 
-                      onClick={() => handleEnrollCourse(course.id)}
-                      className="bg-primary hover:bg-primary/90 transform transition-all duration-200 hover:scale-105"
-                    >
-                      Enroll Now
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
 
-          {filteredCourses.length === 0 && (
-            <div className="text-center py-12 animate-fade-in">
-              <BookOpen className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">No courses found</h3>
-              <p className="text-muted-foreground">Try adjusting your search terms</p>
-            </div>
-          )}
-        </section>
+                {/* Courses Grid */}
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredCourses.map((course, index) => (
+                    <Card key={course.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in hover-lift" style={{ animationDelay: `${0.1 * index}s` }}>
+                      <div className="relative overflow-hidden rounded-t-lg">
+                        <img 
+                          src={course.image} 
+                          alt={course.title}
+                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <div className="absolute top-4 left-4">
+                          <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                            {course.category}
+                          </Badge>
+                        </div>
+                        <div className="absolute top-4 right-4">
+                          <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                            {course.level}
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <CardContent className="p-6">
+                        <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                          {course.title}
+                        </h3>
+                        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                          {course.description}
+                        </p>
+                        
+                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                          <div className="flex items-center space-x-1">
+                            <Clock className="w-4 h-4" />
+                            <span>{course.duration}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Users className="w-4 h-4" />
+                            <span>{course.students.toLocaleString()}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <span>{course.rating}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <span className="text-2xl font-bold text-primary">{course.price}</span>
+                          <Button 
+                            onClick={() => handleEnrollCourse(course.id)}
+                            className="bg-primary hover:bg-primary/90 transform transition-all duration-200 hover:scale-105"
+                          >
+                            Enroll Now
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+
+                {filteredCourses.length === 0 && (
+                  <div className="text-center py-12 animate-fade-in">
+                    <BookOpen className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-foreground mb-2">No courses found</h3>
+                    <p className="text-muted-foreground">Try adjusting your search terms</p>
+                  </div>
+                )}
+              </section>
+            )}
+
+            {/* Tutorials Section */}
+            {activeTab === 'tutorials' && (
+              <section>
+                <h2 className="text-3xl font-bold text-foreground mb-6">Quick Tutorials</h2>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {tutorials.map((tutorial, index) => (
+                    <Card key={tutorial.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
+                      <div className="relative overflow-hidden rounded-t-lg">
+                        <img 
+                          src={tutorial.image} 
+                          alt={tutorial.title}
+                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <div className="absolute top-4 right-4">
+                          <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                            {tutorial.difficulty}
+                          </Badge>
+                        </div>
+                      </div>
+                      <CardContent className="p-6">
+                        <h3 className="text-xl font-bold text-foreground mb-2">{tutorial.title}</h3>
+                        <p className="text-muted-foreground text-sm mb-4">{tutorial.description}</p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                            <Clock className="w-4 h-4" />
+                            <span>{tutorial.duration}</span>
+                          </div>
+                          <Button size="sm">Start Tutorial</Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Articles Section */}
+            {activeTab === 'articles' && (
+              <section>
+                <h2 className="text-3xl font-bold text-foreground mb-6">Latest Articles</h2>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {articles.map((article, index) => (
+                    <Card key={article.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
+                      <div className="relative overflow-hidden rounded-t-lg">
+                        <img 
+                          src={article.image} 
+                          alt={article.title}
+                          className="w-full h-48 object-cover"
+                        />
+                      </div>
+                      <CardContent className="p-6">
+                        <h3 className="text-xl font-bold text-foreground mb-2">{article.title}</h3>
+                        <p className="text-muted-foreground text-sm mb-4">{article.excerpt}</p>
+                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                          <span>By {article.author}</span>
+                          <span>{article.readTime}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">{new Date(article.publishedDate).toLocaleDateString()}</span>
+                          <Button size="sm" variant="outline">Read Article</Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Quizzes Section */}
+            {activeTab === 'quizzes' && (
+              <section>
+                <h2 className="text-3xl font-bold text-foreground mb-6">Practice Quizzes</h2>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {quizzes.map((quiz, index) => (
+                    <Card key={quiz.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <Award className="w-8 h-8 text-primary" />
+                          {quiz.completed && (
+                            <Badge className="bg-green-100 text-green-800">Completed</Badge>
+                          )}
+                        </div>
+                        <h3 className="text-xl font-bold text-foreground mb-2">{quiz.title}</h3>
+                        <p className="text-muted-foreground text-sm mb-4">{quiz.description}</p>
+                        <div className="space-y-2 text-sm text-muted-foreground mb-4">
+                          <div className="flex justify-between">
+                            <span>Questions:</span>
+                            <span>{quiz.questions}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Difficulty:</span>
+                            <Badge variant="outline">{quiz.difficulty}</Badge>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Time Limit:</span>
+                            <span>{quiz.timeLimit}</span>
+                          </div>
+                        </div>
+                        <Button className="w-full" variant={quiz.completed ? "outline" : "default"}>
+                          {quiz.completed ? 'Retake Quiz' : 'Start Quiz'}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </section>
+            )}
+          </>
+        )}
       </main>
     </div>
   );
