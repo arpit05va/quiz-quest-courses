@@ -1,11 +1,20 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Zap } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
 import UserProfile from '@/components/UserProfile';
 
@@ -190,6 +199,13 @@ const Dashboard = () => {
     navigate(`/course/${courseId}`);
   };
 
+  const tabItems = [
+    { key: 'courses', label: 'Courses', icon: BookOpen },
+    { key: 'tutorials', label: 'Tutorials', icon: FileText },
+    { key: 'articles', label: 'Articles', icon: FileText },
+    { key: 'quizzes', label: 'Quizzes', icon: Award }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
       {/* Dashboard Header */}
@@ -206,77 +222,62 @@ const Dashboard = () => {
               </span>
             </div>
 
-            {/* Navigation Tabs */}
-            <div className="hidden md:flex items-center space-x-6">
-              <Button
-                variant={activeTab === 'courses' ? 'default' : 'ghost'}
-                onClick={() => setActiveTab('courses')}
-                className="flex items-center space-x-2"
-              >
-                <BookOpen className="w-4 h-4" />
-                <span>Courses</span>
-              </Button>
-              <Button
-                variant={activeTab === 'tutorials' ? 'default' : 'ghost'}
-                onClick={() => setActiveTab('tutorials')}
-                className="flex items-center space-x-2"
-              >
-                <FileText className="w-4 h-4" />
-                <span>Tutorials</span>
-              </Button>
-              <Button
-                variant={activeTab === 'articles' ? 'default' : 'ghost'}
-                onClick={() => setActiveTab('articles')}
-                className="flex items-center space-x-2"
-              >
-                <FileText className="w-4 h-4" />
-                <span>Articles</span>
-              </Button>
-              <Button
-                variant={activeTab === 'quizzes' ? 'default' : 'ghost'}
-                onClick={() => setActiveTab('quizzes')}
-                className="flex items-center space-x-2"
-              >
-                <Award className="w-4 h-4" />
-                <span>Quizzes</span>
-              </Button>
-              <Button
-                variant={activeTab === 'profile' ? 'default' : 'ghost'}
-                onClick={() => setActiveTab('profile')}
-                className="flex items-center space-x-2"
-              >
-                <User className="w-4 h-4" />
-                <span>Profile</span>
-              </Button>
+            {/* Navigation Tabs - Desktop */}
+            <div className="hidden lg:flex items-center space-x-2">
+              {tabItems.map((tab) => (
+                <Button
+                  key={tab.key}
+                  variant={activeTab === tab.key ? 'default' : 'ghost'}
+                  onClick={() => setActiveTab(tab.key)}
+                  className="flex items-center space-x-2"
+                >
+                  <tab.icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </Button>
+              ))}
             </div>
 
-            {/* User Menu */}
+            {/* User Profile Dropdown */}
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-muted-foreground">
-                <User className="w-5 h-5" />
-                <span>Welcome back!</span>
-              </div>
-              <Button 
-                onClick={handleLogout}
-                variant="outline"
-                className="flex items-center space-x-2 hover-lift"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Logout</span>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-2 hover:bg-muted">
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="Profile" />
+                      <AvatarFallback>JD</AvatarFallback>
+                    </Avatar>
+                    <div className="hidden md:block text-left">
+                      <p className="text-sm font-medium">John Doe</p>
+                      <p className="text-xs text-muted-foreground">john.doe@example.com</p>
+                    </div>
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => setActiveTab('profile')}>
+                    <User className="w-4 h-4 mr-2" />
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Settings className="w-4 h-4 mr-2" />
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
 
           {/* Mobile Navigation */}
-          <div className="md:hidden pb-4">
+          <div className="lg:hidden pb-4">
             <div className="flex space-x-2 overflow-x-auto">
-              {[
-                { key: 'courses', label: 'Courses', icon: BookOpen },
-                { key: 'tutorials', label: 'Tutorials', icon: FileText },
-                { key: 'articles', label: 'Articles', icon: FileText },
-                { key: 'quizzes', label: 'Quizzes', icon: Award },
-                { key: 'profile', label: 'Profile', icon: User }
-              ].map((tab) => (
+              {tabItems.map((tab) => (
                 <Button
                   key={tab.key}
                   variant={activeTab === tab.key ? 'default' : 'ghost'}
@@ -288,6 +289,15 @@ const Dashboard = () => {
                   <span>{tab.label}</span>
                 </Button>
               ))}
+              <Button
+                variant={activeTab === 'profile' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveTab('profile')}
+                className="flex items-center space-x-1 whitespace-nowrap"
+              >
+                <User className="w-4 h-4" />
+                <span>Profile</span>
+              </Button>
             </div>
           </div>
         </div>
@@ -309,39 +319,54 @@ const Dashboard = () => {
               </p>
             </div>
 
-            {/* Stats Cards */}
+            {/* Quick Stats - More Compact */}
             {activeTab === 'courses' && (
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift" style={{ animationDelay: '0.1s' }}>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Enrolled Courses</CardTitle>
-                    <BookOpen className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-primary">3</div>
-                    <p className="text-xs text-muted-foreground">2 in progress</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-2">
+                      <BookOpen className="h-5 w-5 text-primary" />
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Enrolled</p>
+                        <p className="text-2xl font-bold text-primary">3</p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift" style={{ animationDelay: '0.2s' }}>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Completed</CardTitle>
-                    <Star className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-secondary">1</div>
-                    <p className="text-xs text-muted-foreground">With certificate</p>
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-2">
+                      <Star className="h-5 w-5 text-secondary" />
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Completed</p>
+                        <p className="text-2xl font-bold text-secondary">1</p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift" style={{ animationDelay: '0.3s' }}>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Study Hours</CardTitle>
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-green-600">47</div>
-                    <p className="text-xs text-muted-foreground">This month</p>
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-2">
+                      <Clock className="h-5 w-5 text-green-600" />
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Study Hours</p>
+                        <p className="text-2xl font-bold text-green-600">47</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-2">
+                      <Award className="h-5 w-5 text-yellow-600" />
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Certificates</p>
+                        <p className="text-2xl font-bold text-yellow-600">1</p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -371,7 +396,7 @@ const Dashboard = () => {
                 </div>
 
                 {/* Courses Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredCourses.map((course, index) => (
                     <Card key={course.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in hover-lift" style={{ animationDelay: `${0.1 * index}s` }}>
                       <div className="relative overflow-hidden rounded-t-lg">
