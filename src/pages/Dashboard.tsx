@@ -101,46 +101,80 @@ const Dashboard = () => {
     {
       id: 1,
       title: 'Getting Started with React',
-      description: 'Learn the basics of React and component-based development.',
+      description: 'Learn the basics of React and component-based development through hands-on exercises and real-world examples.',
       duration: '30 min',
       difficulty: 'Beginner',
       image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=250&fit=crop',
       views: 15420,
       rating: 4.7,
-      completed: false
+      completed: false,
+      category: 'Programming',
+      level: 'Beginner'
     },
     {
       id: 2,
       title: 'CSS Grid Layout Mastery',
-      description: 'Master CSS Grid for creating responsive layouts.',
+      description: 'Master CSS Grid for creating responsive layouts with practical examples and advanced techniques.',
       duration: '45 min',
       difficulty: 'Intermediate',
       image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=250&fit=crop',
       views: 12380,
       rating: 4.8,
-      completed: true
+      completed: true,
+      category: 'Web Development',
+      level: 'Intermediate'
     },
     {
       id: 3,
       title: 'JavaScript ES6+ Features',
-      description: 'Explore modern JavaScript features and best practices.',
+      description: 'Explore modern JavaScript features and best practices including arrow functions, destructuring, and async/await.',
       duration: '60 min',
       difficulty: 'Intermediate',
       image: 'https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=400&h=250&fit=crop',
       views: 18950,
       rating: 4.9,
-      completed: false
+      completed: false,
+      category: 'Programming',
+      level: 'Intermediate'
     },
     {
       id: 4,
       title: 'Node.js Backend Development',
-      description: 'Build scalable backend applications with Node.js and Express.',
+      description: 'Build scalable backend applications with Node.js and Express, including REST APIs and database integration.',
       duration: '75 min',
       difficulty: 'Advanced',
       image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&h=250&fit=crop',
       views: 9876,
       rating: 4.6,
-      completed: false
+      completed: false,
+      category: 'Backend',
+      level: 'Advanced'
+    },
+    {
+      id: 5,
+      title: 'Vue.js Fundamentals',
+      description: 'Learn Vue.js framework for building interactive user interfaces with components and reactive data.',
+      duration: '50 min',
+      difficulty: 'Beginner',
+      image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&h=250&fit=crop',
+      views: 11250,
+      rating: 4.5,
+      completed: false,
+      category: 'Frontend',
+      level: 'Beginner'
+    },
+    {
+      id: 6,
+      title: 'Python Data Analysis',
+      description: 'Analyze data using Python libraries like Pandas, NumPy, and Matplotlib for data science projects.',
+      duration: '90 min',
+      difficulty: 'Advanced',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop',
+      views: 8765,
+      rating: 4.8,
+      completed: false,
+      category: 'Data Science',
+      level: 'Advanced'
     }
   ];
 
@@ -543,66 +577,78 @@ const Dashboard = () => {
               </section>
             )}
 
-            {/* Enhanced Tutorials Section - Smaller Cards */}
+            {/* Enhanced Tutorials Section - Same style as courses */}
             {activeTab === 'tutorials' && (
               <section>
                 <h2 className="text-3xl font-bold text-foreground mb-6">Interactive Tutorials</h2>
-                <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {tutorials.map((tutorial, index) => (
-                    <Card key={tutorial.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
+                    <Card key={tutorial.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in hover-lift" style={{ animationDelay: `${0.1 * index}s` }}>
                       <div className="relative overflow-hidden rounded-t-lg">
                         <img 
                           src={tutorial.image} 
                           alt={tutorial.title}
-                          className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105"
+                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                         />
-                        <div className="absolute top-2 left-2">
-                          <Badge variant="outline" className="text-xs bg-white/90 text-gray-800">
-                            {tutorial.difficulty}
+                        <div className="absolute top-4 left-4">
+                          <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                            {tutorial.category}
                           </Badge>
                         </div>
-                        <div className="absolute top-2 right-2">
-                          {tutorial.completed ? (
-                            <Badge className="bg-green-500 text-white text-xs">
-                              <CheckCircle2 className="w-3 h-3 mr-1" />
-                              Done
-                            </Badge>
-                          ) : (
-                            <Badge variant="outline" className="text-xs bg-blue-500 text-white">
-                              New
-                            </Badge>
-                          )}
+                        <div className="absolute top-4 right-4">
+                          <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                            {tutorial.level}
+                          </Badge>
                         </div>
+                        {tutorial.completed && (
+                          <div className="absolute bottom-4 right-4">
+                            <Badge className="bg-green-500 text-white">
+                              <CheckCircle2 className="w-3 h-3 mr-1" />
+                              Completed
+                            </Badge>
+                          </div>
+                        )}
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
-                          <Play className="w-8 h-8 text-white opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
+                          <Play className="w-12 h-12 text-white opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
                         </div>
                       </div>
-                      <CardContent className="p-4">
-                        <h3 className="text-lg font-bold text-foreground mb-1 line-clamp-2">{tutorial.title}</h3>
-                        <p className="text-muted-foreground text-xs mb-3 line-clamp-2">{tutorial.description}</p>
-                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
+                      
+                      <CardContent className="p-6">
+                        <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                          {tutorial.title}
+                        </h3>
+                        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                          {tutorial.description}
+                        </p>
+                        
+                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                           <div className="flex items-center space-x-1">
-                            <Clock className="w-3 h-3" />
+                            <Clock className="w-4 h-4" />
                             <span>{tutorial.duration}</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <Eye className="w-3 h-3" />
-                            <span>{(tutorial.views / 1000).toFixed(1)}k</span>
+                            <Eye className="w-4 h-4" />
+                            <span>{(tutorial.views / 1000).toFixed(1)}k views</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                             <span>{tutorial.rating}</span>
                           </div>
                         </div>
-                        <Button 
-                          size="sm"
-                          className="w-full text-xs" 
-                          onClick={() => handleStartTutorial(tutorial.id)}
-                          variant={tutorial.completed ? "outline" : "default"}
-                        >
-                          <Play className="w-3 h-3 mr-1" />
-                          {tutorial.completed ? 'Watch Again' : 'Start Tutorial'}
-                        </Button>
+                        
+                        <div className="flex items-center justify-between">
+                          <Badge variant="outline" className="text-sm">
+                            {tutorial.difficulty}
+                          </Badge>
+                          <Button 
+                            onClick={() => handleStartTutorial(tutorial.id)}
+                            className="bg-primary hover:bg-primary/90 transform transition-all duration-200 hover:scale-105"
+                            variant={tutorial.completed ? "outline" : "default"}
+                          >
+                            <Play className="w-4 h-4 mr-2" />
+                            {tutorial.completed ? 'Watch Again' : 'Start Tutorial'}
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   ))}
