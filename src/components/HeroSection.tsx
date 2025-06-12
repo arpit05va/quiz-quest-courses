@@ -17,7 +17,7 @@ const HeroSection = () => {
           <div className="text-center lg:text-left animate-fade-in">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight animate-bounce-in">
               Learn Skills That
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary animate-gradient mt-2">
+              <span className="block text-primary font-bold mt-2">
                 Shape Your Future
               </span>
             </h1>
