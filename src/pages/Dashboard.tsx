@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer } from 'lucide-react';
+import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
 import UserProfile from '@/components/UserProfile';
 
@@ -253,27 +253,26 @@ const Dashboard = () => {
 
   const handleStartTutorial = (tutorialId: number) => {
     console.log(`Starting tutorial ${tutorialId}`);
-    // In a real app, this would navigate to the tutorial page
+    navigate(`/tutorial/${tutorialId}`);
   };
 
   const handleReadArticle = (articleId: number) => {
     console.log(`Reading article ${articleId}`);
-    // In a real app, this would navigate to the article page
+    navigate(`/article/${articleId}`);
   };
 
   const handleStartQuiz = (quizId: number) => {
     console.log(`Starting quiz ${quizId}`);
-    // In a real app, this would navigate to the quiz page
+    navigate(`/quiz/${quizId}`);
   };
 
   const handleRetakeQuiz = (quizId: number) => {
     console.log(`Retaking quiz ${quizId}`);
-    // In a real app, this would reset and start the quiz
+    navigate(`/quiz/${quizId}/retake`);
   };
 
   const handleBookmarkArticle = (articleId: number) => {
     console.log(`Bookmarking article ${articleId}`);
-    // In a real app, this would toggle bookmark status
   };
 
   const tabItems = [
@@ -289,10 +288,10 @@ const Dashboard = () => {
       <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Logo - Fixed to navigate to dashboard */}
+            {/* Logo - Navigate to dashboard */}
             <div 
               className="flex items-center space-x-2 group cursor-pointer"
-              onClick={() => setActiveTab('courses')}
+              onClick={() => navigate('/dashboard')}
             >
               <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center animate-gradient hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
                 <BookOpen className="w-6 h-6 text-white animate-float" />
@@ -544,65 +543,64 @@ const Dashboard = () => {
               </section>
             )}
 
-            {/* Enhanced Tutorials Section */}
+            {/* Enhanced Tutorials Section - Smaller Cards */}
             {activeTab === 'tutorials' && (
               <section>
                 <h2 className="text-3xl font-bold text-foreground mb-6">Interactive Tutorials</h2>
-                <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {tutorials.map((tutorial, index) => (
                     <Card key={tutorial.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
                       <div className="relative overflow-hidden rounded-t-lg">
                         <img 
                           src={tutorial.image} 
                           alt={tutorial.title}
-                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                          className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105"
                         />
-                        <div className="absolute top-4 left-4">
-                          <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                        <div className="absolute top-2 left-2">
+                          <Badge variant="outline" className="text-xs bg-white/90 text-gray-800">
                             {tutorial.difficulty}
                           </Badge>
                         </div>
-                        <div className="absolute top-4 right-4">
+                        <div className="absolute top-2 right-2">
                           {tutorial.completed ? (
-                            <Badge className="bg-green-500/80 text-white">
+                            <Badge className="bg-green-500 text-white text-xs">
                               <CheckCircle2 className="w-3 h-3 mr-1" />
-                              Completed
+                              Done
                             </Badge>
                           ) : (
-                            <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                            <Badge variant="outline" className="text-xs bg-blue-500 text-white">
                               New
                             </Badge>
                           )}
                         </div>
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
-                          <Play className="w-12 h-12 text-white opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
+                          <Play className="w-8 h-8 text-white opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
                         </div>
                       </div>
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="text-xl font-bold text-foreground">{tutorial.title}</h3>
+                      <CardContent className="p-4">
+                        <h3 className="text-lg font-bold text-foreground mb-1 line-clamp-2">{tutorial.title}</h3>
+                        <p className="text-muted-foreground text-xs mb-3 line-clamp-2">{tutorial.description}</p>
+                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
                           <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            <span className="text-sm text-muted-foreground">{tutorial.rating}</span>
-                          </div>
-                        </div>
-                        <p className="text-muted-foreground text-sm mb-4">{tutorial.description}</p>
-                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                          <div className="flex items-center space-x-1">
-                            <Clock className="w-4 h-4" />
+                            <Clock className="w-3 h-3" />
                             <span>{tutorial.duration}</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <Users className="w-4 h-4" />
-                            <span>{tutorial.views.toLocaleString()} views</span>
+                            <Eye className="w-3 h-3" />
+                            <span>{(tutorial.views / 1000).toFixed(1)}k</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                            <span>{tutorial.rating}</span>
                           </div>
                         </div>
                         <Button 
-                          className="w-full" 
+                          size="sm"
+                          className="w-full text-xs" 
                           onClick={() => handleStartTutorial(tutorial.id)}
                           variant={tutorial.completed ? "outline" : "default"}
                         >
-                          <Play className="w-4 h-4 mr-2" />
+                          <Play className="w-3 h-3 mr-1" />
                           {tutorial.completed ? 'Watch Again' : 'Start Tutorial'}
                         </Button>
                       </CardContent>
@@ -616,9 +614,9 @@ const Dashboard = () => {
             {activeTab === 'articles' && (
               <section>
                 <h2 className="text-3xl font-bold text-foreground mb-6">Latest Articles & Insights</h2>
-                <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-6">
+                <div className="grid gap-6">
                   {articles.map((article, index) => (
-                    <Card key={article.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
+                    <Card key={article.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in cursor-pointer" style={{ animationDelay: `${0.1 * index}s` }} onClick={() => handleReadArticle(article.id)}>
                       <div className="md:flex">
                         <div className="md:w-1/3">
                           <img 
@@ -639,13 +637,16 @@ const Dashboard = () => {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleBookmarkArticle(article.id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleBookmarkArticle(article.id);
+                              }}
                               className="text-muted-foreground hover:text-primary"
                             >
                               <Star className={`w-4 h-4 ${article.bookmarked ? 'fill-yellow-400 text-yellow-400' : ''}`} />
                             </Button>
                           </div>
-                          <h3 className="text-xl font-bold text-foreground mb-2 hover:text-primary transition-colors cursor-pointer">
+                          <h3 className="text-xl font-bold text-foreground mb-2 hover:text-primary transition-colors">
                             {article.title}
                           </h3>
                           <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{article.excerpt}</p>
@@ -655,8 +656,14 @@ const Dashboard = () => {
                               <span>{article.readTime}</span>
                             </div>
                             <div className="flex items-center space-x-4">
-                              <span>{article.views} views</span>
-                              <span>{article.likes} likes</span>
+                              <div className="flex items-center space-x-1">
+                                <Eye className="w-4 h-4" />
+                                <span>{article.views}</span>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <Heart className="w-4 h-4" />
+                                <span>{article.likes}</span>
+                              </div>
                             </div>
                           </div>
                           <div className="flex items-center justify-between">
@@ -664,7 +671,10 @@ const Dashboard = () => {
                               {new Date(article.publishedDate).toLocaleDateString()}
                             </span>
                             <Button 
-                              onClick={() => handleReadArticle(article.id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleReadArticle(article.id);
+                              }}
                               className="flex items-center space-x-2"
                             >
                               <span>Read Article</span>
@@ -712,7 +722,7 @@ const Dashboard = () => {
                           </div>
                           <div className="flex items-center justify-between">
                             <span className="text-muted-foreground">Difficulty:</span>
-                            <Badge variant="outline" size="sm">{quiz.difficulty}</Badge>
+                            <Badge variant="outline">{quiz.difficulty}</Badge>
                           </div>
                           <div className="flex items-center justify-between">
                             <span className="text-muted-foreground">Time Limit:</span>
@@ -736,7 +746,7 @@ const Dashboard = () => {
                             {quiz.completed ? 'Retake Quiz' : 'Start Quiz'}
                           </Button>
                           {quiz.completed && (
-                            <Button variant="ghost" size="sm">
+                            <Button variant="ghost">
                               View Results
                             </Button>
                           )}
