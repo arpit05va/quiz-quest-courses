@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -14,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown } from 'lucide-react';
+import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
 import UserProfile from '@/components/UserProfile';
 
@@ -105,7 +104,10 @@ const Dashboard = () => {
       description: 'Learn the basics of React and component-based development.',
       duration: '30 min',
       difficulty: 'Beginner',
-      image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=250&fit=crop'
+      image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=250&fit=crop',
+      views: 15420,
+      rating: 4.7,
+      completed: false
     },
     {
       id: 2,
@@ -113,7 +115,10 @@ const Dashboard = () => {
       description: 'Master CSS Grid for creating responsive layouts.',
       duration: '45 min',
       difficulty: 'Intermediate',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=250&fit=crop'
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=250&fit=crop',
+      views: 12380,
+      rating: 4.8,
+      completed: true
     },
     {
       id: 3,
@@ -121,7 +126,21 @@ const Dashboard = () => {
       description: 'Explore modern JavaScript features and best practices.',
       duration: '60 min',
       difficulty: 'Intermediate',
-      image: 'https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=400&h=250&fit=crop'
+      image: 'https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=400&h=250&fit=crop',
+      views: 18950,
+      rating: 4.9,
+      completed: false
+    },
+    {
+      id: 4,
+      title: 'Node.js Backend Development',
+      description: 'Build scalable backend applications with Node.js and Express.',
+      duration: '75 min',
+      difficulty: 'Advanced',
+      image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&h=250&fit=crop',
+      views: 9876,
+      rating: 4.6,
+      completed: false
     }
   ];
 
@@ -129,29 +148,41 @@ const Dashboard = () => {
     {
       id: 1,
       title: '10 Web Development Trends in 2024',
-      excerpt: 'Discover the latest trends shaping the future of web development...',
+      excerpt: 'Discover the latest trends shaping the future of web development including AI integration, serverless architecture, and progressive web apps...',
       author: 'John Smith',
       readTime: '5 min read',
       publishedDate: '2024-01-15',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop'
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop',
+      tags: ['Web Development', 'Trends', 'Technology'],
+      views: 2580,
+      likes: 154,
+      bookmarked: false
     },
     {
       id: 2,
       title: 'The Future of AI in Education',
-      excerpt: 'How artificial intelligence is transforming online learning...',
+      excerpt: 'How artificial intelligence is transforming online learning experiences through personalized content, adaptive learning paths, and intelligent tutoring systems...',
       author: 'Jane Doe',
       readTime: '7 min read',
       publishedDate: '2024-01-10',
-      image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=250&fit=crop'
+      image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=250&fit=crop',
+      tags: ['AI', 'Education', 'Machine Learning'],
+      views: 3240,
+      likes: 298,
+      bookmarked: true
     },
     {
       id: 3,
       title: 'Building Responsive Websites',
-      excerpt: 'Best practices for creating websites that work on all devices...',
+      excerpt: 'Best practices for creating websites that work seamlessly across all devices using modern CSS techniques, flexible layouts, and mobile-first design...',
       author: 'Mike Johnson',
       readTime: '6 min read',
       publishedDate: '2024-01-08',
-      image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=250&fit=crop'
+      image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=250&fit=crop',
+      tags: ['CSS', 'Responsive Design', 'Mobile'],
+      views: 1870,
+      likes: 112,
+      bookmarked: false
     }
   ];
 
@@ -159,29 +190,50 @@ const Dashboard = () => {
     {
       id: 1,
       title: 'HTML Fundamentals Quiz',
-      description: 'Test your knowledge of HTML basics and semantics.',
+      description: 'Test your knowledge of HTML basics, semantics, and best practices.',
       questions: 15,
       difficulty: 'Beginner',
       timeLimit: '20 min',
-      completed: false
+      completed: false,
+      score: null,
+      attempts: 0,
+      category: 'Web Development'
     },
     {
       id: 2,
       title: 'CSS Selectors Challenge',
-      description: 'Master CSS selectors and specificity rules.',
+      description: 'Master CSS selectors, specificity rules, and advanced styling techniques.',
       questions: 20,
       difficulty: 'Intermediate',
       timeLimit: '25 min',
-      completed: true
+      completed: true,
+      score: 85,
+      attempts: 2,
+      category: 'Web Development'
     },
     {
       id: 3,
       title: 'JavaScript Array Methods',
-      description: 'Test your understanding of JavaScript array manipulation.',
+      description: 'Test your understanding of JavaScript array manipulation and functional programming.',
       questions: 12,
       difficulty: 'Intermediate',
       timeLimit: '15 min',
-      completed: false
+      completed: false,
+      score: null,
+      attempts: 1,
+      category: 'Programming'
+    },
+    {
+      id: 4,
+      title: 'React Hooks Deep Dive',
+      description: 'Advanced quiz on React hooks, state management, and component lifecycle.',
+      questions: 18,
+      difficulty: 'Advanced',
+      timeLimit: '30 min',
+      completed: false,
+      score: null,
+      attempts: 0,
+      category: 'React'
     }
   ];
 
@@ -199,9 +251,34 @@ const Dashboard = () => {
     navigate(`/course/${courseId}`);
   };
 
+  const handleStartTutorial = (tutorialId: number) => {
+    console.log(`Starting tutorial ${tutorialId}`);
+    // In a real app, this would navigate to the tutorial page
+  };
+
+  const handleReadArticle = (articleId: number) => {
+    console.log(`Reading article ${articleId}`);
+    // In a real app, this would navigate to the article page
+  };
+
+  const handleStartQuiz = (quizId: number) => {
+    console.log(`Starting quiz ${quizId}`);
+    // In a real app, this would navigate to the quiz page
+  };
+
+  const handleRetakeQuiz = (quizId: number) => {
+    console.log(`Retaking quiz ${quizId}`);
+    // In a real app, this would reset and start the quiz
+  };
+
+  const handleBookmarkArticle = (articleId: number) => {
+    console.log(`Bookmarking article ${articleId}`);
+    // In a real app, this would toggle bookmark status
+  };
+
   const tabItems = [
     { key: 'courses', label: 'Courses', icon: BookOpen },
-    { key: 'tutorials', label: 'Tutorials', icon: FileText },
+    { key: 'tutorials', label: 'Tutorials', icon: Play },
     { key: 'articles', label: 'Articles', icon: FileText },
     { key: 'quizzes', label: 'Quizzes', icon: Award }
   ];
@@ -212,8 +289,11 @@ const Dashboard = () => {
       <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-2 group cursor-pointer">
+            {/* Logo - Fixed to navigate to dashboard */}
+            <div 
+              className="flex items-center space-x-2 group cursor-pointer"
+              onClick={() => setActiveTab('courses')}
+            >
               <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center animate-gradient hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
                 <BookOpen className="w-6 h-6 text-white animate-float" />
               </div>
@@ -464,11 +544,11 @@ const Dashboard = () => {
               </section>
             )}
 
-            {/* Tutorials Section */}
+            {/* Enhanced Tutorials Section */}
             {activeTab === 'tutorials' && (
               <section>
-                <h2 className="text-3xl font-bold text-foreground mb-6">Quick Tutorials</h2>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <h2 className="text-3xl font-bold text-foreground mb-6">Interactive Tutorials</h2>
+                <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
                   {tutorials.map((tutorial, index) => (
                     <Card key={tutorial.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
                       <div className="relative overflow-hidden rounded-t-lg">
@@ -477,22 +557,54 @@ const Dashboard = () => {
                           alt={tutorial.title}
                           className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                         />
-                        <div className="absolute top-4 right-4">
+                        <div className="absolute top-4 left-4">
                           <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
                             {tutorial.difficulty}
                           </Badge>
                         </div>
+                        <div className="absolute top-4 right-4">
+                          {tutorial.completed ? (
+                            <Badge className="bg-green-500/80 text-white">
+                              <CheckCircle2 className="w-3 h-3 mr-1" />
+                              Completed
+                            </Badge>
+                          ) : (
+                            <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                              New
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+                          <Play className="w-12 h-12 text-white opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
+                        </div>
                       </div>
                       <CardContent className="p-6">
-                        <h3 className="text-xl font-bold text-foreground mb-2">{tutorial.title}</h3>
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="text-xl font-bold text-foreground">{tutorial.title}</h3>
+                          <div className="flex items-center space-x-1">
+                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <span className="text-sm text-muted-foreground">{tutorial.rating}</span>
+                          </div>
+                        </div>
                         <p className="text-muted-foreground text-sm mb-4">{tutorial.description}</p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                          <div className="flex items-center space-x-1">
                             <Clock className="w-4 h-4" />
                             <span>{tutorial.duration}</span>
                           </div>
-                          <Button size="sm">Start Tutorial</Button>
+                          <div className="flex items-center space-x-1">
+                            <Users className="w-4 h-4" />
+                            <span>{tutorial.views.toLocaleString()} views</span>
+                          </div>
                         </div>
+                        <Button 
+                          className="w-full" 
+                          onClick={() => handleStartTutorial(tutorial.id)}
+                          variant={tutorial.completed ? "outline" : "default"}
+                        >
+                          <Play className="w-4 h-4 mr-2" />
+                          {tutorial.completed ? 'Watch Again' : 'Start Tutorial'}
+                        </Button>
                       </CardContent>
                     </Card>
                   ))}
@@ -500,71 +612,135 @@ const Dashboard = () => {
               </section>
             )}
 
-            {/* Articles Section */}
+            {/* Enhanced Articles Section */}
             {activeTab === 'articles' && (
               <section>
-                <h2 className="text-3xl font-bold text-foreground mb-6">Latest Articles</h2>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <h2 className="text-3xl font-bold text-foreground mb-6">Latest Articles & Insights</h2>
+                <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-6">
                   {articles.map((article, index) => (
                     <Card key={article.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
-                      <div className="relative overflow-hidden rounded-t-lg">
-                        <img 
-                          src={article.image} 
-                          alt={article.title}
-                          className="w-full h-48 object-cover"
-                        />
+                      <div className="md:flex">
+                        <div className="md:w-1/3">
+                          <img 
+                            src={article.image} 
+                            alt={article.title}
+                            className="w-full h-48 md:h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
+                          />
+                        </div>
+                        <CardContent className="md:w-2/3 p-6">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex flex-wrap gap-2">
+                              {article.tags.map((tag) => (
+                                <Badge key={tag} variant="outline" className="text-xs">
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleBookmarkArticle(article.id)}
+                              className="text-muted-foreground hover:text-primary"
+                            >
+                              <Star className={`w-4 h-4 ${article.bookmarked ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+                            </Button>
+                          </div>
+                          <h3 className="text-xl font-bold text-foreground mb-2 hover:text-primary transition-colors cursor-pointer">
+                            {article.title}
+                          </h3>
+                          <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{article.excerpt}</p>
+                          <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                            <div className="flex items-center space-x-4">
+                              <span>By {article.author}</span>
+                              <span>{article.readTime}</span>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                              <span>{article.views} views</span>
+                              <span>{article.likes} likes</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-muted-foreground">
+                              {new Date(article.publishedDate).toLocaleDateString()}
+                            </span>
+                            <Button 
+                              onClick={() => handleReadArticle(article.id)}
+                              className="flex items-center space-x-2"
+                            >
+                              <span>Read Article</span>
+                              <ExternalLink className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </CardContent>
                       </div>
-                      <CardContent className="p-6">
-                        <h3 className="text-xl font-bold text-foreground mb-2">{article.title}</h3>
-                        <p className="text-muted-foreground text-sm mb-4">{article.excerpt}</p>
-                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                          <span>By {article.author}</span>
-                          <span>{article.readTime}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-muted-foreground">{new Date(article.publishedDate).toLocaleDateString()}</span>
-                          <Button size="sm" variant="outline">Read Article</Button>
-                        </div>
-                      </CardContent>
                     </Card>
                   ))}
                 </div>
               </section>
             )}
 
-            {/* Quizzes Section */}
+            {/* Enhanced Quizzes Section */}
             {activeTab === 'quizzes' && (
               <section>
-                <h2 className="text-3xl font-bold text-foreground mb-6">Practice Quizzes</h2>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <h2 className="text-3xl font-bold text-foreground mb-6">Practice Quizzes & Assessments</h2>
+                <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
                   {quizzes.map((quiz, index) => (
                     <Card key={quiz.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between mb-4">
-                          <Award className="w-8 h-8 text-primary" />
+                          <div className="flex items-center space-x-3">
+                            <div className={`p-2 rounded-lg ${quiz.completed ? 'bg-green-100' : 'bg-primary/10'}`}>
+                              <Award className={`w-6 h-6 ${quiz.completed ? 'text-green-600' : 'text-primary'}`} />
+                            </div>
+                            <Badge variant="outline">{quiz.category}</Badge>
+                          </div>
                           {quiz.completed && (
-                            <Badge className="bg-green-100 text-green-800">Completed</Badge>
+                            <div className="flex items-center space-x-2">
+                              <CheckCircle2 className="w-5 h-5 text-green-600" />
+                              <span className="text-sm font-medium text-green-600">{quiz.score}%</span>
+                            </div>
                           )}
                         </div>
+                        
                         <h3 className="text-xl font-bold text-foreground mb-2">{quiz.title}</h3>
                         <p className="text-muted-foreground text-sm mb-4">{quiz.description}</p>
-                        <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                          <div className="flex justify-between">
-                            <span>Questions:</span>
-                            <span>{quiz.questions}</span>
+                        
+                        <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                          <div className="flex items-center justify-between">
+                            <span className="text-muted-foreground">Questions:</span>
+                            <span className="font-medium">{quiz.questions}</span>
                           </div>
-                          <div className="flex justify-between">
-                            <span>Difficulty:</span>
-                            <Badge variant="outline">{quiz.difficulty}</Badge>
+                          <div className="flex items-center justify-between">
+                            <span className="text-muted-foreground">Difficulty:</span>
+                            <Badge variant="outline" size="sm">{quiz.difficulty}</Badge>
                           </div>
-                          <div className="flex justify-between">
-                            <span>Time Limit:</span>
-                            <span>{quiz.timeLimit}</span>
+                          <div className="flex items-center justify-between">
+                            <span className="text-muted-foreground">Time Limit:</span>
+                            <div className="flex items-center space-x-1">
+                              <Timer className="w-3 h-3" />
+                              <span className="font-medium">{quiz.timeLimit}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-muted-foreground">Attempts:</span>
+                            <span className="font-medium">{quiz.attempts}</span>
                           </div>
                         </div>
-                        <Button className="w-full" variant={quiz.completed ? "outline" : "default"}>
-                          {quiz.completed ? 'Retake Quiz' : 'Start Quiz'}
-                        </Button>
+                        
+                        <div className="flex space-x-2">
+                          <Button 
+                            className="flex-1" 
+                            onClick={() => quiz.completed ? handleRetakeQuiz(quiz.id) : handleStartQuiz(quiz.id)}
+                            variant={quiz.completed ? "outline" : "default"}
+                          >
+                            {quiz.completed ? 'Retake Quiz' : 'Start Quiz'}
+                          </Button>
+                          {quiz.completed && (
+                            <Button variant="ghost" size="sm">
+                              View Results
+                            </Button>
+                          )}
+                        </div>
                       </CardContent>
                     </Card>
                   ))}
