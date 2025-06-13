@@ -15,9 +15,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
-import UserProfile from '@/components/UserProfile';
-import RecruiterPanel from '@/components/RecruiterPanel';
-import StudentPanel from '@/components/StudentPanel';
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -363,7 +360,7 @@ const Dashboard = () => {
                 <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
                   <DropdownMenuLabel>Student / Aspirant Panel</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => setActiveTab('student')}>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/student')}>
                     <GraduationCap className="w-4 h-4 mr-2" />
                     Open Student Dashboard
                   </DropdownMenuItem>
@@ -403,7 +400,7 @@ const Dashboard = () => {
                 <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
                   <DropdownMenuLabel>Recruiter / HR Panel</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => setActiveTab('recruiter')}>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/recruiter')}>
                     <Users className="w-4 h-4 mr-2" />
                     Open HR Dashboard
                   </DropdownMenuItem>
@@ -451,7 +448,7 @@ const Dashboard = () => {
                 <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => setActiveTab('profile')}>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/profile')}>
                     <User className="w-4 h-4 mr-2" />
                     Profile
                   </DropdownMenuItem>
@@ -485,27 +482,27 @@ const Dashboard = () => {
                 </Button>
               ))}
               <Button
-                variant={activeTab === 'profile' ? 'default' : 'ghost'}
+                variant="ghost"
                 size="sm"
-                onClick={() => setActiveTab('profile')}
+                onClick={() => navigate('/dashboard/profile')}
                 className="flex items-center space-x-1 whitespace-nowrap"
               >
                 <User className="w-4 h-4" />
                 <span>Profile</span>
               </Button>
               <Button
-                variant={activeTab === 'student' ? 'default' : 'ghost'}
+                variant="ghost"
                 size="sm"
-                onClick={() => setActiveTab('student')}
+                onClick={() => navigate('/dashboard/student')}
                 className="flex items-center space-x-1 whitespace-nowrap"
               >
                 <GraduationCap className="w-4 h-4" />
                 <span>Aspirant</span>
               </Button>
               <Button
-                variant={activeTab === 'recruiter' ? 'default' : 'ghost'}
+                variant="ghost"
                 size="sm"
-                onClick={() => setActiveTab('recruiter')}
+                onClick={() => navigate('/dashboard/recruiter')}
                 className="flex items-center space-x-1 whitespace-nowrap"
               >
                 <Briefcase className="w-4 h-4" />
@@ -518,396 +515,334 @@ const Dashboard = () => {
 
       {/* Dashboard Content */}
       <main className="container mx-auto px-4 py-8">
-        {activeTab === 'profile' ? (
-          <UserProfile />
-        ) : activeTab === 'recruiter' ? (
-          <RecruiterPanel />
-        ) : activeTab === 'student' ? (
-          <StudentPanel />
-        ) : (
-          <>
-            {/* Welcome Section */}
-            <div className="mb-8 animate-fade-in">
-              <h1 className="text-4xl font-bold text-foreground mb-2 animate-bounce-in">
-                Your Learning Dashboard
-              </h1>
-              <p className="text-xl text-muted-foreground animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                Continue your educational journey with our curated content
-              </p>
+        {/* Welcome Section */}
+        <div className="mb-8 animate-fade-in">
+          <h1 className="text-4xl font-bold text-foreground mb-2 animate-bounce-in">
+            Your Learning Dashboard
+          </h1>
+          <p className="text-xl text-muted-foreground animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            Continue your educational journey with our curated content
+          </p>
+        </div>
+
+        {/* Quick Stats - More Compact */}
+        {activeTab === 'courses' && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-2">
+                  <BookOpen className="h-5 w-5 text-primary" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Enrolled</p>
+                    <p className="text-2xl font-bold text-primary">3</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-2">
+                  <Star className="h-5 w-5 text-secondary" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Completed</p>
+                    <p className="text-2xl font-bold text-secondary">1</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-2">
+                  <Clock className="h-5 w-5 text-green-600" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Study Hours</p>
+                    <p className="text-2xl font-bold text-green-600">47</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-2">
+                  <Award className="h-5 w-5 text-yellow-600" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Certificates</p>
+                    <p className="text-2xl font-bold text-yellow-600">1</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Content Sections */}
+        {activeTab === 'courses' && (
+          <section className="mb-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+              <h2 className="text-3xl font-bold text-foreground mb-4 md:mb-0 animate-bounce-in">
+                Discover New Courses
+              </h2>
+              
+              {/* Search Bar */}
+              <div className="max-w-md w-full md:w-auto animate-scale-in" style={{ animationDelay: '0.4s' }}>
+                <div className="relative group">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 group-focus-within:text-primary transition-colors duration-300" />
+                  <Input
+                    type="text"
+                    placeholder="Search courses..."
+                    className="pl-10 pr-4 py-3 w-full rounded-full border-2 border-border focus:border-primary transition-all duration-300 hover:shadow-lg focus:shadow-xl"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Quick Stats - More Compact */}
-            {activeTab === 'courses' && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
-                  <CardContent className="p-4">
-                    <div className="flex items-center space-x-2">
-                      <BookOpen className="h-5 w-5 text-primary" />
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">Enrolled</p>
-                        <p className="text-2xl font-bold text-primary">3</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+            {/* Courses Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredCourses.map((course, index) => (
+                <CourseCard key={course.id} course={course} index={index} />
+              ))}
+            </div>
 
-                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
-                  <CardContent className="p-4">
-                    <div className="flex items-center space-x-2">
-                      <Star className="h-5 w-5 text-secondary" />
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">Completed</p>
-                        <p className="text-2xl font-bold text-secondary">1</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
-                  <CardContent className="p-4">
-                    <div className="flex items-center space-x-2">
-                      <Clock className="h-5 w-5 text-green-600" />
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">Study Hours</p>
-                        <p className="text-2xl font-bold text-green-600">47</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
-                  <CardContent className="p-4">
-                    <div className="flex items-center space-x-2">
-                      <Award className="h-5 w-5 text-yellow-600" />
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">Certificates</p>
-                        <p className="text-2xl font-bold text-yellow-600">1</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+            {filteredCourses.length === 0 && (
+              <div className="text-center py-12 animate-fade-in">
+                <BookOpen className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-foreground mb-2">No courses found</h3>
+                <p className="text-muted-foreground">Try adjusting your search terms</p>
               </div>
             )}
+          </section>
+        )}
 
-            {/* Content Sections */}
-            {activeTab === 'courses' && (
-              <section className="mb-8">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-                  <h2 className="text-3xl font-bold text-foreground mb-4 md:mb-0 animate-bounce-in">
-                    Discover New Courses
-                  </h2>
-                  
-                  {/* Search Bar */}
-                  <div className="max-w-md w-full md:w-auto animate-scale-in" style={{ animationDelay: '0.4s' }}>
-                    <div className="relative group">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 group-focus-within:text-primary transition-colors duration-300" />
-                      <Input
-                        type="text"
-                        placeholder="Search courses..."
-                        className="pl-10 pr-4 py-3 w-full rounded-full border-2 border-border focus:border-primary transition-all duration-300 hover:shadow-lg focus:shadow-xl"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                      />
+        {/* Enhanced Tutorials Section - Same style as courses */}
+        {activeTab === 'tutorials' && (
+          <section>
+            <h2 className="text-3xl font-bold text-foreground mb-6">Interactive Tutorials</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {tutorials.map((tutorial, index) => (
+                <Card key={tutorial.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in hover-lift" style={{ animationDelay: `${0.1 * index}s` }}>
+                  <div className="relative overflow-hidden rounded-t-lg">
+                    <img 
+                      src={tutorial.image} 
+                      alt={tutorial.title}
+                      className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                        {tutorial.category}
+                      </Badge>
+                    </div>
+                    <div className="absolute top-4 right-4">
+                      <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
+                        {tutorial.level}
+                      </Badge>
+                    </div>
+                    {tutorial.completed && (
+                      <div className="absolute bottom-4 right-4">
+                        <Badge className="bg-green-500 text-white">
+                          <CheckCircle2 className="w-3 h-3 mr-1" />
+                          Completed
+                        </Badge>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+                      <Play className="w-12 h-12 text-white opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
                     </div>
                   </div>
-                </div>
-
-                {/* Courses Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredCourses.map((course, index) => (
-                    <Card key={course.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in hover-lift" style={{ animationDelay: `${0.1 * index}s` }}>
-                      <div className="relative overflow-hidden rounded-t-lg">
-                        <img 
-                          src={course.image} 
-                          alt={course.title}
-                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                        <div className="absolute top-4 left-4">
-                          <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
-                            {course.category}
-                          </Badge>
-                        </div>
-                        <div className="absolute top-4 right-4">
-                          <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
-                            {course.level}
-                          </Badge>
-                        </div>
+                  
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                      {tutorial.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                      {tutorial.description}
+                    </p>
+                    
+                    <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                      <div className="flex items-center space-x-1">
+                        <Clock className="w-4 h-4" />
+                        <span>{tutorial.duration}</span>
                       </div>
-                      
-                      <CardContent className="p-6">
-                        <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
-                          {course.title}
-                        </h3>
-                        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                          {course.description}
-                        </p>
-                        
-                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                          <div className="flex items-center space-x-1">
-                            <Clock className="w-4 h-4" />
-                            <span>{course.duration}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Users className="w-4 h-4" />
-                            <span>{course.students.toLocaleString()}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            <span>{course.rating}</span>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <span className="text-2xl font-bold text-primary">{course.price}</span>
-                          <Button 
-                            onClick={() => handleEnrollCourse(course.id)}
-                            className="bg-primary hover:bg-primary/90 transform transition-all duration-200 hover:scale-105"
-                          >
-                            Enroll Now
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                      <div className="flex items-center space-x-1">
+                        <Eye className="w-4 h-4" />
+                        <span>{(tutorial.views / 1000).toFixed(1)}k views</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        <span>{tutorial.rating}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="text-sm">
+                        {tutorial.difficulty}
+                      </Badge>
+                      <Button 
+                        onClick={() => handleStartTutorial(tutorial.id)}
+                        className="bg-primary hover:bg-primary/90 transform transition-all duration-200 hover:scale-105"
+                        variant={tutorial.completed ? "outline" : "default"}
+                      >
+                        <Play className="w-4 h-4 mr-2" />
+                        {tutorial.completed ? 'Watch Again' : 'Start Tutorial'}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+        )}
 
-                {filteredCourses.length === 0 && (
-                  <div className="text-center py-12 animate-fade-in">
-                    <BookOpen className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-foreground mb-2">No courses found</h3>
-                    <p className="text-muted-foreground">Try adjusting your search terms</p>
-                  </div>
-                )}
-              </section>
-            )}
-
-            {/* Enhanced Tutorials Section - Same style as courses */}
-            {activeTab === 'tutorials' && (
-              <section>
-                <h2 className="text-3xl font-bold text-foreground mb-6">Interactive Tutorials</h2>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {tutorials.map((tutorial, index) => (
-                    <Card key={tutorial.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in hover-lift" style={{ animationDelay: `${0.1 * index}s` }}>
-                      <div className="relative overflow-hidden rounded-t-lg">
-                        <img 
-                          src={tutorial.image} 
-                          alt={tutorial.title}
-                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                        <div className="absolute top-4 left-4">
-                          <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
-                            {tutorial.category}
-                          </Badge>
-                        </div>
-                        <div className="absolute top-4 right-4">
-                          <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/20">
-                            {tutorial.level}
-                          </Badge>
-                        </div>
-                        {tutorial.completed && (
-                          <div className="absolute bottom-4 right-4">
-                            <Badge className="bg-green-500 text-white">
-                              <CheckCircle2 className="w-3 h-3 mr-1" />
-                              Completed
+        {/* Enhanced Articles Section */}
+        {activeTab === 'articles' && (
+          <section>
+            <h2 className="text-3xl font-bold text-foreground mb-6">Latest Articles & Insights</h2>
+            <div className="grid gap-6">
+              {articles.map((article, index) => (
+                <Card key={article.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in cursor-pointer" style={{ animationDelay: `${0.1 * index}s` }} onClick={() => handleReadArticle(article.id)}>
+                  <div className="md:flex">
+                    <div className="md:w-1/3">
+                      <img 
+                        src={article.image} 
+                        alt={article.title}
+                        className="w-full h-48 md:h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
+                      />
+                    </div>
+                    <CardContent className="md:w-2/3 p-6">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex flex-wrap gap-2">
+                          {article.tags.map((tag) => (
+                            <Badge key={tag} variant="outline" className="text-xs">
+                              {tag}
                             </Badge>
-                          </div>
-                        )}
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
-                          <Play className="w-12 h-12 text-white opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
+                          ))}
                         </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleBookmarkArticle(article.id);
+                          }}
+                          className="text-muted-foreground hover:text-primary"
+                        >
+                          <Star className={`w-4 h-4 ${article.bookmarked ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+                        </Button>
                       </div>
-                      
-                      <CardContent className="p-6">
-                        <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
-                          {tutorial.title}
-                        </h3>
-                        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                          {tutorial.description}
-                        </p>
-                        
-                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                          <div className="flex items-center space-x-1">
-                            <Clock className="w-4 h-4" />
-                            <span>{tutorial.duration}</span>
-                          </div>
+                      <h3 className="text-xl font-bold text-foreground mb-2 hover:text-primary transition-colors">
+                        {article.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{article.excerpt}</p>
+                      <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                        <div className="flex items-center space-x-4">
+                          <span>By {article.author}</span>
+                          <span>{article.readTime}</span>
+                        </div>
+                        <div className="flex items-center space-x-4">
                           <div className="flex items-center space-x-1">
                             <Eye className="w-4 h-4" />
-                            <span>{(tutorial.views / 1000).toFixed(1)}k views</span>
+                            <span>{article.views}</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            <span>{tutorial.rating}</span>
+                            <Heart className="w-4 h-4" />
+                            <span>{article.likes}</span>
                           </div>
                         </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <Badge variant="outline" className="text-sm">
-                            {tutorial.difficulty}
-                          </Badge>
-                          <Button 
-                            onClick={() => handleStartTutorial(tutorial.id)}
-                            className="bg-primary hover:bg-primary/90 transform transition-all duration-200 hover:scale-105"
-                            variant={tutorial.completed ? "outline" : "default"}
-                          >
-                            <Play className="w-4 h-4 mr-2" />
-                            {tutorial.completed ? 'Watch Again' : 'Start Tutorial'}
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Enhanced Articles Section */}
-            {activeTab === 'articles' && (
-              <section>
-                <h2 className="text-3xl font-bold text-foreground mb-6">Latest Articles & Insights</h2>
-                <div className="grid gap-6">
-                  {articles.map((article, index) => (
-                    <Card key={article.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in cursor-pointer" style={{ animationDelay: `${0.1 * index}s` }} onClick={() => handleReadArticle(article.id)}>
-                      <div className="md:flex">
-                        <div className="md:w-1/3">
-                          <img 
-                            src={article.image} 
-                            alt={article.title}
-                            className="w-full h-48 md:h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
-                          />
-                        </div>
-                        <CardContent className="md:w-2/3 p-6">
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex flex-wrap gap-2">
-                              {article.tags.map((tag) => (
-                                <Badge key={tag} variant="outline" className="text-xs">
-                                  {tag}
-                                </Badge>
-                              ))}
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleBookmarkArticle(article.id);
-                              }}
-                              className="text-muted-foreground hover:text-primary"
-                            >
-                              <Star className={`w-4 h-4 ${article.bookmarked ? 'fill-yellow-400 text-yellow-400' : ''}`} />
-                            </Button>
-                          </div>
-                          <h3 className="text-xl font-bold text-foreground mb-2 hover:text-primary transition-colors">
-                            {article.title}
-                          </h3>
-                          <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{article.excerpt}</p>
-                          <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                            <div className="flex items-center space-x-4">
-                              <span>By {article.author}</span>
-                              <span>{article.readTime}</span>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                              <div className="flex items-center space-x-1">
-                                <Eye className="w-4 h-4" />
-                                <span>{article.views}</span>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                <Heart className="w-4 h-4" />
-                                <span>{article.likes}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-muted-foreground">
-                              {new Date(article.publishedDate).toLocaleDateString()}
-                            </span>
-                            <Button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleReadArticle(article.id);
-                              }}
-                              className="flex items-center space-x-2"
-                            >
-                              <span>Read Article</span>
-                              <ExternalLink className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </CardContent>
                       </div>
-                    </Card>
-                  ))}
-                </div>
-              </section>
-            )}
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(article.publishedDate).toLocaleDateString()}
+                        </span>
+                        <Button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleReadArticle(article.id);
+                          }}
+                          className="flex items-center space-x-2"
+                        >
+                          <span>Read Article</span>
+                          <ExternalLink className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </section>
+        )}
 
-            {/* Enhanced Quizzes Section */}
-            {activeTab === 'quizzes' && (
-              <section>
-                <h2 className="text-3xl font-bold text-foreground mb-6">Practice Quizzes & Assessments</h2>
-                <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
-                  {quizzes.map((quiz, index) => (
-                    <Card key={quiz.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center space-x-3">
-                            <div className={`p-2 rounded-lg ${quiz.completed ? 'bg-green-100' : 'bg-primary/10'}`}>
-                              <Award className={`w-6 h-6 ${quiz.completed ? 'text-green-600' : 'text-primary'}`} />
-                            </div>
-                            <Badge variant="outline">{quiz.category}</Badge>
-                          </div>
-                          {quiz.completed && (
-                            <div className="flex items-center space-x-2">
-                              <CheckCircle2 className="w-5 h-5 text-green-600" />
-                              <span className="text-sm font-medium text-green-600">{quiz.score}%</span>
-                            </div>
-                          )}
+        {/* Enhanced Quizzes Section */}
+        {activeTab === 'quizzes' && (
+          <section>
+            <h2 className="text-3xl font-bold text-foreground mb-6">Practice Quizzes & Assessments</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+              {quizzes.map((quiz, index) => (
+                <Card key={quiz.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <div className={`p-2 rounded-lg ${quiz.completed ? 'bg-green-100' : 'bg-primary/10'}`}>
+                          <Award className={`w-6 h-6 ${quiz.completed ? 'text-green-600' : 'text-primary'}`} />
                         </div>
-                        
-                        <h3 className="text-xl font-bold text-foreground mb-2">{quiz.title}</h3>
-                        <p className="text-muted-foreground text-sm mb-4">{quiz.description}</p>
-                        
-                        <div className="grid grid-cols-2 gap-4 text-sm mb-4">
-                          <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">Questions:</span>
-                            <span className="font-medium">{quiz.questions}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">Difficulty:</span>
-                            <Badge variant="outline">{quiz.difficulty}</Badge>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">Time Limit:</span>
-                            <div className="flex items-center space-x-1">
-                              <Timer className="w-3 h-3" />
-                              <span className="font-medium">{quiz.timeLimit}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">Attempts:</span>
-                            <span className="font-medium">{quiz.attempts}</span>
-                          </div>
+                        <Badge variant="outline">{quiz.category}</Badge>
+                      </div>
+                      {quiz.completed && (
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle2 className="w-5 h-5 text-green-600" />
+                          <span className="text-sm font-medium text-green-600">{quiz.score}%</span>
                         </div>
-                        
-                        <div className="flex space-x-2">
-                          <Button 
-                            className="flex-1" 
-                            onClick={() => quiz.completed ? handleRetakeQuiz(quiz.id) : handleStartQuiz(quiz.id)}
-                            variant={quiz.completed ? "outline" : "default"}
-                          >
-                            {quiz.completed ? 'Retake Quiz' : 'Start Quiz'}
-                          </Button>
-                          {quiz.completed && (
-                            <Button variant="ghost">
-                              View Results
-                            </Button>
-                          )}
+                      )}
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-foreground mb-2">{quiz.title}</h3>
+                    <p className="text-muted-foreground text-sm mb-4">{quiz.description}</p>
+                    
+                    <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Questions:</span>
+                        <span className="font-medium">{quiz.questions}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Difficulty:</span>
+                        <Badge variant="outline">{quiz.difficulty}</Badge>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Time Limit:</span>
+                        <div className="flex items-center space-x-1">
+                          <Timer className="w-3 h-3" />
+                          <span className="font-medium">{quiz.timeLimit}</span>
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </section>
-            )}
-          </>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Attempts:</span>
+                        <span className="font-medium">{quiz.attempts}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex space-x-2">
+                      <Button 
+                        className="flex-1" 
+                        onClick={() => quiz.completed ? handleRetakeQuiz(quiz.id) : handleStartQuiz(quiz.id)}
+                        variant={quiz.completed ? "outline" : "default"}
+                      >
+                        {quiz.completed ? 'Retake Quiz' : 'Start Quiz'}
+                      </Button>
+                      {quiz.completed && (
+                        <Button variant="ghost">
+                          View Results
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
         )}
       </main>
     </div>

@@ -22,7 +22,8 @@ const Courses = () => {
       rating: 4.8,
       price: 49,
       image: "/placeholder.svg",
-      category: "web-development"
+      category: "web-development",
+      description: "Learn HTML, CSS, and JavaScript from scratch with hands-on projects."
     },
     {
       id: 2,
@@ -33,7 +34,8 @@ const Courses = () => {
       rating: 4.7,
       price: 59,
       image: "/placeholder.svg",
-      category: "data-science"
+      category: "data-science",
+      description: "Master Python, statistics, and machine learning for data analysis."
     },
     {
       id: 3,
@@ -44,7 +46,8 @@ const Courses = () => {
       rating: 4.6,
       price: 39,
       image: "/placeholder.svg",
-      category: "mobile-development"
+      category: "mobile-development",
+      description: "Build iOS and Android apps using React Native and Flutter."
     },
     {
       id: 4,
@@ -55,7 +58,8 @@ const Courses = () => {
       rating: 4.9,
       price: 69,
       image: "/placeholder.svg",
-      category: "data-science"
+      category: "data-science",
+      description: "Learn machine learning algorithms and their practical applications."
     }
   ];
 
@@ -114,8 +118,8 @@ const Courses = () => {
 
         {/* Course Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredCourses.map((course) => (
-            <CourseCard key={course.id} {...course} />
+          {filteredCourses.map((course, index) => (
+            <CourseCard key={course.id} course={course} index={index} />
           ))}
         </div>
 
