@@ -13,10 +13,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3 } from 'lucide-react';
+import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
 import UserProfile from '@/components/UserProfile';
 import RecruiterPanel from '@/components/RecruiterPanel';
+import StudentPanel from '@/components/StudentPanel';
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -350,6 +351,46 @@ const Dashboard = () => {
                 </Button>
               ))}
               
+              {/* Student Panel Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-2">
+                    <GraduationCap className="w-4 h-4" />
+                    <span>Aspirant Panel</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
+                  <DropdownMenuLabel>Student / Aspirant Panel</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => setActiveTab('student')}>
+                    <GraduationCap className="w-4 h-4 mr-2" />
+                    Open Student Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Search className="w-4 h-4 mr-2" />
+                    AI Job Discovery
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Briefcase className="w-4 h-4 mr-2" />
+                    Application Tracker
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <User className="w-4 h-4 mr-2" />
+                    Profile & Resume
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Interview Prep
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <BarChart3 className="w-4 h-4 mr-2" />
+                    Career Insights
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
               {/* Recruiter Panel Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -453,6 +494,15 @@ const Dashboard = () => {
                 <span>Profile</span>
               </Button>
               <Button
+                variant={activeTab === 'student' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveTab('student')}
+                className="flex items-center space-x-1 whitespace-nowrap"
+              >
+                <GraduationCap className="w-4 h-4" />
+                <span>Aspirant</span>
+              </Button>
+              <Button
                 variant={activeTab === 'recruiter' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setActiveTab('recruiter')}
@@ -472,6 +522,8 @@ const Dashboard = () => {
           <UserProfile />
         ) : activeTab === 'recruiter' ? (
           <RecruiterPanel />
+        ) : activeTab === 'student' ? (
+          <StudentPanel />
         ) : (
           <>
             {/* Welcome Section */}
