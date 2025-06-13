@@ -13,9 +13,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart } from 'lucide-react';
+import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3 } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
 import UserProfile from '@/components/UserProfile';
+import RecruiterPanel from '@/components/RecruiterPanel';
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -348,6 +349,46 @@ const Dashboard = () => {
                   <span>{tab.label}</span>
                 </Button>
               ))}
+              
+              {/* Recruiter Panel Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-2">
+                    <Briefcase className="w-4 h-4" />
+                    <span>HR Panel</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
+                  <DropdownMenuLabel>Recruiter / HR Panel</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => setActiveTab('recruiter')}>
+                    <Users className="w-4 h-4 mr-2" />
+                    Open HR Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Search className="w-4 h-4 mr-2" />
+                    AI Candidate Discovery
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <FileText className="w-4 h-4 mr-2" />
+                    Job Posting
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Eye className="w-4 h-4" />
+                    Candidate Preview
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Calendar className="w-4 h-4" />
+                    Interview Tools
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <BarChart3 className="w-4 h-4" />
+                    Analytics Dashboard
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             {/* User Profile Dropdown */}
@@ -366,7 +407,7 @@ const Dashboard = () => {
                     <ChevronDown className="w-4 h-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setActiveTab('profile')}>
@@ -411,6 +452,15 @@ const Dashboard = () => {
                 <User className="w-4 h-4" />
                 <span>Profile</span>
               </Button>
+              <Button
+                variant={activeTab === 'recruiter' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveTab('recruiter')}
+                className="flex items-center space-x-1 whitespace-nowrap"
+              >
+                <Briefcase className="w-4 h-4" />
+                <span>HR Panel</span>
+              </Button>
             </div>
           </div>
         </div>
@@ -420,6 +470,8 @@ const Dashboard = () => {
       <main className="container mx-auto px-4 py-8">
         {activeTab === 'profile' ? (
           <UserProfile />
+        ) : activeTab === 'recruiter' ? (
+          <RecruiterPanel />
         ) : (
           <>
             {/* Welcome Section */}
