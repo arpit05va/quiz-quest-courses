@@ -20,9 +20,10 @@ const Courses = () => {
       duration: "12 weeks",
       students: 1250,
       rating: 4.8,
-      price: 49,
+      price: "49",
       image: "/placeholder.svg",
       category: "web-development",
+      level: "Beginner",
       description: "Learn HTML, CSS, and JavaScript from scratch with hands-on projects."
     },
     {
@@ -32,9 +33,10 @@ const Courses = () => {
       duration: "10 weeks",
       students: 980,
       rating: 4.7,
-      price: 59,
+      price: "59",
       image: "/placeholder.svg",
       category: "data-science",
+      level: "Intermediate",
       description: "Master Python, statistics, and machine learning for data analysis."
     },
     {
@@ -44,9 +46,10 @@ const Courses = () => {
       duration: "8 weeks",
       students: 750,
       rating: 4.6,
-      price: 39,
+      price: "39",
       image: "/placeholder.svg",
       category: "mobile-development",
+      level: "Advanced",
       description: "Build iOS and Android apps using React Native and Flutter."
     },
     {
@@ -56,9 +59,10 @@ const Courses = () => {
       duration: "14 weeks",
       students: 1100,
       rating: 4.9,
-      price: 69,
+      price: "69",
       image: "/placeholder.svg",
       category: "data-science",
+      level: "Beginner",
       description: "Learn machine learning algorithms and their practical applications."
     }
   ];

@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap } from 'lucide-react';
+import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap, Library } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
 
 const Dashboard = () => {
@@ -336,17 +337,36 @@ const Dashboard = () => {
 
             {/* Navigation Tabs - Desktop */}
             <div className="hidden lg:flex items-center space-x-2">
-              {tabItems.map((tab) => (
-                <Button
-                  key={tab.key}
-                  variant={activeTab === tab.key ? 'default' : 'ghost'}
-                  onClick={() => setActiveTab(tab.key)}
-                  className="flex items-center space-x-2"
-                >
-                  <tab.icon className="w-4 h-4" />
-                  <span>{tab.label}</span>
-                </Button>
-              ))}
+              {/* Learning Content Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-2">
+                    <Library className="w-4 h-4" />
+                    <span>Learning Content</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
+                  <DropdownMenuLabel>Learning Resources</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => setActiveTab('courses')}>
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Courses
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab('tutorials')}>
+                    <Play className="w-4 h-4 mr-2" />
+                    Tutorials
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab('articles')}>
+                    <FileText className="w-4 h-4 mr-2" />
+                    Articles
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab('quizzes')}>
+                    <Award className="w-4 h-4 mr-2" />
+                    Quizzes
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               
               {/* Student Panel Dropdown */}
               <DropdownMenu>
@@ -469,18 +489,37 @@ const Dashboard = () => {
           {/* Mobile Navigation */}
           <div className="lg:hidden pb-4">
             <div className="flex space-x-2 overflow-x-auto">
-              {tabItems.map((tab) => (
-                <Button
-                  key={tab.key}
-                  variant={activeTab === tab.key ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => setActiveTab(tab.key)}
-                  className="flex items-center space-x-1 whitespace-nowrap"
-                >
-                  <tab.icon className="w-4 h-4" />
-                  <span>{tab.label}</span>
-                </Button>
-              ))}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex items-center space-x-1 whitespace-nowrap"
+                  >
+                    <Library className="w-4 h-4" />
+                    <span>Content</span>
+                    <ChevronDown className="w-3 h-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-background border shadow-lg z-50">
+                  <DropdownMenuItem onClick={() => setActiveTab('courses')}>
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Courses
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab('tutorials')}>
+                    <Play className="w-4 h-4 mr-2" />
+                    Tutorials
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab('articles')}>
+                    <FileText className="w-4 h-4 mr-2" />
+                    Articles
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab('quizzes')}>
+                    <Award className="w-4 h-4 mr-2" />
+                    Quizzes
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Button
                 variant="ghost"
                 size="sm"
