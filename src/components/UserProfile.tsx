@@ -362,25 +362,28 @@ const UserProfile = () => {
                           <Eye className="w-4 h-4" />
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-4xl max-h-[80vh]">
-                        <DialogHeader>
-                          <DialogTitle>Document Preview - {uploadedResume.name}</DialogTitle>
+                      <DialogContent className="max-w-5xl w-[90vw] h-[85vh] flex flex-col">
+                        <DialogHeader className="flex-shrink-0">
+                          <DialogTitle className="text-center">Document Preview - {uploadedResume.name}</DialogTitle>
                         </DialogHeader>
-                        <div className="flex-1 overflow-auto">
+                        <div className="flex-1 flex items-center justify-center overflow-hidden">
                           {uploadedResume.type === 'application/pdf' && previewUrl ? (
                             <iframe
                               src={previewUrl}
-                              className="w-full h-[600px] border rounded"
+                              className="w-full h-full border-0 rounded-lg"
                               title="Document Preview"
                             />
                           ) : (
-                            <div className="text-center py-8">
-                              <FileText className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                              <p className="text-gray-600 mb-4">
+                            <div className="text-center py-12">
+                              <FileText className="w-20 h-20 mx-auto mb-6 text-gray-400" />
+                              <h3 className="text-lg font-semibold text-gray-700 mb-2">
                                 Preview not available for {uploadedResume.type.split('/')[1].toUpperCase()} files
+                              </h3>
+                              <p className="text-gray-600 mb-4">
+                                File: {uploadedResume.name}
                               </p>
-                              <p className="text-sm text-gray-500 mb-4">
-                                File: {uploadedResume.name} ({(uploadedResume.size / (1024 * 1024)).toFixed(2)} MB)
+                              <p className="text-sm text-gray-500 mb-6">
+                                Size: {(uploadedResume.size / (1024 * 1024)).toFixed(2)} MB
                               </p>
                               <Button
                                 onClick={() => {
