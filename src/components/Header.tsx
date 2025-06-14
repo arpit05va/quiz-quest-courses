@@ -37,7 +37,7 @@ const Header = () => {
               <BookOpen className="w-6 h-6 text-white animate-float" />
             </div>
             <span className="text-2xl font-bold text-foreground group-hover:text-primary-600 transition-colors duration-300">
-              EduPlatform
+              codeXMania
             </span>
           </Link>
 

@@ -37,7 +37,7 @@ const Footer = () => {
               <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
                 <BookOpen className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold">EduPlatform</span>
+              <span className="text-2xl font-bold">codeXMania</span>
             </div>
             <p className="text-muted-foreground mb-6 leading-relaxed">
               Empowering learners worldwide with high-quality education and innovative learning experiences.
@@ -45,7 +45,7 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-muted-foreground">
                 <Mail className="w-5 h-5" />
-                <span>hello@eduplatform.com</span>
+                <span>hello@codexmania.com</span>
               </div>
               <div className="flex items-center space-x-3 text-muted-foreground">
                 <Phone className="w-5 h-5" />
@@ -82,7 +82,7 @@ const Footer = () => {
         <div className="border-t border-border mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-muted-foreground text-center md:text-left">
-              © 2024 EduPlatform. All rights reserved.
+              © 2024 codeXMania. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
