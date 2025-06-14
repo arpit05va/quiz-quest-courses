@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -14,9 +15,12 @@ import {
   Users, 
   Star, 
   ArrowLeft,
+  ArrowRight,
   FileText,
   Award,
-  Maximize
+  Maximize,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 const CourseDetail = () => {
@@ -230,15 +234,37 @@ console.log(greeting); // Output: Hello, Alice!
                 <h1 className="text-lg font-semibold text-foreground">{currentLessonData.title}</h1>
                 <Badge variant="outline">Lesson {currentLesson + 1} of {course.lessons.length}</Badge>
               </div>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={toggleFullscreen}
-                className="flex items-center space-x-2"
-              >
-                <Maximize className="w-4 h-4" />
-                <span>Exit Fullscreen</span>
-              </Button>
+              <div className="flex items-center space-x-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  disabled={currentLesson === 0}
+                  onClick={() => setCurrentLesson(currentLesson - 1)}
+                  className="flex items-center space-x-2"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Previous</span>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  disabled={currentLesson === course.lessons.length - 1}
+                  onClick={() => setCurrentLesson(currentLesson + 1)}
+                  className="flex items-center space-x-2"
+                >
+                  <span>Next</span>
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={toggleFullscreen}
+                  className="flex items-center space-x-2"
+                >
+                  <Maximize className="w-4 h-4" />
+                  <span>Exit Fullscreen</span>
+                </Button>
+              </div>
             </div>
           </div>
         </header>
