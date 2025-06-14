@@ -9,6 +9,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
+import { toast } from '@/components/ui/sonner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import {
   Search,
   Upload,
@@ -46,7 +49,10 @@ import {
   MessageSquare,
   Calendar as CalendarIcon,
   ChevronRight,
-  ThumbsUp
+  ThumbsUp,
+  Plus,
+  Trash2,
+  Edit
 } from 'lucide-react';
 
 const StudentPanel = () => {
@@ -58,6 +64,16 @@ const StudentPanel = () => {
     salary: '',
     mode: '',
     company: ''
+  });
+
+  // Project form state
+  const [isAddingProject, setIsAddingProject] = useState(false);
+  const [projectForm, setProjectForm] = useState({
+    name: '',
+    techStack: '',
+    description: '',
+    githubLink: '',
+    liveLink: ''
   });
 
   // Set active section based on URL parameter
@@ -130,8 +146,8 @@ const StudentPanel = () => {
     }
   ];
 
-  // Mock profile data
-  const profileData = {
+  // Mock profile data with projects
+  const [profileData, setProfileData] = useState({
     name: 'John Doe',
     email: 'john.doe@example.com',
     college: 'Indian Institute of Technology',
@@ -145,13 +161,27 @@ const StudentPanel = () => {
       { name: 'Node.js', score: 7.0 }
     ],
     projects: [
-      { name: 'E-commerce Platform', tech: 'React, Node.js', link: 'github.com/john/ecommerce' },
-      { name: 'ML Prediction Model', tech: 'Python, TensorFlow', link: 'github.com/john/ml-model' }
+      { 
+        id: 1,
+        name: 'E-commerce Platform', 
+        techStack: 'React, Node.js, MongoDB', 
+        description: 'A full-stack e-commerce platform with user authentication, product catalog, shopping cart, and payment integration.',
+        githubLink: 'https://github.com/john/ecommerce',
+        liveLink: 'https://ecommerce-demo.vercel.app'
+      },
+      { 
+        id: 2,
+        name: 'ML Prediction Model', 
+        techStack: 'Python, TensorFlow, Flask', 
+        description: 'Machine learning model for predicting stock prices using historical data and technical indicators.',
+        githubLink: 'https://github.com/john/ml-model',
+        liveLink: ''
+      }
     ],
     github: 'github.com/johndoe',
     linkedin: 'linkedin.com/in/johndoe',
     completionScore: 85
-  };
+  });
 
   // Mock application data
   const applications = [
@@ -179,6 +209,50 @@ const StudentPanel = () => {
       case 'Rejected': return <XCircle className="w-4 h-4" />;
       default: return <AlertCircle className="w-4 h-4" />;
     }
+  };
+
+  // Project management functions
+  const handleAddProject = () => {
+    if (!projectForm.name || !projectForm.techStack || !projectForm.description) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    const newProject = {
+      id: Date.now(),
+      ...projectForm
+    };
+
+    setProfileData(prev => ({
+      ...prev,
+      projects: [...prev.projects, newProject]
+    }));
+
+    setProjectForm({
+      name: '',
+      techStack: '',
+      description: '',
+      githubLink: '',
+      liveLink: ''
+    });
+
+    setIsAddingProject(false);
+    toast.success('Project added successfully!');
+  };
+
+  const handleDeleteProject = (projectId: number) => {
+    setProfileData(prev => ({
+      ...prev,
+      projects: prev.projects.filter(project => project.id !== projectId)
+    }));
+    toast.success('Project deleted successfully!');
+  };
+
+  const handleProjectFormChange = (field: string, value: string) => {
+    setProjectForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   return (
@@ -415,7 +489,7 @@ const StudentPanel = () => {
           </Card>
         </TabsContent>
 
-        {/* Profile & Resume Builder */}
+        {/* Profile & Resume Builder with Projects Section */}
         <TabsContent value="profile" className="space-y-6">
           <div className="grid grid-cols-3 gap-6">
             <div className="col-span-2 space-y-6">
@@ -468,26 +542,142 @@ const StudentPanel = () => {
                 </CardContent>
               </Card>
 
+              {/* Projects Section */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Projects</CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center space-x-2">
+                      <Code className="w-5 h-5" />
+                      <span>Projects Portfolio</span>
+                    </CardTitle>
+                    <Dialog open={isAddingProject} onOpenChange={setIsAddingProject}>
+                      <DialogTrigger asChild>
+                        <Button size="sm">
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Project
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-2xl">
+                        <DialogHeader>
+                          <DialogTitle>Add New Project</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4 py-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="projectName">Project Name *</Label>
+                              <Input
+                                id="projectName"
+                                value={projectForm.name}
+                                onChange={(e) => handleProjectFormChange('name', e.target.value)}
+                                placeholder="Enter project name"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="techStack">Tech Stack *</Label>
+                              <Input
+                                id="techStack"
+                                value={projectForm.techStack}
+                                onChange={(e) => handleProjectFormChange('techStack', e.target.value)}
+                                placeholder="e.g., React, Node.js, MongoDB"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <Label htmlFor="description">Description *</Label>
+                            <Textarea
+                              id="description"
+                              value={projectForm.description}
+                              onChange={(e) => handleProjectFormChange('description', e.target.value)}
+                              placeholder="Describe your project, its features, and what you learned"
+                              rows={3}
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="githubLink">GitHub Link</Label>
+                              <Input
+                                id="githubLink"
+                                value={projectForm.githubLink}
+                                onChange={(e) => handleProjectFormChange('githubLink', e.target.value)}
+                                placeholder="https://github.com/username/project"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="liveLink">Live Demo Link</Label>
+                              <Input
+                                id="liveLink"
+                                value={projectForm.liveLink}
+                                onChange={(e) => handleProjectFormChange('liveLink', e.target.value)}
+                                placeholder="https://your-project-demo.com"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex justify-end space-x-2 pt-4">
+                            <Button variant="outline" onClick={() => setIsAddingProject(false)}>
+                              Cancel
+                            </Button>
+                            <Button onClick={handleAddProject}>
+                              Add Project
+                            </Button>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {profileData.projects.map((project, index) => (
-                      <div key={index} className="border rounded-lg p-4">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h4 className="font-medium">{project.name}</h4>
-                            <p className="text-sm text-muted-foreground">{project.tech}</p>
-                          </div>
-                          <Button variant="outline" size="sm">
-                            <ExternalLink className="w-4 h-4 mr-2" />
-                            View
-                          </Button>
-                        </div>
+                    {profileData.projects.length === 0 ? (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <Code className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                        <p>No projects added yet.</p>
+                        <p className="text-sm">Add your first project to showcase your skills!</p>
                       </div>
-                    ))}
+                    ) : (
+                      profileData.projects.map((project) => (
+                        <div key={project.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-lg mb-1">{project.name}</h4>
+                              <div className="flex flex-wrap gap-1 mb-2">
+                                {project.techStack.split(',').map((tech, index) => (
+                                  <Badge key={index} variant="secondary" className="text-xs">
+                                    {tech.trim()}
+                                  </Badge>
+                                ))}
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-3">{project.description}</p>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteProject(project.id)}
+                              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                          <div className="flex space-x-2">
+                            {project.githubLink && (
+                              <Button variant="outline" size="sm" asChild>
+                                <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
+                                  <GitBranch className="w-4 h-4 mr-1" />
+                                  Code
+                                </a>
+                              </Button>
+                            )}
+                            {project.liveLink && (
+                              <Button variant="outline" size="sm" asChild>
+                                <a href={project.liveLink} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="w-4 h-4 mr-1" />
+                                  Live Demo
+                                </a>
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </CardContent>
               </Card>
