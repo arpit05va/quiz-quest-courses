@@ -1,5 +1,5 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -50,6 +50,7 @@ import {
 } from 'lucide-react';
 
 const StudentPanel = () => {
+  const [searchParams] = useSearchParams();
   const [activeSection, setActiveSection] = useState('discovery');
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
@@ -58,6 +59,24 @@ const StudentPanel = () => {
     mode: '',
     company: ''
   });
+
+  // Set active section based on URL parameter
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab) {
+      // Map URL parameter values to internal tab values
+      const tabMapping: { [key: string]: string } = {
+        'job-discovery': 'discovery',
+        'application-tracker': 'applications',
+        'profile-resume': 'profile',
+        'interview-prep': 'interview',
+        'career-insights': 'dashboard'
+      };
+      
+      const mappedTab = tabMapping[tab] || tab;
+      setActiveSection(mappedTab);
+    }
+  }, [searchParams]);
 
   // Mock data for jobs
   const jobListings = [
