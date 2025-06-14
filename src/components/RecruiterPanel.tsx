@@ -50,6 +50,7 @@ const RecruiterPanel = () => {
   // Set active tab based on URL parameter
   useEffect(() => {
     const tab = searchParams.get('tab');
+    console.log('URL tab parameter:', tab);
     if (tab) {
       // Map URL parameter values to internal tab values
       const tabMapping: { [key: string]: string } = {
@@ -61,9 +62,12 @@ const RecruiterPanel = () => {
       };
       
       const mappedTab = tabMapping[tab] || tab;
+      console.log('Mapped tab:', mappedTab);
       setActiveTab(mappedTab);
     }
   }, [searchParams]);
+
+  console.log('Current active tab:', activeTab);
 
   // Mock data for demonstration
   const mockCandidates = [
@@ -146,7 +150,7 @@ const RecruiterPanel = () => {
         </TabsList>
 
         {/* AI-Based Candidate Discovery */}
-        <TabsContent value="discovery" className="space-y-6">
+        <TabsContent value="discovery" className="space-y-6 mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -240,88 +244,181 @@ const RecruiterPanel = () => {
           {/* Candidate Results */}
           <div className="space-y-4">
             <h3 className="text-xl font-semibold">Top Matching Candidates</h3>
-            {mockCandidates.map((candidate) => (
-              <Card key={candidate.id} className="hover:shadow-lg transition-all">
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-4">
+            <Card className="hover:shadow-lg transition-all">
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h4 className="text-lg font-semibold">John Smith</h4>
+                    <p className="text-muted-foreground">john.smith@email.com</p>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <MapPin className="w-4 h-4" />
+                      <span className="text-sm">Bangalore</span>
+                      <span className="text-sm">• IIT Delhi</span>
+                      <span className="text-sm">• CGPA: 8.5</span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Target className="w-4 h-4 text-green-600" />
+                      <span className="font-semibold text-green-600">8.2/10</span>
+                    </div>
+                    <Badge variant="outline">Immediate</Badge>
+                  </div>
+                </div>
+
+                {/* AI Pitch */}
+                <div className="bg-blue-50 p-3 rounded-lg mb-4">
+                  <div className="flex items-start space-x-2">
+                    <Brain className="w-4 h-4 text-blue-600 mt-0.5" />
                     <div>
-                      <h4 className="text-lg font-semibold">{candidate.name}</h4>
-                      <p className="text-muted-foreground">{candidate.email}</p>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <MapPin className="w-4 h-4" />
-                        <span className="text-sm">{candidate.location}</span>
-                        <span className="text-sm">• {candidate.college}</span>
-                        <span className="text-sm">• CGPA: {candidate.cgpa}</span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Target className="w-4 h-4 text-green-600" />
-                        <span className="font-semibold text-green-600">{candidate.overallScore}/10</span>
-                      </div>
-                      <Badge variant="outline">{candidate.availability}</Badge>
+                      <p className="text-sm font-medium text-blue-900">AI Smart Pitch</p>
+                      <p className="text-sm text-blue-800">Strong full-stack developer with proven React expertise and excellent problem-solving skills.</p>
                     </div>
                   </div>
+                </div>
 
-                  {/* AI Pitch */}
-                  <div className="bg-blue-50 p-3 rounded-lg mb-4">
-                    <div className="flex items-start space-x-2">
-                      <Brain className="w-4 h-4 text-blue-600 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-medium text-blue-900">AI Smart Pitch</p>
-                        <p className="text-sm text-blue-800">{candidate.aiPitch}</p>
-                      </div>
-                    </div>
+                {/* Skills */}
+                <div className="mb-4">
+                  <p className="text-sm font-medium mb-2">Skills & Tech Stack</p>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="secondary">React</Badge>
+                    <Badge variant="secondary">Node.js</Badge>
+                    <Badge variant="secondary">TypeScript</Badge>
+                    <Badge variant="secondary">AWS</Badge>
                   </div>
+                </div>
 
-                  {/* Skills */}
-                  <div className="mb-4">
-                    <p className="text-sm font-medium mb-2">Skills & Tech Stack</p>
-                    <div className="flex flex-wrap gap-2">
-                      {candidate.skills.map((skill) => (
-                        <Badge key={skill} variant="secondary">{skill}</Badge>
-                      ))}
+                {/* Quiz Scores */}
+                <div className="mb-4">
+                  <p className="text-sm font-medium mb-2">Quiz Competency Scores</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="text-center">
+                      <p className="text-xs text-muted-foreground">React</p>
+                      <p className="font-semibold">9/10</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-muted-foreground">JavaScript</p>
+                      <p className="font-semibold">8/10</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-muted-foreground">Node.js</p>
+                      <p className="font-semibold">7/10</p>
                     </div>
                   </div>
+                </div>
 
-                  {/* Quiz Scores */}
-                  <div className="mb-4">
-                    <p className="text-sm font-medium mb-2">Quiz Competency Scores</p>
-                    <div className="grid grid-cols-3 gap-3">
-                      {Object.entries(candidate.quizScores).map(([topic, score]) => (
-                        <div key={topic} className="text-center">
-                          <p className="text-xs text-muted-foreground capitalize">{topic}</p>
-                          <p className="font-semibold">{score}/10</p>
-                        </div>
-                      ))}
-                    </div>
+                {/* Actions */}
+                <div className="flex justify-between items-center">
+                  <div className="flex space-x-2">
+                    <Button size="sm" variant="outline">
+                      <Eye className="w-4 h-4 mr-1" />
+                      View Profile
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      Resume
+                    </Button>
                   </div>
+                  <div className="flex space-x-2">
+                    <Button size="sm" variant="outline">
+                      <Heart className="w-4 h-4 mr-1" />
+                      Watchlist
+                    </Button>
+                    <Button size="sm">
+                      <CheckCircle2 className="w-4 h-4 mr-1" />
+                      Shortlist
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-                  {/* Actions */}
-                  <div className="flex justify-between items-center">
-                    <div className="flex space-x-2">
-                      <Button size="sm" variant="outline">
-                        <Eye className="w-4 h-4 mr-1" />
-                        View Profile
-                      </Button>
-                      <Button size="sm" variant="outline">
-                        Resume
-                      </Button>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button size="sm" variant="outline">
-                        <Heart className="w-4 h-4 mr-1" />
-                        Watchlist
-                      </Button>
-                      <Button size="sm">
-                        <CheckCircle2 className="w-4 h-4 mr-1" />
-                        Shortlist
-                      </Button>
+            <Card className="hover:shadow-lg transition-all">
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h4 className="text-lg font-semibold">Sarah Wilson</h4>
+                    <p className="text-muted-foreground">sarah.wilson@email.com</p>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <MapPin className="w-4 h-4" />
+                      <span className="text-sm">Mumbai</span>
+                      <span className="text-sm">• BITS Pilani</span>
+                      <span className="text-sm">• CGPA: 9.1</span>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <div className="text-right">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Target className="w-4 h-4 text-green-600" />
+                      <span className="font-semibold text-green-600">8.5/10</span>
+                    </div>
+                    <Badge variant="outline">30 days notice</Badge>
+                  </div>
+                </div>
+
+                {/* AI Pitch */}
+                <div className="bg-blue-50 p-3 rounded-lg mb-4">
+                  <div className="flex items-start space-x-2">
+                    <Brain className="w-4 h-4 text-blue-600 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-blue-900">AI Smart Pitch</p>
+                      <p className="text-sm text-blue-800">Backend specialist with exceptional database skills and clean coding practices.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Skills */}
+                <div className="mb-4">
+                  <p className="text-sm font-medium mb-2">Skills & Tech Stack</p>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="secondary">Python</Badge>
+                    <Badge variant="secondary">Django</Badge>
+                    <Badge variant="secondary">PostgreSQL</Badge>
+                    <Badge variant="secondary">Docker</Badge>
+                  </div>
+                </div>
+
+                {/* Quiz Scores */}
+                <div className="mb-4">
+                  <p className="text-sm font-medium mb-2">Quiz Competency Scores</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="text-center">
+                      <p className="text-xs text-muted-foreground">Python</p>
+                      <p className="font-semibold">9/10</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-muted-foreground">SQL</p>
+                      <p className="font-semibold">8/10</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-muted-foreground">Django</p>
+                      <p className="font-semibold">8/10</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex justify-between items-center">
+                  <div className="flex space-x-2">
+                    <Button size="sm" variant="outline">
+                      <Eye className="w-4 h-4 mr-1" />
+                      View Profile
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      Resume
+                    </Button>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button size="sm" variant="outline">
+                      <Heart className="w-4 h-4 mr-1" />
+                      Watchlist
+                    </Button>
+                    <Button size="sm">
+                      <CheckCircle2 className="w-4 h-4 mr-1" />
+                      Shortlist
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </TabsContent>
 
@@ -460,73 +557,139 @@ const RecruiterPanel = () => {
         </TabsContent>
 
         {/* Candidate Preview Panel */}
-        <TabsContent value="candidates" className="space-y-6">
+        <TabsContent value="candidates" className="space-y-6 mt-6">
           <Card>
             <CardHeader>
               <CardTitle>Candidate Management</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockCandidates.map((candidate) => (
-                  <div key={candidate.id} className="border rounded-lg p-4">
-                    <div className="grid md:grid-cols-3 gap-4">
-                      {/* Basic Info */}
-                      <div>
-                        <h4 className="font-semibold">{candidate.name}</h4>
-                        <p className="text-sm text-muted-foreground">{candidate.email}</p>
-                        <div className="mt-2 space-y-1">
-                          <div className="flex items-center space-x-2">
-                            <Badge variant="outline">LinkedIn</Badge>
-                            <Badge variant="outline">GitHub</Badge>
-                          </div>
-                          <p className="text-sm">Expected: {candidate.expectedSalary}</p>
+                <div className="border rounded-lg p-4">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    {/* Basic Info */}
+                    <div>
+                      <h4 className="font-semibold">John Smith</h4>
+                      <p className="text-sm text-muted-foreground">john.smith@email.com</p>
+                      <div className="mt-2 space-y-1">
+                        <div className="flex items-center space-x-2">
+                          <Badge variant="outline">LinkedIn</Badge>
+                          <Badge variant="outline">GitHub</Badge>
                         </div>
+                        <p className="text-sm">Expected: 12-15 LPA</p>
                       </div>
+                    </div>
 
-                      {/* Skills & Scores */}
-                      <div>
-                        <p className="text-sm font-medium mb-2">Quiz Scores</p>
-                        {Object.entries(candidate.quizScores).map(([topic, score]) => (
-                          <div key={topic} className="flex justify-between items-center mb-1">
-                            <span className="text-sm capitalize">{topic}</span>
-                            <Progress value={score * 10} className="w-16 h-2" />
-                            <span className="text-sm font-medium">{score}/10</span>
-                          </div>
-                        ))}
+                    {/* Skills & Scores */}
+                    <div>
+                      <p className="text-sm font-medium mb-2">Quiz Scores</p>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm">React</span>
+                        <Progress value={90} className="w-16 h-2" />
+                        <span className="text-sm font-medium">9/10</span>
                       </div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm">JavaScript</span>
+                        <Progress value={80} className="w-16 h-2" />
+                        <span className="text-sm font-medium">8/10</span>
+                      </div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm">Node.js</span>
+                        <Progress value={70} className="w-16 h-2" />
+                        <span className="text-sm font-medium">7/10</span>
+                      </div>
+                    </div>
 
-                      {/* Actions */}
-                      <div className="space-y-2">
-                        <Button size="sm" className="w-full">
-                          <Eye className="w-4 h-4 mr-2" />
-                          View Full Profile
+                    {/* Actions */}
+                    <div className="space-y-2">
+                      <Button size="sm" className="w-full">
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Full Profile
+                      </Button>
+                      <Button size="sm" variant="outline" className="w-full">
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Schedule Interview
+                      </Button>
+                      <div className="flex space-x-2">
+                        <Button size="sm" variant="outline">
+                          <CheckCircle2 className="w-4 h-4" />
                         </Button>
-                        <Button size="sm" variant="outline" className="w-full">
-                          <Calendar className="w-4 h-4 mr-2" />
-                          Schedule Interview
+                        <Button size="sm" variant="outline">
+                          <X className="w-4 h-4" />
                         </Button>
-                        <div className="flex space-x-2">
-                          <Button size="sm" variant="outline">
-                            <CheckCircle2 className="w-4 h-4" />
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <X className="w-4 h-4" />
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Heart className="w-4 h-4" />
-                          </Button>
-                        </div>
+                        <Button size="sm" variant="outline">
+                          <Heart className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
                   </div>
-                ))}
+                </div>
+
+                <div className="border rounded-lg p-4">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    {/* Basic Info */}
+                    <div>
+                      <h4 className="font-semibold">Sarah Wilson</h4>
+                      <p className="text-sm text-muted-foreground">sarah.wilson@email.com</p>
+                      <div className="mt-2 space-y-1">
+                        <div className="flex items-center space-x-2">
+                          <Badge variant="outline">LinkedIn</Badge>
+                          <Badge variant="outline">GitHub</Badge>
+                        </div>
+                        <p className="text-sm">Expected: 10-12 LPA</p>
+                      </div>
+                    </div>
+
+                    {/* Skills & Scores */}
+                    <div>
+                      <p className="text-sm font-medium mb-2">Quiz Scores</p>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm">Python</span>
+                        <Progress value={90} className="w-16 h-2" />
+                        <span className="text-sm font-medium">9/10</span>
+                      </div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm">SQL</span>
+                        <Progress value={80} className="w-16 h-2" />
+                        <span className="text-sm font-medium">8/10</span>
+                      </div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm">Django</span>
+                        <Progress value={80} className="w-16 h-2" />
+                        <span className="text-sm font-medium">8/10</span>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="space-y-2">
+                      <Button size="sm" className="w-full">
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Full Profile
+                      </Button>
+                      <Button size="sm" variant="outline" className="w-full">
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Schedule Interview
+                      </Button>
+                      <div className="flex space-x-2">
+                        <Button size="sm" variant="outline">
+                          <CheckCircle2 className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="outline">
+                          <X className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="outline">
+                          <Heart className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Interview & Shortlisting Tools */}
-        <TabsContent value="interviews" className="space-y-6">
+        <TabsContent value="interviews" className="space-y-6 mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -591,25 +754,42 @@ const RecruiterPanel = () => {
               <div>
                 <h4 className="font-semibold mb-3">Candidate Comparison Tool</h4>
                 <div className="grid md:grid-cols-3 gap-4">
-                  {mockCandidates.slice(0, 2).map((candidate) => (
-                    <Card key={candidate.id} className="p-4">
-                      <h5 className="font-medium">{candidate.name}</h5>
-                      <div className="mt-2 space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-sm">Overall Score</span>
-                          <span className="font-medium">{candidate.overallScore}/10</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-sm">Experience</span>
-                          <span className="font-medium">{candidate.experience}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-sm">Expected Salary</span>
-                          <span className="font-medium">{candidate.expectedSalary}</span>
-                        </div>
+                  <Card className="p-4">
+                    <h5 className="font-medium">John Smith</h5>
+                    <div className="mt-2 space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Overall Score</span>
+                        <span className="font-medium">8.2/10</span>
                       </div>
-                    </Card>
-                  ))}
+                      <div className="flex justify-between">
+                        <span className="text-sm">Experience</span>
+                        <span className="font-medium">3 years</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm">Expected Salary</span>
+                        <span className="font-medium">12-15 LPA</span>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="p-4">
+                    <h5 className="font-medium">Sarah Wilson</h5>
+                    <div className="mt-2 space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Overall Score</span>
+                        <span className="font-medium">8.5/10</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm">Experience</span>
+                        <span className="font-medium">2 years</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm">Expected Salary</span>
+                        <span className="font-medium">10-12 LPA</span>
+                      </div>
+                    </div>
+                  </Card>
+
                   <div className="flex items-center justify-center border-2 border-dashed border-border rounded-lg p-4">
                     <Button variant="outline">
                       Add Candidate
