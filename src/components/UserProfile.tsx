@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
+import { toast } from '@/components/ui/sonner';
 import { 
   User, 
   Mail, 
@@ -20,11 +21,14 @@ import {
   BookOpen,
   Award,
   Calendar,
-  ExternalLink
+  ExternalLink,
+  FileText,
+  Check
 } from 'lucide-react';
 
 const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [uploadedResume, setUploadedResume] = useState<File | null>(null);
   const [profileData, setProfileData] = useState({
     firstName: 'John',
     lastName: 'Doe',
@@ -72,6 +76,7 @@ const UserProfile = () => {
   const handleSave = () => {
     // Here you would typically save to backend
     setIsEditing(false);
+    toast.success('Profile updated successfully!');
   };
 
   const handleCancel = () => {
@@ -84,6 +89,36 @@ const UserProfile = () => {
       ...prev,
       [field]: value
     }));
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Check file type
+    const allowedTypes = ['.pdf', '.doc', '.docx'];
+    const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+    
+    if (!allowedTypes.includes(fileExtension)) {
+      toast.error('Invalid file type. Please upload PDF, DOC, or DOCX files only.');
+      return;
+    }
+
+    // Check file size (5MB = 5 * 1024 * 1024 bytes)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error('File size too large. Please upload a file smaller than 5MB.');
+      return;
+    }
+
+    setUploadedResume(file);
+    toast.success('Resume uploaded successfully!');
+    console.log('File uploaded:', file.name, 'Size:', file.size, 'Type:', file.type);
+  };
+
+  const handleRemoveResume = () => {
+    setUploadedResume(null);
+    toast.success('Resume removed successfully!');
   };
 
   return (
@@ -267,13 +302,51 @@ const UserProfile = () => {
             <CardTitle>Resume & Documents</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
-              <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground mb-2">Upload your resume</p>
-              <Button variant="outline" size="sm">
-                Choose File
-              </Button>
-            </div>
+            {uploadedResume ? (
+              <div className="border border-green-200 rounded-lg p-4 bg-green-50">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <FileText className="w-5 h-5 text-green-600" />
+                    <div>
+                      <p className="font-medium text-green-800">{uploadedResume.name}</p>
+                      <p className="text-sm text-green-600">
+                        {(uploadedResume.size / (1024 * 1024)).toFixed(2)} MB
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-5 h-5 text-green-600" />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleRemoveResume}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
+                <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground mb-2">Upload your resume</p>
+                <input
+                  type="file"
+                  id="resume-upload"
+                  accept=".pdf,.doc,.docx"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => document.getElementById('resume-upload')?.click()}
+                >
+                  Choose File
+                </Button>
+              </div>
+            )}
             <div className="text-sm text-muted-foreground">
               <p>Supported formats: PDF, DOC, DOCX (Max 5MB)</p>
             </div>
