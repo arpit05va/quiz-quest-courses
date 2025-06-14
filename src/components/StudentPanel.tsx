@@ -52,7 +52,9 @@ import {
   ThumbsUp,
   Plus,
   Trash2,
-  Edit
+  Edit,
+  FolderPlus,
+  Lightbulb
 } from 'lucide-react';
 
 const StudentPanel = () => {
@@ -542,7 +544,7 @@ const StudentPanel = () => {
                 </CardContent>
               </Card>
 
-              {/* Projects Section */}
+              {/* Enhanced Projects Section */}
               <Card>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -552,71 +554,141 @@ const StudentPanel = () => {
                     </CardTitle>
                     <Dialog open={isAddingProject} onOpenChange={setIsAddingProject}>
                       <DialogTrigger asChild>
-                        <Button size="sm">
+                        <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                           <Plus className="w-4 h-4 mr-2" />
                           Add Project
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-2xl">
-                        <DialogHeader>
-                          <DialogTitle>Add New Project</DialogTitle>
+                      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                        <DialogHeader className="space-y-3 pb-6 border-b">
+                          <div className="flex items-center space-x-3">
+                            <div className="p-3 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg">
+                              <FolderPlus className="w-6 h-6 text-blue-600" />
+                            </div>
+                            <div>
+                              <DialogTitle className="text-2xl font-bold text-gray-900">Add New Project</DialogTitle>
+                              <p className="text-sm text-gray-600 mt-1">Showcase your technical skills and creativity</p>
+                            </div>
+                          </div>
                         </DialogHeader>
-                        <div className="space-y-4 py-4">
-                          <div className="grid grid-cols-2 gap-4">
-                            <div>
-                              <Label htmlFor="projectName">Project Name *</Label>
-                              <Input
-                                id="projectName"
-                                value={projectForm.name}
-                                onChange={(e) => handleProjectFormChange('name', e.target.value)}
-                                placeholder="Enter project name"
-                              />
+                        
+                        <div className="space-y-8 py-6">
+                          {/* Project Basic Info Section */}
+                          <div className="space-y-6">
+                            <div className="flex items-center space-x-2 mb-4">
+                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <span className="text-blue-600 font-semibold text-sm">1</span>
+                              </div>
+                              <h3 className="text-lg font-semibold text-gray-900">Project Information</h3>
                             </div>
-                            <div>
-                              <Label htmlFor="techStack">Tech Stack *</Label>
-                              <Input
-                                id="techStack"
-                                value={projectForm.techStack}
-                                onChange={(e) => handleProjectFormChange('techStack', e.target.value)}
-                                placeholder="e.g., React, Node.js, MongoDB"
-                              />
-                            </div>
-                          </div>
-                          <div>
-                            <Label htmlFor="description">Description *</Label>
-                            <Textarea
-                              id="description"
-                              value={projectForm.description}
-                              onChange={(e) => handleProjectFormChange('description', e.target.value)}
-                              placeholder="Describe your project, its features, and what you learned"
-                              rows={3}
-                            />
-                          </div>
-                          <div className="grid grid-cols-2 gap-4">
-                            <div>
-                              <Label htmlFor="githubLink">GitHub Link</Label>
-                              <Input
-                                id="githubLink"
-                                value={projectForm.githubLink}
-                                onChange={(e) => handleProjectFormChange('githubLink', e.target.value)}
-                                placeholder="https://github.com/username/project"
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor="liveLink">Live Demo Link</Label>
-                              <Input
-                                id="liveLink"
-                                value={projectForm.liveLink}
-                                onChange={(e) => handleProjectFormChange('liveLink', e.target.value)}
-                                placeholder="https://your-project-demo.com"
-                              />
+                            
+                            <div className="grid grid-cols-2 gap-6">
+                              <div className="space-y-2">
+                                <Label htmlFor="projectName" className="text-sm font-medium text-gray-700 flex items-center">
+                                  Project Name <span className="text-red-500 ml-1">*</span>
+                                </Label>
+                                <Input
+                                  id="projectName"
+                                  value={projectForm.name}
+                                  onChange={(e) => handleProjectFormChange('name', e.target.value)}
+                                  placeholder="e.g., AI-Powered Task Manager"
+                                  className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="techStack" className="text-sm font-medium text-gray-700 flex items-center">
+                                  Tech Stack <span className="text-red-500 ml-1">*</span>
+                                </Label>
+                                <Input
+                                  id="techStack"
+                                  value={projectForm.techStack}
+                                  onChange={(e) => handleProjectFormChange('techStack', e.target.value)}
+                                  placeholder="React, Node.js, MongoDB, Express"
+                                  className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                />
+                              </div>
                             </div>
                           </div>
-                          <div className="flex justify-end space-x-2 pt-4">
-                            <Button variant="outline" onClick={() => setIsAddingProject(false)}>
+
+                          {/* Project Description Section */}
+                          <div className="space-y-6">
+                            <div className="flex items-center space-x-2 mb-4">
+                              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                <span className="text-purple-600 font-semibold text-sm">2</span>
+                              </div>
+                              <h3 className="text-lg font-semibold text-gray-900">Project Details</h3>
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label htmlFor="description" className="text-sm font-medium text-gray-700 flex items-center">
+                                Description <span className="text-red-500 ml-1">*</span>
+                                <Lightbulb className="w-4 h-4 ml-2 text-yellow-500" />
+                              </Label>
+                              <Textarea
+                                id="description"
+                                value={projectForm.description}
+                                onChange={(e) => handleProjectFormChange('description', e.target.value)}
+                                placeholder="Describe your project's purpose, key features, challenges solved, and what you learned. Be specific about your role and the impact of your work."
+                                rows={4}
+                                className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 resize-none"
+                              />
+                              <p className="text-xs text-gray-500 mt-1">💡 Tip: Include the problem you solved, your approach, and the results achieved</p>
+                            </div>
+                          </div>
+
+                          {/* Project Links Section */}
+                          <div className="space-y-6">
+                            <div className="flex items-center space-x-2 mb-4">
+                              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                <span className="text-green-600 font-semibold text-sm">3</span>
+                              </div>
+                              <h3 className="text-lg font-semibold text-gray-900">Project Links</h3>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-6">
+                              <div className="space-y-2">
+                                <Label htmlFor="githubLink" className="text-sm font-medium text-gray-700 flex items-center">
+                                  <GitBranch className="w-4 h-4 mr-2" />
+                                  GitHub Repository
+                                </Label>
+                                <Input
+                                  id="githubLink"
+                                  value={projectForm.githubLink}
+                                  onChange={(e) => handleProjectFormChange('githubLink', e.target.value)}
+                                  placeholder="https://github.com/username/project-name"
+                                  className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="liveLink" className="text-sm font-medium text-gray-700 flex items-center">
+                                  <Globe className="w-4 h-4 mr-2" />
+                                  Live Demo
+                                </Label>
+                                <Input
+                                  id="liveLink"
+                                  value={projectForm.liveLink}
+                                  onChange={(e) => handleProjectFormChange('liveLink', e.target.value)}
+                                  placeholder="https://your-awesome-project.vercel.app"
+                                  className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">
+                            <Button 
+                              variant="outline" 
+                              onClick={() => setIsAddingProject(false)}
+                              className="px-6 py-2.5 border-gray-300 text-gray-700 hover:bg-gray-50"
+                            >
                               Cancel
                             </Button>
-                            <Button onClick={handleAddProject}>
+                            <Button 
+                              onClick={handleAddProject}
+                              className="px-8 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium shadow-lg"
+                            >
+                              <Plus className="w-4 h-4 mr-2" />
                               Add Project
                             </Button>
                           </div>
