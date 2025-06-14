@@ -52,11 +52,7 @@ import {
   ThumbsUp,
   Plus,
   Trash2,
-  Edit,
-  Sparkles,
-  Rocket,
-  Link2,
-  Github
+  Edit
 } from 'lucide-react';
 
 const StudentPanel = () => {
@@ -546,137 +542,82 @@ const StudentPanel = () => {
                 </CardContent>
               </Card>
 
-              {/* Enhanced Projects Section */}
-              <Card className="border-2 border-dashed border-blue-200 hover:border-blue-400 transition-colors">
+              {/* Projects Section */}
+              <Card>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center space-x-2">
-                      <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600">
-                        <Rocket className="w-5 h-5 text-white" />
-                      </div>
-                      <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                        Projects Portfolio
-                      </span>
+                      <Code className="w-5 h-5" />
+                      <span>Projects Portfolio</span>
                     </CardTitle>
                     <Dialog open={isAddingProject} onOpenChange={setIsAddingProject}>
                       <DialogTrigger asChild>
-                        <Button size="sm" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+                        <Button size="sm">
                           <Plus className="w-4 h-4 mr-2" />
                           Add Project
-                          <Sparkles className="w-4 h-4 ml-2" />
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-                        <DialogHeader className="pb-6">
-                          <DialogTitle className="flex items-center space-x-3 text-2xl">
-                            <div className="p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600">
-                              <Rocket className="w-6 h-6 text-white" />
-                            </div>
-                            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                              Create Amazing Project
-                            </span>
-                          </DialogTitle>
-                          <p className="text-muted-foreground mt-2">
-                            Showcase your skills and creativity. Add details about your project to impress recruiters.
-                          </p>
+                      <DialogContent className="max-w-2xl">
+                        <DialogHeader>
+                          <DialogTitle>Add New Project</DialogTitle>
                         </DialogHeader>
-                        
-                        <div className="space-y-6 py-4">
-                          {/* Project Name & Tech Stack Row */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                              <Label htmlFor="projectName" className="text-base font-semibold flex items-center space-x-2">
-                                <Code className="w-4 h-4 text-blue-600" />
-                                <span>Project Name *</span>
-                              </Label>
+                        <div className="space-y-4 py-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="projectName">Project Name *</Label>
                               <Input
                                 id="projectName"
                                 value={projectForm.name}
                                 onChange={(e) => handleProjectFormChange('name', e.target.value)}
-                                placeholder="e.g., AI-Powered Task Manager"
-                                className="h-12 text-base border-2 focus:border-blue-500 transition-colors"
+                                placeholder="Enter project name"
                               />
                             </div>
-                            <div className="space-y-2">
-                              <Label htmlFor="techStack" className="text-base font-semibold flex items-center space-x-2">
-                                <Zap className="w-4 h-4 text-purple-600" />
-                                <span>Tech Stack *</span>
-                              </Label>
+                            <div>
+                              <Label htmlFor="techStack">Tech Stack *</Label>
                               <Input
                                 id="techStack"
                                 value={projectForm.techStack}
                                 onChange={(e) => handleProjectFormChange('techStack', e.target.value)}
-                                placeholder="e.g., React, Node.js, MongoDB, AWS"
-                                className="h-12 text-base border-2 focus:border-purple-500 transition-colors"
+                                placeholder="e.g., React, Node.js, MongoDB"
                               />
                             </div>
                           </div>
-
-                          {/* Description */}
-                          <div className="space-y-2">
-                            <Label htmlFor="description" className="text-base font-semibold flex items-center space-x-2">
-                              <FileText className="w-4 h-4 text-green-600" />
-                              <span>Project Description *</span>
-                            </Label>
+                          <div>
+                            <Label htmlFor="description">Description *</Label>
                             <Textarea
                               id="description"
                               value={projectForm.description}
                               onChange={(e) => handleProjectFormChange('description', e.target.value)}
-                              placeholder="Describe your project's purpose, key features, challenges you solved, and what you learned. Make it compelling!"
-                              rows={4}
-                              className="text-base border-2 focus:border-green-500 transition-colors resize-none"
+                              placeholder="Describe your project, its features, and what you learned"
+                              rows={3}
                             />
-                            <p className="text-xs text-muted-foreground">
-                              💡 Tip: Mention the problem you solved, technologies used, and key features
-                            </p>
                           </div>
-
-                          {/* Links Row */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                              <Label htmlFor="githubLink" className="text-base font-semibold flex items-center space-x-2">
-                                <Github className="w-4 h-4 text-gray-800" />
-                                <span>GitHub Repository</span>
-                              </Label>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="githubLink">GitHub Link</Label>
                               <Input
                                 id="githubLink"
                                 value={projectForm.githubLink}
                                 onChange={(e) => handleProjectFormChange('githubLink', e.target.value)}
-                                placeholder="https://github.com/username/project-name"
-                                className="h-12 text-base border-2 focus:border-gray-500 transition-colors"
+                                placeholder="https://github.com/username/project"
                               />
                             </div>
-                            <div className="space-y-2">
-                              <Label htmlFor="liveLink" className="text-base font-semibold flex items-center space-x-2">
-                                <Globe className="w-4 h-4 text-orange-600" />
-                                <span>Live Demo</span>
-                              </Label>
+                            <div>
+                              <Label htmlFor="liveLink">Live Demo Link</Label>
                               <Input
                                 id="liveLink"
                                 value={projectForm.liveLink}
                                 onChange={(e) => handleProjectFormChange('liveLink', e.target.value)}
-                                placeholder="https://your-awesome-project.vercel.app"
-                                className="h-12 text-base border-2 focus:border-orange-500 transition-colors"
+                                placeholder="https://your-project-demo.com"
                               />
                             </div>
                           </div>
-
-                          {/* Action Buttons */}
-                          <div className="flex justify-end space-x-4 pt-6 border-t">
-                            <Button 
-                              variant="outline" 
-                              onClick={() => setIsAddingProject(false)}
-                              className="px-6 py-2 h-12"
-                            >
+                          <div className="flex justify-end space-x-2 pt-4">
+                            <Button variant="outline" onClick={() => setIsAddingProject(false)}>
                               Cancel
                             </Button>
-                            <Button 
-                              onClick={handleAddProject}
-                              className="px-8 py-2 h-12 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-                            >
-                              <Rocket className="w-4 h-4 mr-2" />
-                              Launch Project
-                              <Sparkles className="w-4 h-4 ml-2" />
+                            <Button onClick={handleAddProject}>
+                              Add Project
                             </Button>
                           </div>
                         </div>
@@ -687,58 +628,48 @@ const StudentPanel = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {profileData.projects.length === 0 ? (
-                      <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl border-2 border-dashed border-blue-200">
-                        <div className="max-w-md mx-auto">
-                          <div className="p-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
-                            <Rocket className="w-10 h-10 text-white" />
-                          </div>
-                          <h3 className="text-xl font-semibold text-gray-800 mb-2">Ready to showcase your work?</h3>
-                          <p className="text-gray-600 mb-4">Add your first project to stand out from the crowd!</p>
-                          <p className="text-sm text-gray-500">Projects help recruiters understand your practical skills and creativity.</p>
-                        </div>
+                      <div className="text-center py-8 text-muted-foreground">
+                        <Code className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                        <p>No projects added yet.</p>
+                        <p className="text-sm">Add your first project to showcase your skills!</p>
                       </div>
                     ) : (
                       profileData.projects.map((project) => (
-                        <div key={project.id} className="border-2 rounded-xl p-6 hover:shadow-lg transition-all duration-200 bg-gradient-to-br from-white to-gray-50 hover:from-blue-50 hover:to-purple-50">
-                          <div className="flex items-start justify-between mb-4">
+                        <div key={project.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div className="flex items-start justify-between mb-3">
                             <div className="flex-1">
-                              <div className="flex items-center space-x-3 mb-3">
-                                <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600">
-                                  <Code className="w-5 h-5 text-white" />
-                                </div>
-                                <h4 className="font-bold text-xl text-gray-800">{project.name}</h4>
-                              </div>
-                              <div className="flex flex-wrap gap-2 mb-3">
+                              <h4 className="font-semibold text-lg mb-1">{project.name}</h4>
+                              <div className="flex flex-wrap gap-1 mb-2">
                                 {project.techStack.split(',').map((tech, index) => (
-                                  <Badge key={index} variant="secondary" className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 border border-blue-200">
+                                  <Badge key={index} variant="secondary" className="text-xs">
                                     {tech.trim()}
                                   </Badge>
                                 ))}
                               </div>
-                              <p className="text-gray-600 mb-4 leading-relaxed">{project.description}</p>
+                              <p className="text-sm text-muted-foreground mb-3">{project.description}</p>
                             </div>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => handleDeleteProject(project.id)}
-                              className="text-red-500 hover:text-red-700 hover:bg-red-50 ml-4"
+                              className="text-red-600 hover:text-red-700 hover:bg-red-50"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>
                           </div>
-                          <div className="flex space-x-3">
+                          <div className="flex space-x-2">
                             {project.githubLink && (
-                              <Button variant="outline" size="sm" asChild className="border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white">
+                              <Button variant="outline" size="sm" asChild>
                                 <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
-                                  <Github className="w-4 h-4 mr-2" />
-                                  View Code
+                                  <GitBranch className="w-4 h-4 mr-1" />
+                                  Code
                                 </a>
                               </Button>
                             )}
                             {project.liveLink && (
-                              <Button variant="outline" size="sm" asChild className="border-orange-500 text-orange-600 hover:bg-orange-500 hover:text-white">
+                              <Button variant="outline" size="sm" asChild>
                                 <a href={project.liveLink} target="_blank" rel="noopener noreferrer">
-                                  <Globe className="w-4 h-4 mr-2" />
+                                  <ExternalLink className="w-4 h-4 mr-1" />
                                   Live Demo
                                 </a>
                               </Button>
