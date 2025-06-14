@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -26,17 +25,13 @@ import {
   ExternalLink,
   FileText,
   Check,
-  Eye,
-  Plus,
-  Code,
-  Trash2
+  Eye
 } from 'lucide-react';
 
 const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [uploadedResume, setUploadedResume] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [showAddProject, setShowAddProject] = useState(false);
   const [profileData, setProfileData] = useState({
     firstName: 'John',
     lastName: 'Doe',
@@ -49,33 +44,6 @@ const UserProfile = () => {
     codechefUrl: 'https://codechef.com/users/johndoe',
     codeforcesUrl: 'https://codeforces.com/profile/johndoe',
     profilePhoto: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
-  });
-
-  const [projects, setProjects] = useState([
-    {
-      id: 1,
-      name: 'E-commerce Website',
-      techStack: ['React', 'Node.js', 'MongoDB', 'Express'],
-      description: 'A full-stack e-commerce platform with user authentication, product catalog, shopping cart, and payment integration.',
-      projectLink: 'https://github.com/johndoe/ecommerce-app',
-      liveLink: 'https://ecommerce-demo.netlify.app'
-    },
-    {
-      id: 2,
-      name: 'Task Management App',
-      techStack: ['Vue.js', 'Firebase', 'Tailwind CSS'],
-      description: 'A collaborative task management application with real-time updates, drag-and-drop functionality, and team collaboration features.',
-      projectLink: 'https://github.com/johndoe/task-manager',
-      liveLink: 'https://taskmanager-demo.vercel.app'
-    }
-  ]);
-
-  const [newProject, setNewProject] = useState({
-    name: '',
-    techStack: '',
-    description: '',
-    projectLink: '',
-    liveLink: ''
   });
 
   const enrolledCourses = [
@@ -187,40 +155,6 @@ const UserProfile = () => {
     // For now, we'll just show a success message
     toast.success('Resume submitted to server successfully!');
     console.log('Submitting file to server:', uploadedResume.name);
-  };
-
-  const handleAddProject = () => {
-    if (!newProject.name || !newProject.techStack || !newProject.description || !newProject.projectLink) {
-      toast.error('Please fill in all required fields.');
-      return;
-    }
-
-    const techStackArray = newProject.techStack.split(',').map(tech => tech.trim()).filter(tech => tech);
-    
-    const project = {
-      id: Date.now(),
-      name: newProject.name,
-      techStack: techStackArray,
-      description: newProject.description,
-      projectLink: newProject.projectLink,
-      liveLink: newProject.liveLink || undefined
-    };
-
-    setProjects(prev => [...prev, project]);
-    setNewProject({
-      name: '',
-      techStack: '',
-      description: '',
-      projectLink: '',
-      liveLink: ''
-    });
-    setShowAddProject(false);
-    toast.success('Project added successfully!');
-  };
-
-  const handleDeleteProject = (projectId: number) => {
-    setProjects(prev => prev.filter(project => project.id !== projectId));
-    toast.success('Project deleted successfully!');
   };
 
   return (
@@ -514,164 +448,6 @@ const UserProfile = () => {
           </CardContent>
         </Card>
       </div>
-
-      {/* Projects Portfolio */}
-      <Card className="border-none shadow-lg">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center space-x-2">
-              <Code className="w-5 h-5" />
-              <span>Projects Portfolio</span>
-            </CardTitle>
-            <Button
-              onClick={() => setShowAddProject(true)}
-              className="flex items-center space-x-2"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Project</span>
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-6">
-            {projects.map((project) => (
-              <div key={project.id} className="border border-border rounded-lg p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex-1">
-                    <h4 className="text-xl font-semibold mb-2">{project.name}</h4>
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {project.techStack.map((tech, index) => (
-                        <Badge key={index} variant="secondary">
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-                    <p className="text-muted-foreground mb-4">{project.description}</p>
-                    <div className="flex flex-wrap gap-3">
-                      <a
-                        href={project.projectLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary hover:underline flex items-center space-x-1"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        <span>View Code</span>
-                      </a>
-                      {project.liveLink && (
-                        <a
-                          href={project.liveLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline flex items-center space-x-1"
-                        >
-                          <Eye className="w-4 h-4" />
-                          <span>Live Demo</span>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleDeleteProject(project.id)}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-
-            {projects.length === 0 && (
-              <div className="text-center py-12">
-                <Code className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-lg font-semibold mb-2">No Projects Yet</h3>
-                <p className="text-muted-foreground mb-4">Start building your portfolio by adding your first project.</p>
-                <Button onClick={() => setShowAddProject(true)} className="flex items-center space-x-2">
-                  <Plus className="w-4 h-4" />
-                  <span>Add Your First Project</span>
-                </Button>
-              </div>
-            )}
-          </div>
-
-          {/* Add Project Form */}
-          {showAddProject && (
-            <div className="mt-6 border border-border rounded-lg p-6 bg-muted/50">
-              <h3 className="text-lg font-semibold mb-4">Add New Project</h3>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="projectName">Project Name *</Label>
-                  <Input
-                    id="projectName"
-                    value={newProject.name}
-                    onChange={(e) => setNewProject(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder="Enter project name"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="techStack">Technologies Used *</Label>
-                  <Input
-                    id="techStack"
-                    value={newProject.techStack}
-                    onChange={(e) => setNewProject(prev => ({ ...prev, techStack: e.target.value }))}
-                    placeholder="React, Node.js, MongoDB (comma separated)"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="projectDescription">Project Description *</Label>
-                  <Textarea
-                    id="projectDescription"
-                    value={newProject.description}
-                    onChange={(e) => setNewProject(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder="Describe your project, its features, and what you learned..."
-                    rows={4}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="projectLink">GitHub/Project Link *</Label>
-                  <Input
-                    id="projectLink"
-                    value={newProject.projectLink}
-                    onChange={(e) => setNewProject(prev => ({ ...prev, projectLink: e.target.value }))}
-                    placeholder="https://github.com/username/project"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="liveLink">Live Demo Link (Optional)</Label>
-                  <Input
-                    id="liveLink"
-                    value={newProject.liveLink}
-                    onChange={(e) => setNewProject(prev => ({ ...prev, liveLink: e.target.value }))}
-                    placeholder="https://yourproject.netlify.app"
-                  />
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setShowAddProject(false);
-                      setNewProject({
-                        name: '',
-                        techStack: '',
-                        description: '',
-                        projectLink: '',
-                        liveLink: ''
-                      });
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button onClick={handleAddProject} className="flex items-center space-x-2">
-                    <Save className="w-4 h-4" />
-                    <span>Add Project</span>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
 
       {/* Enrolled Courses */}
       <Card className="border-none shadow-lg">
