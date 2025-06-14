@@ -65,7 +65,7 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
               </div>
             </div>
 
-            {/* Page Title */}
+            {/* Page Title - Only show the title without CodeXMania prefix */}
             <div className="hidden md:block">
               <h1 className="text-xl font-semibold text-foreground">{title}</h1>
             </div>
