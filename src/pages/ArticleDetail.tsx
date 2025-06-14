@@ -1,13 +1,21 @@
 
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Eye, Heart, Star, Clock, User } from 'lucide-react';
+import { ArrowLeft, Eye, Heart, Star, Clock, User, Share } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const ArticleDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  // State for interactive features
+  const [isLiked, setIsLiked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [likesCount, setLikesCount] = useState(154);
 
   // Mock article data - in a real app, this would come from an API
   const article = {
@@ -67,8 +75,70 @@ const ArticleDetail = () => {
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=400&fit=crop',
     tags: ['Web Development', 'Trends', 'Technology'],
     views: 2580,
-    likes: 154,
     bookmarked: false
+  };
+
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    setLikesCount(prev => isLiked ? prev - 1 : prev + 1);
+    
+    toast({
+      title: isLiked ? "Article unliked" : "Article liked!",
+      description: isLiked ? "You removed your like from this article." : "Thanks for liking this article!",
+    });
+  };
+
+  const handleBookmark = () => {
+    setIsBookmarked(!isBookmarked);
+    
+    toast({
+      title: isBookmarked ? "Bookmark removed" : "Article bookmarked!",
+      description: isBookmarked ? "Article removed from your bookmarks." : "Article saved to your bookmarks.",
+    });
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: article.title,
+          text: article.excerpt,
+          url: url,
+        });
+        
+        toast({
+          title: "Article shared!",
+          description: "Thanks for sharing this article.",
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    } else {
+      // Fallback to copying URL to clipboard
+      try {
+        await navigator.clipboard.writeText(url);
+        toast({
+          title: "Link copied!",
+          description: "Article link copied to clipboard.",
+        });
+      } catch (error) {
+        toast({
+          title: "Share failed",
+          description: "Unable to share or copy link.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const handleRelatedArticleClick = (title: string) => {
+    toast({
+      title: "Navigating to article",
+      description: `Opening "${title}"`,
+    });
+    // In a real app, this would navigate to the actual article
   };
 
   return (
@@ -125,7 +195,7 @@ const ArticleDetail = () => {
                   </div>
                   <div className="flex items-center space-x-2">
                     <Heart className="w-4 h-4" />
-                    <span>{article.likes} likes</span>
+                    <span>{likesCount} likes</span>
                   </div>
                 </div>
               </div>
@@ -149,17 +219,26 @@ const ArticleDetail = () => {
                 <CardTitle className="text-lg">Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Button className="w-full" variant="outline">
-                  <Heart className="w-4 h-4 mr-2" />
-                  Like Article
+                <Button 
+                  className={`w-full ${isLiked ? 'bg-red-500 hover:bg-red-600 text-white' : ''}`}
+                  variant={isLiked ? "default" : "outline"}
+                  onClick={handleLike}
+                >
+                  <Heart className={`w-4 h-4 mr-2 ${isLiked ? 'fill-current' : ''}`} />
+                  {isLiked ? 'Liked' : 'Like Article'}
                 </Button>
                 
-                <Button className="w-full" variant="outline">
-                  <Star className="w-4 h-4 mr-2" />
-                  {article.bookmarked ? 'Remove Bookmark' : 'Bookmark'}
+                <Button 
+                  className={`w-full ${isBookmarked ? 'bg-yellow-500 hover:bg-yellow-600 text-white' : ''}`}
+                  variant={isBookmarked ? "default" : "outline"}
+                  onClick={handleBookmark}
+                >
+                  <Star className={`w-4 h-4 mr-2 ${isBookmarked ? 'fill-current' : ''}`} />
+                  {isBookmarked ? 'Bookmarked' : 'Bookmark'}
                 </Button>
                 
-                <Button className="w-full" variant="outline">
+                <Button className="w-full" variant="outline" onClick={handleShare}>
+                  <Share className="w-4 h-4 mr-2" />
                   Share Article
                 </Button>
               </CardContent>
@@ -172,11 +251,17 @@ const ArticleDetail = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  <div className="cursor-pointer hover:bg-muted/50 p-2 rounded">
+                  <div 
+                    className="cursor-pointer hover:bg-muted/50 p-2 rounded transition-colors"
+                    onClick={() => handleRelatedArticleClick("The Future of AI in Education")}
+                  >
                     <h4 className="font-medium text-sm">The Future of AI in Education</h4>
                     <p className="text-xs text-muted-foreground">7 min read</p>
                   </div>
-                  <div className="cursor-pointer hover:bg-muted/50 p-2 rounded">
+                  <div 
+                    className="cursor-pointer hover:bg-muted/50 p-2 rounded transition-colors"
+                    onClick={() => handleRelatedArticleClick("Building Responsive Websites")}
+                  >
                     <h4 className="font-medium text-sm">Building Responsive Websites</h4>
                     <p className="text-xs text-muted-foreground">6 min read</p>
                   </div>
