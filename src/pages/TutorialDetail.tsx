@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,6 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   BookOpen, 
   CheckCircle, 
@@ -16,7 +16,8 @@ import {
   ArrowLeft,
   FileText,
   Award,
-  Eye
+  Eye,
+  Maximize
 } from 'lucide-react';
 
 const TutorialDetail = () => {
@@ -24,6 +25,7 @@ const TutorialDetail = () => {
   const navigate = useNavigate();
   const [currentLesson, setCurrentLesson] = useState(0);
   const [completedLessons, setCompletedLessons] = useState(new Set([0]));
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Mock tutorial data - in a real app, this would come from an API
   const tutorial = {
@@ -176,8 +178,94 @@ function Counter() {
     setCompletedLessons(newCompleted);
   };
 
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+  };
+
   const currentLessonData = tutorial.lessons[currentLesson];
   const completionPercentage = (completedLessons.size / tutorial.lessons.length) * 100;
+
+  if (isFullscreen) {
+    return (
+      <div className="fixed inset-0 bg-background z-50 flex flex-col">
+        {/* Fullscreen Header */}
+        <header className="bg-background/95 backdrop-blur-sm border-b border-border">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center space-x-4">
+                <h1 className="text-lg font-semibold text-foreground">{currentLessonData.title}</h1>
+                <Badge variant="outline">Lesson {currentLesson + 1} of {tutorial.lessons.length}</Badge>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={toggleFullscreen}
+                className="flex items-center space-x-2"
+              >
+                <Maximize className="w-4 h-4" />
+                <span>Exit Fullscreen</span>
+              </Button>
+            </div>
+          </div>
+        </header>
+
+        {/* Fullscreen Content */}
+        <div className="flex-1 overflow-hidden">
+          <ScrollArea className="h-full">
+            <div className="container mx-auto px-4 py-6">
+              <Card className="border-none shadow-lg max-w-4xl mx-auto">
+                <CardContent className="p-8">
+                  {currentLessonData.type === 'text' ? (
+                    <div className="prose max-w-none">
+                      <div className="mb-6">
+                        <h2 className="text-3xl font-bold text-foreground mb-4">{currentLessonData.title}</h2>
+                        <div className="flex items-center space-x-4 text-sm text-muted-foreground mb-8">
+                          <div className="flex items-center space-x-1">
+                            <Clock className="w-4 h-4" />
+                            <span>{currentLessonData.duration}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <FileText className="w-4 h-4" />
+                            <span>Reading Material</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div 
+                        className="text-foreground leading-relaxed text-lg"
+                        dangerouslySetInnerHTML={{ __html: currentLessonData.content || '' }}
+                      />
+                    </div>
+                  ) : currentLessonData.type === 'quiz' ? (
+                    <div className="p-12 text-center">
+                      <Award className="w-20 h-20 text-primary mx-auto mb-6" />
+                      <h3 className="text-3xl font-bold mb-4">{currentLessonData.title}</h3>
+                      <p className="text-muted-foreground mb-8 text-lg">
+                        Test your knowledge with {currentLessonData.questions} questions
+                      </p>
+                      <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8 py-3">
+                        Start Quiz
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="p-12 text-center">
+                      <FileText className="w-20 h-20 text-primary mx-auto mb-6" />
+                      <h3 className="text-3xl font-bold mb-4">{currentLessonData.title}</h3>
+                      <p className="text-muted-foreground mb-8 text-lg">
+                        Apply your skills in this hands-on project
+                      </p>
+                      <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8 py-3">
+                        Start Project
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </ScrollArea>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
@@ -220,49 +308,63 @@ function Counter() {
             {/* Content Area */}
             <Card className="border-none shadow-lg">
               <CardContent className="p-6">
-                {currentLessonData.type === 'text' ? (
-                  <div className="prose max-w-none">
-                    <div className="mb-4">
-                      <h2 className="text-2xl font-bold text-foreground mb-2">{currentLessonData.title}</h2>
-                      <div className="flex items-center space-x-4 text-sm text-muted-foreground mb-6">
-                        <div className="flex items-center space-x-1">
-                          <Clock className="w-4 h-4" />
-                          <span>{currentLessonData.duration}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <FileText className="w-4 h-4" />
-                          <span>Reading Material</span>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-2xl font-bold text-foreground">{currentLessonData.title}</h2>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={toggleFullscreen}
+                    className="flex items-center space-x-2"
+                  >
+                    <Maximize className="w-4 h-4" />
+                    <span>Fullscreen</span>
+                  </Button>
+                </div>
+                
+                <ScrollArea className="h-96">
+                  {currentLessonData.type === 'text' ? (
+                    <div className="prose max-w-none pr-4">
+                      <div className="mb-4">
+                        <div className="flex items-center space-x-4 text-sm text-muted-foreground mb-6">
+                          <div className="flex items-center space-x-1">
+                            <Clock className="w-4 h-4" />
+                            <span>{currentLessonData.duration}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <FileText className="w-4 h-4" />
+                            <span>Reading Material</span>
+                          </div>
                         </div>
                       </div>
+                      <div 
+                        className="text-foreground leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: currentLessonData.content || '' }}
+                      />
                     </div>
-                    <div 
-                      className="text-foreground leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: currentLessonData.content || '' }}
-                    />
-                  </div>
-                ) : currentLessonData.type === 'quiz' ? (
-                  <div className="p-8 text-center">
-                    <Award className="w-16 h-16 text-primary mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">{currentLessonData.title}</h3>
-                    <p className="text-muted-foreground mb-6">
-                      Test your knowledge with {currentLessonData.questions} questions
-                    </p>
-                    <Button size="lg" className="bg-primary hover:bg-primary/90">
-                      Start Quiz
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="p-8 text-center">
-                    <FileText className="w-16 h-16 text-primary mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">{currentLessonData.title}</h3>
-                    <p className="text-muted-foreground mb-6">
-                      Apply your skills in this hands-on project
-                    </p>
-                    <Button size="lg" className="bg-primary hover:bg-primary/90">
-                      Start Project
-                    </Button>
-                  </div>
-                )}
+                  ) : currentLessonData.type === 'quiz' ? (
+                    <div className="p-8 text-center">
+                      <Award className="w-16 h-16 text-primary mx-auto mb-4" />
+                      <h3 className="text-2xl font-bold mb-2">{currentLessonData.title}</h3>
+                      <p className="text-muted-foreground mb-6">
+                        Test your knowledge with {currentLessonData.questions} questions
+                      </p>
+                      <Button size="lg" className="bg-primary hover:bg-primary/90">
+                        Start Quiz
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="p-8 text-center">
+                      <FileText className="w-16 h-16 text-primary mx-auto mb-4" />
+                      <h3 className="text-2xl font-bold mb-2">{currentLessonData.title}</h3>
+                      <p className="text-muted-foreground mb-6">
+                        Apply your skills in this hands-on project
+                      </p>
+                      <Button size="lg" className="bg-primary hover:bg-primary/90">
+                        Start Project
+                      </Button>
+                    </div>
+                  )}
+                </ScrollArea>
               </CardContent>
             </Card>
 
@@ -383,40 +485,42 @@ function Counter() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                {tutorial.lessons.map((lesson, index) => (
-                  <div
-                    key={lesson.id}
-                    className={`p-3 rounded-lg cursor-pointer transition-all duration-200 ${
-                      currentLesson === index 
-                        ? 'bg-primary/10 border border-primary/20' 
-                        : 'hover:bg-muted/50'
-                    }`}
-                    onClick={() => setCurrentLesson(index)}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="flex-shrink-0">
-                        {completedLessons.has(index) ? (
-                          <CheckCircle className="w-5 h-5 text-green-600" />
-                        ) : lesson.type === 'text' ? (
-                          <FileText className="w-5 h-5 text-muted-foreground" />
-                        ) : lesson.type === 'quiz' ? (
-                          <Award className="w-5 h-5 text-muted-foreground" />
-                        ) : (
-                          <FileText className="w-5 h-5 text-muted-foreground" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground truncate">
-                          {lesson.title}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {lesson.duration}
-                          {lesson.type === 'quiz' && ` • ${lesson.questions} questions`}
-                        </p>
+                <ScrollArea className="h-96">
+                  {tutorial.lessons.map((lesson, index) => (
+                    <div
+                      key={lesson.id}
+                      className={`p-3 rounded-lg cursor-pointer transition-all duration-200 mb-2 ${
+                        currentLesson === index 
+                          ? 'bg-primary/10 border border-primary/20' 
+                          : 'hover:bg-muted/50'
+                      }`}
+                      onClick={() => setCurrentLesson(index)}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="flex-shrink-0">
+                          {completedLessons.has(index) ? (
+                            <CheckCircle className="w-5 h-5 text-green-600" />
+                          ) : lesson.type === 'text' ? (
+                            <FileText className="w-5 h-5 text-muted-foreground" />
+                          ) : lesson.type === 'quiz' ? (
+                            <Award className="w-5 h-5 text-muted-foreground" />
+                          ) : (
+                            <FileText className="w-5 h-5 text-muted-foreground" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-foreground truncate">
+                            {lesson.title}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {lesson.duration}
+                            {lesson.type === 'quiz' && ` • ${lesson.questions} questions`}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </ScrollArea>
               </CardContent>
             </Card>
 
