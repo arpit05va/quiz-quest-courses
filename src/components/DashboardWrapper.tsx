@@ -1,4 +1,3 @@
-
 import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -57,7 +56,7 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
               {/* Enhanced Text Logo */}
               <div className="flex flex-col">
                 <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent group-hover:from-purple-500 group-hover:via-blue-500 group-hover:to-cyan-400 transition-all duration-300">
-                  code<span className="text-orange-500 group-hover:text-orange-400 transition-colors duration-300">X</span>Mania
+                  codeXMania
                 </span>
                 <span className="text-xs text-muted-foreground font-medium tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
                   Learn • Code • Excel
@@ -65,9 +64,11 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
               </div>
             </div>
 
-            {/* Page Title - Only show the title without CodeXMania prefix */}
+            {/* Page Title - Show only codeXMania */}
             <div className="hidden md:block">
-              <h1 className="text-xl font-semibold text-foreground">{title}</h1>
+              <h1 className="text-xl font-semibold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                codeXMania
+              </h1>
             </div>
 
             {/* Navigation Dropdowns */}
