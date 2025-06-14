@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Users, Clock, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface Course {
   id: number;
@@ -23,6 +24,12 @@ interface CourseCardProps {
 }
 
 const CourseCard = ({ course, index }: CourseCardProps) => {
+  const navigate = useNavigate();
+
+  const handleEnrollClick = () => {
+    navigate(`/course/${course.id}`);
+  };
+
   return (
     <Card className="group hover:shadow-xl transition-all duration-500 border-none shadow-lg animate-fade-in overflow-hidden hover-lift relative" style={{ animationDelay: `${index * 0.1}s` }}>
       {/* Shimmer effect overlay */}
@@ -79,7 +86,10 @@ const CourseCard = ({ course, index }: CourseCardProps) => {
           <span className="text-2xl font-bold text-primary-600 group-hover:animate-pulse">{course.price}</span>
         </div>
         
-        <Button className="w-full bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-semibold transition-all duration-300 hover:shadow-lg relative overflow-hidden group">
+        <Button 
+          onClick={handleEnrollClick}
+          className="w-full bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-semibold transition-all duration-300 hover:shadow-lg relative overflow-hidden group"
+        >
           <span className="relative z-10">Enroll Now</span>
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 animate-shimmer transition-opacity duration-300"></div>
         </Button>
