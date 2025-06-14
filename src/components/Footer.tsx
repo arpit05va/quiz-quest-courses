@@ -1,5 +1,5 @@
 
-import { BookOpen, Mail, Phone, MapPin } from 'lucide-react';
+import { BookOpen, Mail, Phone, MapPin, Code, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Footer = () => {
@@ -31,13 +31,32 @@ const Footer = () => {
     <footer className="bg-muted/50 dark:bg-gray-900 text-foreground dark:text-white">
       <div className="container mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Brand Section */}
+          {/* Enhanced Brand Section */}
           <div className="lg:col-span-1">
-            <div className="flex items-center space-x-2 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-white" />
+            <div className="flex items-center space-x-3 mb-6 group">
+              <div className="relative">
+                {/* Enhanced Logo Container */}
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/25 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 relative overflow-hidden">
+                  {/* Animated Background Pattern */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  {/* Primary Icon */}
+                  <Code className="w-7 h-7 text-white relative z-10" />
+                  
+                  {/* Secondary Icon */}
+                  <Zap className="w-4 h-4 text-yellow-300 absolute top-1 right-1 animate-bounce opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                </div>
+                
+                {/* Glow Effect */}
+                <div className="absolute inset-0 w-12 h-12 bg-gradient-to-br from-purple-600 to-cyan-500 rounded-xl blur-lg opacity-0 group-hover:opacity-30 transition-all duration-500 -z-10"></div>
               </div>
-              <span className="text-2xl font-bold">codeXMania</span>
+              
+              {/* Enhanced Text Logo */}
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent group-hover:from-purple-500 group-hover:via-blue-500 group-hover:to-cyan-400 transition-all duration-300">
+                  code<span className="text-orange-500 group-hover:text-orange-400 transition-colors duration-300">X</span>Mania
+                </span>
+              </div>
             </div>
             <p className="text-muted-foreground mb-6 leading-relaxed">
               Empowering learners worldwide with high-quality education and innovative learning experiences.
