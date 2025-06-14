@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/components/ui/sonner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   User, 
   Mail, 
@@ -23,12 +24,14 @@ import {
   Calendar,
   ExternalLink,
   FileText,
-  Check
+  Check,
+  Eye
 } from 'lucide-react';
 
 const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [uploadedResume, setUploadedResume] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [profileData, setProfileData] = useState({
     firstName: 'John',
     lastName: 'Doe',
@@ -112,13 +115,46 @@ const UserProfile = () => {
     }
 
     setUploadedResume(file);
+    
+    // Create preview URL for the file
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    
     toast.success('Resume uploaded successfully!');
     console.log('File uploaded:', file.name, 'Size:', file.size, 'Type:', file.type);
   };
 
   const handleRemoveResume = () => {
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
     setUploadedResume(null);
+    setPreviewUrl(null);
     toast.success('Resume removed successfully!');
+  };
+
+  const handlePreview = () => {
+    if (!uploadedResume || !previewUrl) return;
+    
+    // For PDF files, we can display them directly
+    if (uploadedResume.type === 'application/pdf') {
+      return;
+    }
+    
+    // For DOC/DOCX files, we'll show a message since they can't be previewed directly in browser
+    toast.info('DOC/DOCX files cannot be previewed directly. Click to download and view externally.');
+  };
+
+  const handleSubmitToServer = async () => {
+    if (!uploadedResume) {
+      toast.error('No file selected to submit.');
+      return;
+    }
+
+    // Here you would implement the actual server submission
+    // For now, we'll just show a success message
+    toast.success('Resume submitted to server successfully!');
+    console.log('Submitting file to server:', uploadedResume.name);
   };
 
   return (
@@ -316,6 +352,53 @@ const UserProfile = () => {
                   </div>
                   <div className="flex items-center space-x-2">
                     <Check className="w-5 h-5 text-green-600" />
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-4xl max-h-[80vh]">
+                        <DialogHeader>
+                          <DialogTitle>Document Preview - {uploadedResume.name}</DialogTitle>
+                        </DialogHeader>
+                        <div className="flex-1 overflow-auto">
+                          {uploadedResume.type === 'application/pdf' && previewUrl ? (
+                            <iframe
+                              src={previewUrl}
+                              className="w-full h-[600px] border rounded"
+                              title="Document Preview"
+                            />
+                          ) : (
+                            <div className="text-center py-8">
+                              <FileText className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                              <p className="text-gray-600 mb-4">
+                                Preview not available for {uploadedResume.type.split('/')[1].toUpperCase()} files
+                              </p>
+                              <p className="text-sm text-gray-500 mb-4">
+                                File: {uploadedResume.name} ({(uploadedResume.size / (1024 * 1024)).toFixed(2)} MB)
+                              </p>
+                              <Button
+                                onClick={() => {
+                                  const link = document.createElement('a');
+                                  link.href = previewUrl || '';
+                                  link.download = uploadedResume.name;
+                                  link.click();
+                                }}
+                                className="flex items-center space-x-2"
+                              >
+                                <Upload className="w-4 h-4" />
+                                <span>Download to View</span>
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -325,6 +408,15 @@ const UserProfile = () => {
                       <X className="w-4 h-4" />
                     </Button>
                   </div>
+                </div>
+                <div className="mt-4 flex justify-end space-x-2">
+                  <Button
+                    onClick={handleSubmitToServer}
+                    className="flex items-center space-x-2"
+                  >
+                    <Upload className="w-4 h-4" />
+                    <span>Submit to Server</span>
+                  </Button>
                 </div>
               </div>
             ) : (
