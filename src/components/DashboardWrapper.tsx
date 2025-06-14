@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { BookOpen, User, Settings, LogOut, ChevronDown, GraduationCap, Briefcase, Search, FileText, Eye, Calendar, BarChart3, Users } from 'lucide-react';
+import { BookOpen, User, Settings, LogOut, ChevronDown, GraduationCap, Briefcase, Search, FileText, Eye, Calendar, BarChart3, Users, Play, Award, Library } from 'lucide-react';
 
 interface DashboardWrapperProps {
   children: ReactNode;
@@ -61,6 +61,37 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
                 <span>Dashboard</span>
               </Button>
               
+              {/* Learning Content Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-2">
+                    <Library className="w-4 h-4" />
+                    <span>Learning Content</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
+                  <DropdownMenuLabel>Learning Resources</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/courses')}>
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Courses
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/tutorials')}>
+                    <Play className="w-4 h-4 mr-2" />
+                    Tutorials
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/articles')}>
+                    <FileText className="w-4 h-4 mr-2" />
+                    Articles
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/quizzes')}>
+                    <Award className="w-4 h-4 mr-2" />
+                    Quizzes
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
               {/* Student Panel Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -78,23 +109,23 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
                     Open Student Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/student?tab=job-discovery')}>
                     <Search className="w-4 h-4 mr-2" />
                     AI Job Discovery
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/student?tab=application-tracker')}>
                     <Briefcase className="w-4 h-4 mr-2" />
                     Application Tracker
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/student?tab=profile-resume')}>
                     <User className="w-4 h-4 mr-2" />
                     Profile & Resume
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/student?tab=interview-prep')}>
                     <Calendar className="w-4 h-4 mr-2" />
                     Interview Prep
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/student?tab=career-insights')}>
                     <BarChart3 className="w-4 h-4 mr-2" />
                     Career Insights
                   </DropdownMenuItem>
@@ -118,24 +149,24 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
                     Open HR Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/recruiter?tab=candidate-discovery')}>
                     <Search className="w-4 h-4 mr-2" />
                     AI Candidate Discovery
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/recruiter?tab=job-posting')}>
                     <FileText className="w-4 h-4 mr-2" />
                     Job Posting
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Eye className="w-4 h-4" />
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/recruiter?tab=candidate-preview')}>
+                    <Eye className="w-4 h-4 mr-2" />
                     Candidate Preview
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Calendar className="w-4 h-4" />
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/recruiter?tab=interview-tools')}>
+                    <Calendar className="w-4 h-4 mr-2" />
                     Interview Tools
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <BarChart3 className="w-4 h-4" />
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/recruiter?tab=analytics')}>
+                    <BarChart3 className="w-4 h-4 mr-2" />
                     Analytics Dashboard
                   </DropdownMenuItem>
                 </DropdownMenuContent>

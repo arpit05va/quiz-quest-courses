@@ -349,19 +349,19 @@ const Dashboard = () => {
                 <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
                   <DropdownMenuLabel>Learning Resources</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => setActiveTab('courses')}>
+                  <DropdownMenuItem onClick={() => navigate('/courses')}>
                     <BookOpen className="w-4 h-4 mr-2" />
                     Courses
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveTab('tutorials')}>
+                  <DropdownMenuItem onClick={() => navigate('/tutorials')}>
                     <Play className="w-4 h-4 mr-2" />
                     Tutorials
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveTab('articles')}>
+                  <DropdownMenuItem onClick={() => navigate('/articles')}>
                     <FileText className="w-4 h-4 mr-2" />
                     Articles
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveTab('quizzes')}>
+                  <DropdownMenuItem onClick={() => navigate('/quizzes')}>
                     <Award className="w-4 h-4 mr-2" />
                     Quizzes
                   </DropdownMenuItem>
@@ -385,23 +385,23 @@ const Dashboard = () => {
                     Open Student Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/student?tab=job-discovery')}>
                     <Search className="w-4 h-4 mr-2" />
                     AI Job Discovery
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/student?tab=application-tracker')}>
                     <Briefcase className="w-4 h-4 mr-2" />
                     Application Tracker
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/student?tab=profile-resume')}>
                     <User className="w-4 h-4 mr-2" />
                     Profile & Resume
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/student?tab=interview-prep')}>
                     <Calendar className="w-4 h-4 mr-2" />
                     Interview Prep
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/student?tab=career-insights')}>
                     <BarChart3 className="w-4 h-4 mr-2" />
                     Career Insights
                   </DropdownMenuItem>
@@ -425,24 +425,24 @@ const Dashboard = () => {
                     Open HR Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/recruiter?tab=candidate-discovery')}>
                     <Search className="w-4 h-4 mr-2" />
                     AI Candidate Discovery
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/recruiter?tab=job-posting')}>
                     <FileText className="w-4 h-4 mr-2" />
                     Job Posting
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Eye className="w-4 h-4" />
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/recruiter?tab=candidate-preview')}>
+                    <Eye className="w-4 h-4 mr-2" />
                     Candidate Preview
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Calendar className="w-4 h-4" />
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/recruiter?tab=interview-tools')}>
+                    <Calendar className="w-4 h-4 mr-2" />
                     Interview Tools
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <BarChart3 className="w-4 h-4" />
+                  <DropdownMenuItem onClick={() => navigate('/dashboard/recruiter?tab=analytics')}>
+                    <BarChart3 className="w-4 h-4 mr-2" />
                     Analytics Dashboard
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -502,19 +502,19 @@ const Dashboard = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-background border shadow-lg z-50">
-                  <DropdownMenuItem onClick={() => setActiveTab('courses')}>
+                  <DropdownMenuItem onClick={() => navigate('/courses')}>
                     <BookOpen className="w-4 h-4 mr-2" />
                     Courses
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveTab('tutorials')}>
+                  <DropdownMenuItem onClick={() => navigate('/tutorials')}>
                     <Play className="w-4 h-4 mr-2" />
                     Tutorials
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveTab('articles')}>
+                  <DropdownMenuItem onClick={() => navigate('/articles')}>
                     <FileText className="w-4 h-4 mr-2" />
                     Articles
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveTab('quizzes')}>
+                  <DropdownMenuItem onClick={() => navigate('/quizzes')}>
                     <Award className="w-4 h-4 mr-2" />
                     Quizzes
                   </DropdownMenuItem>
