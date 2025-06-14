@@ -560,14 +560,14 @@ const StudentPanel = () => {
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-                        <DialogHeader className="space-y-3 pb-6 border-b">
+                        <DialogHeader className="space-y-3 pb-6 border-b border-gray-200">
                           <div className="flex items-center space-x-3">
-                            <div className="p-3 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg">
+                            <div className="p-3 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border border-blue-100">
                               <FolderPlus className="w-6 h-6 text-blue-600" />
                             </div>
                             <div>
-                              <DialogTitle className="text-2xl font-bold text-gray-900">Add New Project</DialogTitle>
-                              <p className="text-sm text-gray-600 mt-1">Showcase your technical skills and creativity</p>
+                              <DialogTitle className="text-2xl font-bold text-foreground">Add New Project</DialogTitle>
+                              <p className="text-sm text-muted-foreground mt-1">Showcase your technical skills and creativity</p>
                             </div>
                           </div>
                         </DialogHeader>
@@ -576,35 +576,35 @@ const StudentPanel = () => {
                           {/* Project Basic Info Section */}
                           <div className="space-y-6">
                             <div className="flex items-center space-x-2 mb-4">
-                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                              <div className="w-8 h-8 bg-blue-50 border border-blue-200 rounded-full flex items-center justify-center">
                                 <span className="text-blue-600 font-semibold text-sm">1</span>
                               </div>
-                              <h3 className="text-lg font-semibold text-gray-900">Project Information</h3>
+                              <h3 className="text-lg font-semibold text-foreground">Project Information</h3>
                             </div>
                             
                             <div className="grid grid-cols-2 gap-6">
                               <div className="space-y-2">
-                                <Label htmlFor="projectName" className="text-sm font-medium text-gray-700 flex items-center">
-                                  Project Name <span className="text-red-500 ml-1">*</span>
+                                <Label htmlFor="projectName" className="text-sm font-medium text-foreground flex items-center">
+                                  Project Name <span className="text-destructive ml-1">*</span>
                                 </Label>
                                 <Input
                                   id="projectName"
                                   value={projectForm.name}
                                   onChange={(e) => handleProjectFormChange('name', e.target.value)}
                                   placeholder="e.g., AI-Powered Task Manager"
-                                  className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                  className="h-11 border-input focus:border-primary focus:ring-primary"
                                 />
                               </div>
                               <div className="space-y-2">
-                                <Label htmlFor="techStack" className="text-sm font-medium text-gray-700 flex items-center">
-                                  Tech Stack <span className="text-red-500 ml-1">*</span>
+                                <Label htmlFor="techStack" className="text-sm font-medium text-foreground flex items-center">
+                                  Tech Stack <span className="text-destructive ml-1">*</span>
                                 </Label>
                                 <Input
                                   id="techStack"
                                   value={projectForm.techStack}
                                   onChange={(e) => handleProjectFormChange('techStack', e.target.value)}
                                   placeholder="React, Node.js, MongoDB, Express"
-                                  className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                  className="h-11 border-input focus:border-primary focus:ring-primary"
                                 />
                               </div>
                             </div>
@@ -613,15 +613,15 @@ const StudentPanel = () => {
                           {/* Project Description Section */}
                           <div className="space-y-6">
                             <div className="flex items-center space-x-2 mb-4">
-                              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                              <div className="w-8 h-8 bg-purple-50 border border-purple-200 rounded-full flex items-center justify-center">
                                 <span className="text-purple-600 font-semibold text-sm">2</span>
                               </div>
-                              <h3 className="text-lg font-semibold text-gray-900">Project Details</h3>
+                              <h3 className="text-lg font-semibold text-foreground">Project Details</h3>
                             </div>
                             
                             <div className="space-y-2">
-                              <Label htmlFor="description" className="text-sm font-medium text-gray-700 flex items-center">
-                                Description <span className="text-red-500 ml-1">*</span>
+                              <Label htmlFor="description" className="text-sm font-medium text-foreground flex items-center">
+                                Description <span className="text-destructive ml-1">*</span>
                                 <Lightbulb className="w-4 h-4 ml-2 text-yellow-500" />
                               </Label>
                               <Textarea
@@ -630,24 +630,24 @@ const StudentPanel = () => {
                                 onChange={(e) => handleProjectFormChange('description', e.target.value)}
                                 placeholder="Describe your project's purpose, key features, challenges solved, and what you learned. Be specific about your role and the impact of your work."
                                 rows={4}
-                                className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 resize-none"
+                                className="border-input focus:border-primary focus:ring-primary resize-none"
                               />
-                              <p className="text-xs text-gray-500 mt-1">💡 Tip: Include the problem you solved, your approach, and the results achieved</p>
+                              <p className="text-xs text-muted-foreground mt-1">💡 Tip: Include the problem you solved, your approach, and the results achieved</p>
                             </div>
                           </div>
 
                           {/* Project Links Section */}
                           <div className="space-y-6">
                             <div className="flex items-center space-x-2 mb-4">
-                              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                              <div className="w-8 h-8 bg-green-50 border border-green-200 rounded-full flex items-center justify-center">
                                 <span className="text-green-600 font-semibold text-sm">3</span>
                               </div>
-                              <h3 className="text-lg font-semibold text-gray-900">Project Links</h3>
+                              <h3 className="text-lg font-semibold text-foreground">Project Links</h3>
                             </div>
                             
                             <div className="grid grid-cols-2 gap-6">
                               <div className="space-y-2">
-                                <Label htmlFor="githubLink" className="text-sm font-medium text-gray-700 flex items-center">
+                                <Label htmlFor="githubLink" className="text-sm font-medium text-foreground flex items-center">
                                   <GitBranch className="w-4 h-4 mr-2" />
                                   GitHub Repository
                                 </Label>
@@ -656,11 +656,11 @@ const StudentPanel = () => {
                                   value={projectForm.githubLink}
                                   onChange={(e) => handleProjectFormChange('githubLink', e.target.value)}
                                   placeholder="https://github.com/username/project-name"
-                                  className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
+                                  className="h-11 border-input focus:border-primary focus:ring-primary"
                                 />
                               </div>
                               <div className="space-y-2">
-                                <Label htmlFor="liveLink" className="text-sm font-medium text-gray-700 flex items-center">
+                                <Label htmlFor="liveLink" className="text-sm font-medium text-foreground flex items-center">
                                   <Globe className="w-4 h-4 mr-2" />
                                   Live Demo
                                 </Label>
@@ -669,18 +669,18 @@ const StudentPanel = () => {
                                   value={projectForm.liveLink}
                                   onChange={(e) => handleProjectFormChange('liveLink', e.target.value)}
                                   placeholder="https://your-awesome-project.vercel.app"
-                                  className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
+                                  className="h-11 border-input focus:border-primary focus:ring-primary"
                                 />
                               </div>
                             </div>
                           </div>
 
                           {/* Action Buttons */}
-                          <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">
+                          <div className="flex justify-end space-x-3 pt-6 border-t border-border">
                             <Button 
                               variant="outline" 
                               onClick={() => setIsAddingProject(false)}
-                              className="px-6 py-2.5 border-gray-300 text-gray-700 hover:bg-gray-50"
+                              className="px-6 py-2.5"
                             >
                               Cancel
                             </Button>
