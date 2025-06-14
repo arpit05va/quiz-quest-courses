@@ -65,11 +65,11 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
             </div>
 
             {/* Page Title - Show only codeXMania */}
-            <div className="hidden md:block">
+{/*             <div className="hidden md:block">
               <h1 className="text-xl font-semibold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
                 codeXMania
               </h1>
-            </div>
+            </div> */}
 
             {/* Navigation Dropdowns */}
             <div className="hidden lg:flex items-center space-x-2">
