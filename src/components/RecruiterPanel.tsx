@@ -943,11 +943,11 @@ const RecruiterPanel = () => {
               {/* AI Pitch */}
               <div>
                 <h4 className="font-semibold mb-2">AI Assessment</h4>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <p className="text-sm">{selectedCandidate.aiPitch}</p>
+                <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <p className="text-sm text-blue-900 dark:text-blue-100">{selectedCandidate.aiPitch}</p>
                   <div className="mt-2">
-                    <span className="text-sm font-medium">Overall Score: </span>
-                    <span className="text-lg font-bold text-green-600">{selectedCandidate.overallScore}/10</span>
+                    <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Overall Score: </span>
+                    <span className="text-lg font-bold text-green-600 dark:text-green-400">{selectedCandidate.overallScore}/10</span>
                   </div>
                 </div>
               </div>
