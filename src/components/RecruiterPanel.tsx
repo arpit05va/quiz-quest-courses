@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
+import { toast } from '@/components/ui/sonner';
 import {
   Select,
   SelectContent,
@@ -46,6 +47,8 @@ const RecruiterPanel = () => {
   const [activeTab, setActiveTab] = useState('discovery');
   const [jobDescription, setJobDescription] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Set active tab based on URL parameter
   useEffect(() => {
@@ -64,6 +67,57 @@ const RecruiterPanel = () => {
       setActiveTab(mappedTab);
     }
   }, [searchParams]);
+
+  // Handle file upload
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Check file type
+      const allowedTypes = [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'text/plain'
+      ];
+      
+      if (!allowedTypes.includes(file.type)) {
+        toast.error('Please upload a PDF, Word document, or text file');
+        return;
+      }
+
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('File size must be less than 5MB');
+        return;
+      }
+
+      setUploadedFile(file);
+      toast.success(`File "${file.name}" uploaded successfully!`);
+
+      // Read file content for text files
+      if (file.type === 'text/plain') {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target?.result as string;
+          setJobDescription(content);
+        };
+        reader.readAsText(file);
+      }
+    }
+  };
+
+  const handleChooseFile = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleRemoveFile = () => {
+    setUploadedFile(null);
+    setJobDescription('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+    toast.success('File removed successfully');
+  };
 
   // Mock data for demonstration
   const mockCandidates = [
@@ -158,12 +212,38 @@ const RecruiterPanel = () => {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="jd-upload">Upload Job Description</Label>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx,.txt"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
                   <div className="border-2 border-dashed border-border rounded-lg p-4 text-center">
                     <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">Upload JD file or paste content</p>
-                    <Button variant="outline" size="sm" className="mt-2">
-                      Choose File
-                    </Button>
+                    {uploadedFile ? (
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium text-green-600">File uploaded successfully!</p>
+                        <p className="text-xs text-muted-foreground">{uploadedFile.name}</p>
+                        <div className="flex space-x-2 justify-center">
+                          <Button variant="outline" size="sm" onClick={handleChooseFile}>
+                            Change File
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={handleRemoveFile}>
+                            <X className="w-4 h-4 mr-1" />
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="text-sm text-muted-foreground">Upload JD file or paste content</p>
+                        <p className="text-xs text-muted-foreground mt-1">Supports PDF, Word, and Text files (max 5MB)</p>
+                        <Button variant="outline" size="sm" className="mt-2" onClick={handleChooseFile}>
+                          Choose File
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div>
