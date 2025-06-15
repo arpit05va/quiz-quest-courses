@@ -193,6 +193,14 @@ const StudentPanel = () => {
     { id: 4, company: 'AI Startup', position: 'Python Dev', status: 'Rejected', appliedDate: '2024-01-08' }
   ]);
 
+  // Calculate dynamic stats for applications
+  const applicationStats = {
+    total: applications.length,
+    shortlisted: applications.filter(app => app.status === 'Shortlisted').length,
+    interviews: applications.filter(app => app.status === 'Interview Scheduled').length,
+    offers: applications.filter(app => app.status === 'Offer Received').length
+  };
+
   // Function to handle job application
   const handleApplyJob = (jobId: number) => {
     setJobListings(prevJobs => 
@@ -450,7 +458,7 @@ const StudentPanel = () => {
                   <Send className="h-5 w-5 text-blue-600" />
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Total Applied</p>
-                    <p className="text-2xl font-bold text-blue-600">12</p>
+                    <p className="text-2xl font-bold text-blue-600">{applicationStats.total}</p>
                   </div>
                 </div>
               </CardContent>
@@ -462,7 +470,7 @@ const StudentPanel = () => {
                   <CheckCircle2 className="h-5 w-5 text-green-600" />
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Shortlisted</p>
-                    <p className="text-2xl font-bold text-green-600">5</p>
+                    <p className="text-2xl font-bold text-green-600">{applicationStats.shortlisted}</p>
                   </div>
                 </div>
               </CardContent>
@@ -474,7 +482,7 @@ const StudentPanel = () => {
                   <Calendar className="h-5 w-5 text-purple-600" />
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Interviews</p>
-                    <p className="text-2xl font-bold text-purple-600">3</p>
+                    <p className="text-2xl font-bold text-purple-600">{applicationStats.interviews}</p>
                   </div>
                 </div>
               </CardContent>
@@ -486,7 +494,7 @@ const StudentPanel = () => {
                   <Award className="h-5 w-5 text-yellow-600" />
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Offers</p>
-                    <p className="text-2xl font-bold text-yellow-600">1</p>
+                    <p className="text-2xl font-bold text-yellow-600">{applicationStats.offers}</p>
                   </div>
                 </div>
               </CardContent>
