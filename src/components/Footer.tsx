@@ -1,6 +1,6 @@
 
 import { BookOpen, Mail, Phone, MapPin, Code, Zap } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import AnimatedSocialLogos from './AnimatedSocialLogos';
 
 const Footer = () => {
   const footerLinks = {
@@ -103,19 +103,8 @@ const Footer = () => {
             <p className="text-muted-foreground text-center md:text-left">
               © 2024 codeXMania. All rights reserved.
             </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                Facebook
-              </Button>
-              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                Twitter
-              </Button>
-              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                LinkedIn
-              </Button>
-              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                Instagram
-              </Button>
+            <div className="mt-4 md:mt-0">
+              <AnimatedSocialLogos />
             </div>
           </div>
         </div>
