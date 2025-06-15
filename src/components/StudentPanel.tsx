@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -186,13 +185,13 @@ const StudentPanel = () => {
     completionScore: 85
   });
 
-  // Mock application data
-  const applications = [
+  // Mock application data with state management
+  const [applications, setApplications] = useState([
     { id: 1, company: 'Tech Corp', position: 'SDE Intern', status: 'Interview Scheduled', appliedDate: '2024-01-15' },
     { id: 2, company: 'Data Inc', position: 'ML Intern', status: 'Shortlisted', appliedDate: '2024-01-12' },
     { id: 3, company: 'Web Solutions', position: 'Frontend Dev', status: 'Applied', appliedDate: '2024-01-10' },
     { id: 4, company: 'AI Startup', position: 'Python Dev', status: 'Rejected', appliedDate: '2024-01-08' }
-  ];
+  ]);
 
   // Function to handle job application
   const handleApplyJob = (jobId: number) => {
@@ -205,10 +204,24 @@ const StudentPanel = () => {
     );
 
     const appliedJob = jobListings.find(job => job.id === jobId);
-    toast.success(`Successfully applied to ${appliedJob?.title} at ${appliedJob?.company}!`, {
-      description: "Your application has been submitted. You'll receive updates via email.",
-      duration: 5000,
-    });
+    
+    if (appliedJob) {
+      // Add to applications list
+      const newApplication = {
+        id: Date.now(), // Generate unique ID
+        company: appliedJob.company,
+        position: appliedJob.title,
+        status: 'Applied',
+        appliedDate: new Date().toISOString().split('T')[0] // Today's date in YYYY-MM-DD format
+      };
+
+      setApplications(prevApplications => [newApplication, ...prevApplications]);
+
+      toast.success(`Successfully applied to ${appliedJob.title} at ${appliedJob.company}!`, {
+        description: "Your application has been submitted. You'll receive updates via email.",
+        duration: 5000,
+      });
+    }
   };
 
   const getStatusColor = (status: string) => {
