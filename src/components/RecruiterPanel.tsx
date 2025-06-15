@@ -48,7 +48,8 @@ import {
   Target,
   TrendingUp,
   Linkedin,
-  Github
+  Github,
+  Plus
 } from 'lucide-react';
 
 const RecruiterPanel = () => {
@@ -67,6 +68,59 @@ const RecruiterPanel = () => {
   // Watchlist and shortlist states
   const [watchlist, setWatchlist] = useState<number[]>([]);
   const [shortlisted, setShortlisted] = useState<number[]>([]);
+
+  // Job posting form states
+  const [jobForm, setJobForm] = useState({
+    title: '',
+    type: '',
+    location: '',
+    salary: '',
+    skills: [] as string[],
+    description: '',
+    batch: '',
+    degree: '',
+    cgpa: '',
+    deadline: '',
+    tags: [] as string[]
+  });
+  const [skillInput, setSkillInput] = useState('');
+  const [jobs, setJobs] = useState([
+    {
+      id: 1,
+      title: 'Senior React Developer',
+      type: 'Full-time',
+      location: 'Remote',
+      salary: '15-20 LPA',
+      applicants: 45,
+      deadline: '2024-02-15',
+      status: 'Active',
+      skills: ['React', 'Node.js', 'TypeScript'],
+      description: 'We are looking for a senior React developer...',
+      batch: '2024',
+      degree: 'B.Tech',
+      cgpa: '7.0',
+      tags: ['Urgent', 'Work From Home']
+    },
+    {
+      id: 2,
+      title: 'Python Backend Intern',
+      type: 'Internship',
+      location: 'Bangalore',
+      salary: '25k stipend',
+      applicants: 120,
+      deadline: '2024-02-10',
+      status: 'Active',
+      skills: ['Python', 'Django', 'PostgreSQL'],
+      description: 'Internship opportunity for Python backend development...',
+      batch: '2025',
+      degree: 'B.Tech',
+      cgpa: '6.5',
+      tags: ['Entry Level', 'Diversity']
+    }
+  ]);
+
+  // Available tags
+  const availableTags = ['Urgent', 'Work From Home', 'Diversity', 'Entry Level', 'Remote', 'Full-time', 'Part-time'];
 
   // Set active tab based on URL parameter
   useEffect(() => {
@@ -135,6 +189,88 @@ const RecruiterPanel = () => {
       fileInputRef.current.value = '';
     }
     toast.success('File removed successfully');
+  };
+
+  // Job posting form handlers
+  const handleJobFormChange = (field: string, value: string) => {
+    setJobForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleAddSkill = () => {
+    if (skillInput.trim() && !jobForm.skills.includes(skillInput.trim())) {
+      setJobForm(prev => ({
+        ...prev,
+        skills: [...prev.skills, skillInput.trim()]
+      }));
+      setSkillInput('');
+    }
+  };
+
+  const handleRemoveSkill = (skillToRemove: string) => {
+    setJobForm(prev => ({
+      ...prev,
+      skills: prev.skills.filter(skill => skill !== skillToRemove)
+    }));
+  };
+
+  const handleAddTag = (tag: string) => {
+    if (!jobForm.tags.includes(tag)) {
+      setJobForm(prev => ({
+        ...prev,
+        tags: [...prev.tags, tag]
+      }));
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setJobForm(prev => ({
+      ...prev,
+      tags: prev.tags.filter(tag => tag !== tagToRemove)
+    }));
+  };
+
+  const handlePostJob = () => {
+    // Validate required fields
+    if (!jobForm.title || !jobForm.type || !jobForm.location || !jobForm.salary || !jobForm.description) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    // Create new job
+    const newJob = {
+      id: Date.now(),
+      ...jobForm,
+      applicants: 0,
+      status: 'Active' as const
+    };
+
+    setJobs(prev => [newJob, ...prev]);
+    
+    // Reset form
+    setJobForm({
+      title: '',
+      type: '',
+      location: '',
+      salary: '',
+      skills: [],
+      description: '',
+      batch: '',
+      degree: '',
+      cgpa: '',
+      deadline: '',
+      tags: []
+    });
+    setSkillInput('');
+
+    toast.success('Job posted successfully!');
+  };
+
+  const handleDeleteJob = (jobId: number) => {
+    setJobs(prev => prev.filter(job => job.id !== jobId));
+    toast.success('Job deleted successfully');
   };
 
   // Handle candidate actions
@@ -209,29 +345,6 @@ const RecruiterPanel = () => {
       linkedin: 'https://linkedin.com/in/sarahwilson',
       github: 'https://github.com/sarahwilson',
       availability: '30 days notice'
-    }
-  ];
-
-  const mockJobs = [
-    {
-      id: 1,
-      title: 'Senior React Developer',
-      type: 'Full-time',
-      location: 'Remote',
-      salary: '15-20 LPA',
-      applicants: 45,
-      deadline: '2024-02-15',
-      status: 'Active'
-    },
-    {
-      id: 2,
-      title: 'Python Backend Intern',
-      type: 'Internship',
-      location: 'Bangalore',
-      salary: '25k stipend',
-      applicants: 120,
-      deadline: '2024-02-10',
-      status: 'Active'
     }
   ];
 
@@ -480,12 +593,17 @@ const RecruiterPanel = () => {
             <CardContent className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="job-title">Job Title</Label>
-                  <Input id="job-title" placeholder="e.g., Senior React Developer" />
+                  <Label htmlFor="job-title">Job Title *</Label>
+                  <Input 
+                    id="job-title" 
+                    placeholder="e.g., Senior React Developer" 
+                    value={jobForm.title}
+                    onChange={(e) => handleJobFormChange('title', e.target.value)}
+                  />
                 </div>
                 <div>
-                  <Label htmlFor="job-type">Job Type</Label>
-                  <Select>
+                  <Label htmlFor="job-type">Job Type *</Label>
+                  <Select value={jobForm.type} onValueChange={(value) => handleJobFormChange('type', value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select job type" />
                     </SelectTrigger>
@@ -497,8 +615,8 @@ const RecruiterPanel = () => {
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="location">Location</Label>
-                  <Select>
+                  <Label htmlFor="location">Location *</Label>
+                  <Select value={jobForm.location} onValueChange={(value) => handleJobFormChange('location', value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select location type" />
                     </SelectTrigger>
@@ -510,61 +628,119 @@ const RecruiterPanel = () => {
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="salary">Salary Range</Label>
-                  <Input id="salary" placeholder="e.g., 15-20 LPA" />
+                  <Label htmlFor="salary">Salary Range *</Label>
+                  <Input 
+                    id="salary" 
+                    placeholder="e.g., 15-20 LPA" 
+                    value={jobForm.salary}
+                    onChange={(e) => handleJobFormChange('salary', e.target.value)}
+                  />
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="skills">Required Skills (Auto-suggested)</Label>
-                <Input id="skills" placeholder="Start typing skills..." />
+                <Label htmlFor="skills">Required Skills</Label>
+                <div className="flex space-x-2">
+                  <Input 
+                    id="skills" 
+                    placeholder="Start typing skills..." 
+                    value={skillInput}
+                    onChange={(e) => setSkillInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddSkill()}
+                  />
+                  <Button type="button" onClick={handleAddSkill}>
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  <Badge variant="secondary">React <X className="w-3 h-3 ml-1" /></Badge>
-                  <Badge variant="secondary">Node.js <X className="w-3 h-3 ml-1" /></Badge>
-                  <Badge variant="secondary">TypeScript <X className="w-3 h-3 ml-1" /></Badge>
+                  {jobForm.skills.map((skill) => (
+                    <Badge key={skill} variant="secondary" className="cursor-pointer" onClick={() => handleRemoveSkill(skill)}>
+                      {skill} <X className="w-3 h-3 ml-1" />
+                    </Badge>
+                  ))}
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="description">Job Description</Label>
+                <Label htmlFor="description">Job Description *</Label>
                 <Textarea
                   id="description"
                   placeholder="Detailed job description..."
                   rows={6}
+                  value={jobForm.description}
+                  onChange={(e) => handleJobFormChange('description', e.target.value)}
                 />
               </div>
 
               <div className="grid md:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="batch">Batch/Year</Label>
-                  <Input id="batch" placeholder="e.g., 2024" />
+                  <Input 
+                    id="batch" 
+                    placeholder="e.g., 2024" 
+                    value={jobForm.batch}
+                    onChange={(e) => handleJobFormChange('batch', e.target.value)}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="degree">Degree</Label>
-                  <Input id="degree" placeholder="e.g., B.Tech, M.Tech" />
+                  <Input 
+                    id="degree" 
+                    placeholder="e.g., B.Tech, M.Tech" 
+                    value={jobForm.degree}
+                    onChange={(e) => handleJobFormChange('degree', e.target.value)}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="cgpa">Minimum CGPA</Label>
-                  <Input id="cgpa" placeholder="e.g., 7.0" />
+                  <Input 
+                    id="cgpa" 
+                    placeholder="e.g., 7.0" 
+                    value={jobForm.cgpa}
+                    onChange={(e) => handleJobFormChange('cgpa', e.target.value)}
+                  />
                 </div>
               </div>
 
               <div>
                 <Label htmlFor="deadline">Application Deadline</Label>
-                <Input id="deadline" type="date" />
+                <Input 
+                  id="deadline" 
+                  type="date" 
+                  value={jobForm.deadline}
+                  onChange={(e) => handleJobFormChange('deadline', e.target.value)}
+                />
               </div>
 
               <div>
                 <Label>Tags</Label>
                 <div className="flex flex-wrap gap-2 mt-2">
-                  <Badge variant="outline">Urgent</Badge>
-                  <Badge variant="outline">Work From Home</Badge>
-                  <Badge variant="outline">Diversity</Badge>
-                  <Badge variant="outline">Entry Level</Badge>
+                  {availableTags.map((tag) => (
+                    <Badge 
+                      key={tag} 
+                      variant={jobForm.tags.includes(tag) ? "default" : "outline"}
+                      className="cursor-pointer"
+                      onClick={() => jobForm.tags.includes(tag) ? handleRemoveTag(tag) : handleAddTag(tag)}
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
                 </div>
+                {jobForm.tags.length > 0 && (
+                  <div className="mt-2">
+                    <p className="text-sm text-muted-foreground">Selected tags:</p>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {jobForm.tags.map((tag) => (
+                        <Badge key={tag} variant="secondary" className="cursor-pointer" onClick={() => handleRemoveTag(tag)}>
+                          {tag} <X className="w-3 h-3 ml-1" />
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <Button className="w-full">
+              <Button className="w-full" onClick={handlePostJob}>
                 <FileText className="w-4 h-4 mr-2" />
                 Post Job
               </Button>
@@ -574,29 +750,81 @@ const RecruiterPanel = () => {
           {/* Active Jobs */}
           <Card>
             <CardHeader>
-              <CardTitle>Active Job Postings</CardTitle>
+              <CardTitle>Active Job Postings ({jobs.length})</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockJobs.map((job) => (
+                {jobs.map((job) => (
                   <div key={job.id} className="border rounded-lg p-4">
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start mb-3">
                       <div>
                         <h4 className="font-semibold">{job.title}</h4>
                         <p className="text-sm text-muted-foreground">
                           {job.type} • {job.location} • {job.salary}
                         </p>
-                        <p className="text-sm text-muted-foreground">
-                          Deadline: {job.deadline}
-                        </p>
+                        {job.deadline && (
+                          <p className="text-sm text-muted-foreground">
+                            Deadline: {job.deadline}
+                          </p>
+                        )}
                       </div>
                       <div className="text-right">
                         <Badge variant="secondary">{job.status}</Badge>
                         <p className="text-sm font-medium mt-1">{job.applicants} applicants</p>
                       </div>
                     </div>
+                    
+                    {job.skills && job.skills.length > 0 && (
+                      <div className="mb-3">
+                        <p className="text-sm font-medium mb-1">Required Skills:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {job.skills.map((skill) => (
+                            <Badge key={skill} variant="outline" className="text-xs">{skill}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {job.tags && job.tags.length > 0 && (
+                      <div className="mb-3">
+                        <div className="flex flex-wrap gap-1">
+                          {job.tags.map((tag) => (
+                            <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex justify-between items-center">
+                      <div className="flex space-x-2">
+                        <Button size="sm" variant="outline">
+                          <Eye className="w-4 h-4 mr-1" />
+                          View Applications
+                        </Button>
+                        <Button size="sm" variant="outline">
+                          <FileText className="w-4 h-4 mr-1" />
+                          Edit
+                        </Button>
+                      </div>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => handleDeleteJob(job.id)}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <X className="w-4 h-4 mr-1" />
+                        Delete
+                      </Button>
+                    </div>
                   </div>
                 ))}
+                
+                {jobs.length === 0 && (
+                  <div className="text-center py-8">
+                    <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">No job postings yet. Create your first job posting above.</p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
