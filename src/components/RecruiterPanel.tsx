@@ -424,7 +424,7 @@ const RecruiterPanel = () => {
                       {Object.entries(candidate.quizScores).map(([topic, score]) => (
                         <div key={topic} className="text-center">
                           <p className="text-xs text-muted-foreground capitalize">{topic}</p>
-                          <p className="font-semibold">{score}/10</p>
+                          <p className="font-semibold">{score as number}/10</p>
                         </div>
                       ))}
                     </div>
@@ -437,7 +437,7 @@ const RecruiterPanel = () => {
                         <Eye className="w-4 h-4 mr-1" />
                         View Profile
                       </Button>
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" onClick={() => handleViewResume(candidate)}>
                         Resume
                       </Button>
                     </div>
@@ -931,8 +931,8 @@ const RecruiterPanel = () => {
                   {Object.entries(selectedCandidate.quizScores).map(([topic, score]) => (
                     <div key={topic} className="text-center p-3 border rounded">
                       <p className="text-sm text-muted-foreground capitalize">{topic}</p>
-                      <p className="text-2xl font-bold">{score}/10</p>
-                      <Progress value={Number(score) * 10} className="mt-2" />
+                      <p className="text-2xl font-bold">{score as number}/10</p>
+                      <Progress value={(score as number) * 10} className="mt-2" />
                     </div>
                   ))}
                 </div>
