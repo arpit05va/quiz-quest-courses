@@ -180,6 +180,19 @@ const RecruiterPanel = () => {
     notes: ''
   });
 
+  // Interview tab states
+  const [quickInterviewForm, setQuickInterviewForm] = useState({
+    candidateName: '',
+    datetime: '',
+    platform: ''
+  });
+  const [questionGeneratorForm, setQuestionGeneratorForm] = useState({
+    role: '',
+    difficulty: ''
+  });
+  const [generatedQuestions, setGeneratedQuestions] = useState<string[]>([]);
+  const [isGeneratingQuestions, setIsGeneratingQuestions] = useState(false);
+
   // Set active tab based on URL parameter
   useEffect(() => {
     const tab = searchParams.get('tab');
@@ -461,6 +474,130 @@ const RecruiterPanel = () => {
 
   const handleRejectCandidate = (candidateId: number) => {
     toast.success('Candidate rejected and notification sent');
+  };
+
+  // New handlers for interview tab
+  const handleQuickInterviewFormChange = (field: string, value: string) => {
+    setQuickInterviewForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleQuickScheduleInterview = () => {
+    if (!quickInterviewForm.candidateName || !quickInterviewForm.datetime || !quickInterviewForm.platform) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    const dateTime = new Date(quickInterviewForm.datetime);
+    const date = dateTime.toLocaleDateString();
+    const time = dateTime.toLocaleTimeString();
+
+    toast.success(`Interview scheduled with ${quickInterviewForm.candidateName} on ${date} at ${time} via ${quickInterviewForm.platform}`);
+    
+    // Reset form
+    setQuickInterviewForm({
+      candidateName: '',
+      datetime: '',
+      platform: ''
+    });
+  };
+
+  const handleQuestionGeneratorFormChange = (field: string, value: string) => {
+    setQuestionGeneratorForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleGenerateQuestions = async () => {
+    if (!questionGeneratorForm.role || !questionGeneratorForm.difficulty) {
+      toast.error('Please select both role and difficulty level');
+      return;
+    }
+
+    setIsGeneratingQuestions(true);
+
+    // Mock AI question generation
+    setTimeout(() => {
+      const questionSets = {
+        frontend: {
+          beginner: [
+            "What is the difference between HTML and XHTML?",
+            "Explain the box model in CSS.",
+            "What are the different ways to apply CSS to a webpage?",
+            "What is the difference between let, const, and var in JavaScript?",
+            "How do you center a div horizontally and vertically?"
+          ],
+          intermediate: [
+            "Explain the concept of closures in JavaScript with an example.",
+            "What is the difference between React functional and class components?",
+            "How does CSS Grid differ from Flexbox?",
+            "What are React hooks and why were they introduced?",
+            "Explain event bubbling and event capturing in JavaScript."
+          ],
+          advanced: [
+            "How would you optimize a React application's performance?",
+            "Explain the Virtual DOM and how React uses it for efficient rendering.",
+            "What are Web Workers and when would you use them?",
+            "How would you implement server-side rendering with React?",
+            "Describe different state management patterns in React applications."
+          ]
+        },
+        backend: {
+          beginner: [
+            "What is the difference between SQL and NoSQL databases?",
+            "Explain what an API is and how REST APIs work.",
+            "What is the difference between GET and POST HTTP methods?",
+            "What is a database index and why is it important?",
+            "Explain the concept of environment variables."
+          ],
+          intermediate: [
+            "How would you handle authentication and authorization in a web application?",
+            "Explain the concept of database normalization.",
+            "What are microservices and how do they differ from monolithic architecture?",
+            "How would you implement caching in a backend application?",
+            "Explain the difference between synchronous and asynchronous programming."
+          ],
+          advanced: [
+            "How would you design a scalable database architecture for a high-traffic application?",
+            "Explain different load balancing strategies.",
+            "How would you implement distributed transactions across microservices?",
+            "What are the considerations for designing a fault-tolerant system?",
+            "How would you implement rate limiting and circuit breaker patterns?"
+          ]
+        },
+        fullstack: {
+          beginner: [
+            "Explain the client-server architecture.",
+            "What is the difference between frontend and backend development?",
+            "How do you connect a frontend application to a backend API?",
+            "What is CORS and why is it important?",
+            "Explain the request-response cycle in web applications."
+          ],
+          intermediate: [
+            "How would you implement user authentication across frontend and backend?",
+            "Explain the concept of session management in web applications.",
+            "How would you handle file uploads in a full-stack application?",
+            "What are the security considerations when building a web application?",
+            "How would you implement real-time communication between client and server?"
+          ],
+          advanced: [
+            "How would you architect a full-stack application for scalability?",
+            "Explain different deployment strategies for full-stack applications.",
+            "How would you implement monitoring and logging across the entire stack?",
+            "What are the considerations for building a multi-tenant application?",
+            "How would you implement automated testing for a full-stack application?"
+          ]
+        }
+      };
+
+      const questions = questionSets[questionGeneratorForm.role as keyof typeof questionSets]?.[questionGeneratorForm.difficulty as keyof typeof questionSets.frontend] || [];
+      setGeneratedQuestions(questions);
+      setIsGeneratingQuestions(false);
+      toast.success(`Generated ${questions.length} interview questions!`);
+    }, 2000);
   };
 
   // Mock data for demonstration
@@ -1119,52 +1256,110 @@ const RecruiterPanel = () => {
                 <div>
                   <h4 className="font-semibold mb-3">Schedule Interview</h4>
                   <div className="space-y-3">
-                    <Input placeholder="Candidate name" />
-                    <Input type="datetime-local" />
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Platform" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="zoom">Zoom</SelectItem>
-                        <SelectItem value="meet">Google Meet</SelectItem>
-                        <SelectItem value="teams">MS Teams</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Button className="w-full">Schedule Interview</Button>
+                    <div>
+                      <Label htmlFor="candidate-name">Candidate Name *</Label>
+                      <Input 
+                        id="candidate-name"
+                        placeholder="Enter candidate name" 
+                        value={quickInterviewForm.candidateName}
+                        onChange={(e) => handleQuickInterviewFormChange('candidateName', e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="interview-datetime">Date & Time *</Label>
+                      <Input 
+                        id="interview-datetime"
+                        type="datetime-local" 
+                        value={quickInterviewForm.datetime}
+                        onChange={(e) => handleQuickInterviewFormChange('datetime', e.target.value)}
+                        min={new Date().toISOString().slice(0, 16)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="interview-platform">Platform *</Label>
+                      <Select value={quickInterviewForm.platform} onValueChange={(value) => handleQuickInterviewFormChange('platform', value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select platform" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="zoom">Zoom</SelectItem>
+                          <SelectItem value="meet">Google Meet</SelectItem>
+                          <SelectItem value="teams">MS Teams</SelectItem>
+                          <SelectItem value="phone">Phone Call</SelectItem>
+                          <SelectItem value="inperson">In Person</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button className="w-full" onClick={handleQuickScheduleInterview}>
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Schedule Interview
+                    </Button>
                   </div>
                 </div>
 
                 <div>
                   <h4 className="font-semibold mb-3">AI Interview Questions</h4>
                   <div className="space-y-3">
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Role" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="frontend">Frontend Developer</SelectItem>
-                        <SelectItem value="backend">Backend Developer</SelectItem>
-                        <SelectItem value="fullstack">Full Stack Developer</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Difficulty" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="beginner">Beginner</SelectItem>
-                        <SelectItem value="intermediate">Intermediate</SelectItem>
-                        <SelectItem value="advanced">Advanced</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Button variant="outline" className="w-full">
+                    <div>
+                      <Label htmlFor="question-role">Role *</Label>
+                      <Select value={questionGeneratorForm.role} onValueChange={(value) => handleQuestionGeneratorFormChange('role', value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="frontend">Frontend Developer</SelectItem>
+                          <SelectItem value="backend">Backend Developer</SelectItem>
+                          <SelectItem value="fullstack">Full Stack Developer</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="question-difficulty">Difficulty *</Label>
+                      <Select value={questionGeneratorForm.difficulty} onValueChange={(value) => handleQuestionGeneratorFormChange('difficulty', value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select difficulty" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="beginner">Beginner</SelectItem>
+                          <SelectItem value="intermediate">Intermediate</SelectItem>
+                          <SelectItem value="advanced">Advanced</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={handleGenerateQuestions}
+                      disabled={isGeneratingQuestions}
+                    >
                       <Brain className="w-4 h-4 mr-2" />
-                      Generate Questions
+                      {isGeneratingQuestions ? 'Generating...' : 'Generate Questions'}
                     </Button>
                   </div>
                 </div>
               </div>
+
+              {/* Generated Questions Display */}
+              {generatedQuestions.length > 0 && (
+                <div className="mt-6">
+                  <h4 className="font-semibold mb-3">Generated Interview Questions</h4>
+                  <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
+                    <div className="space-y-3">
+                      {generatedQuestions.map((question, index) => (
+                        <div key={index} className="flex items-start space-x-3">
+                          <Badge variant="outline" className="mt-1">{index + 1}</Badge>
+                          <p className="text-sm">{question}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <Button size="sm" variant="outline" onClick={() => setGeneratedQuestions([])}>
+                        Clear Questions
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <Separator />
 
