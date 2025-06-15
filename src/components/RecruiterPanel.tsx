@@ -46,7 +46,9 @@ import {
   CheckCircle2,
   Brain,
   Target,
-  TrendingUp
+  TrendingUp,
+  Linkedin,
+  Github
 } from 'lucide-react';
 
 const RecruiterPanel = () => {
@@ -630,8 +632,8 @@ const RecruiterPanel = () => {
                         {Object.entries(candidate.quizScores).map(([topic, score]) => (
                           <div key={topic} className="flex justify-between items-center mb-1">
                             <span className="text-sm capitalize">{topic}</span>
-                            <Progress value={score * 10} className="w-16 h-2" />
-                            <span className="text-sm font-medium">{score}/10</span>
+                            <Progress value={(score as number) * 10} className="w-16 h-2" />
+                            <span className="text-sm font-medium">{score as number}/10</span>
                           </div>
                         ))}
                       </div>
@@ -954,11 +956,23 @@ const RecruiterPanel = () => {
               <div>
                 <h4 className="font-semibold mb-2">Professional Links</h4>
                 <div className="flex space-x-4">
-                  <Button variant="outline" size="sm">
-                    LinkedIn Profile
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => window.open(selectedCandidate.linkedin, '_blank')}
+                    className="flex items-center space-x-2"
+                  >
+                    <Linkedin className="w-4 h-4 text-blue-600" />
+                    <span>LinkedIn</span>
                   </Button>
-                  <Button variant="outline" size="sm">
-                    GitHub Profile
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => window.open(selectedCandidate.github, '_blank')}
+                    className="flex items-center space-x-2"
+                  >
+                    <Github className="w-4 h-4 text-gray-800" />
+                    <span>GitHub</span>
                   </Button>
                 </div>
               </div>
