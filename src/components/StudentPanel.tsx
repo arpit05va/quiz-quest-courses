@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -96,8 +97,8 @@ const StudentPanel = () => {
     }
   }, [searchParams]);
 
-  // Mock data for jobs
-  const jobListings = [
+  // Mock data for jobs with state management
+  const [jobListings, setJobListings] = useState([
     {
       id: 1,
       title: 'Frontend Developer Intern',
@@ -146,7 +147,7 @@ const StudentPanel = () => {
       applied: false,
       status: null
     }
-  ];
+  ]);
 
   // Mock profile data with projects
   const [profileData, setProfileData] = useState({
@@ -192,6 +193,23 @@ const StudentPanel = () => {
     { id: 3, company: 'Web Solutions', position: 'Frontend Dev', status: 'Applied', appliedDate: '2024-01-10' },
     { id: 4, company: 'AI Startup', position: 'Python Dev', status: 'Rejected', appliedDate: '2024-01-08' }
   ];
+
+  // Function to handle job application
+  const handleApplyJob = (jobId: number) => {
+    setJobListings(prevJobs => 
+      prevJobs.map(job => 
+        job.id === jobId 
+          ? { ...job, applied: true, status: 'Applied' }
+          : job
+      )
+    );
+
+    const appliedJob = jobListings.find(job => job.id === jobId);
+    toast.success(`Successfully applied to ${appliedJob?.title} at ${appliedJob?.company}!`, {
+      description: "Your application has been submitted. You'll receive updates via email.",
+      duration: 5000,
+    });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -370,7 +388,7 @@ const StudentPanel = () => {
                           <span className="ml-1">{job.status}</span>
                         </Badge>
                       ) : (
-                        <Button>
+                        <Button onClick={() => handleApplyJob(job.id)}>
                           <Send className="w-4 h-4 mr-2" />
                           Apply Now
                         </Button>
