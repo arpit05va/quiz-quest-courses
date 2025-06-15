@@ -10,6 +10,13 @@ import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { toast } from '@/components/ui/sonner';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -49,6 +56,15 @@ const RecruiterPanel = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Dialog states
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const [resumeDialogOpen, setResumeDialogOpen] = useState(false);
+  const [selectedCandidate, setSelectedCandidate] = useState<any>(null);
+  
+  // Watchlist and shortlist states
+  const [watchlist, setWatchlist] = useState<number[]>([]);
+  const [shortlisted, setShortlisted] = useState<number[]>([]);
 
   // Set active tab based on URL parameter
   useEffect(() => {
@@ -117,6 +133,43 @@ const RecruiterPanel = () => {
       fileInputRef.current.value = '';
     }
     toast.success('File removed successfully');
+  };
+
+  // Handle candidate actions
+  const handleViewProfile = (candidate: any) => {
+    setSelectedCandidate(candidate);
+    setProfileDialogOpen(true);
+  };
+
+  const handleViewResume = (candidate: any) => {
+    setSelectedCandidate(candidate);
+    setResumeDialogOpen(true);
+  };
+
+  const handleToggleWatchlist = (candidateId: number) => {
+    setWatchlist(prev => {
+      const isInWatchlist = prev.includes(candidateId);
+      if (isInWatchlist) {
+        toast.success('Candidate removed from watchlist');
+        return prev.filter(id => id !== candidateId);
+      } else {
+        toast.success('Candidate added to watchlist');
+        return [...prev, candidateId];
+      }
+    });
+  };
+
+  const handleToggleShortlist = (candidateId: number) => {
+    setShortlisted(prev => {
+      const isShortlisted = prev.includes(candidateId);
+      if (isShortlisted) {
+        toast.success('Candidate removed from shortlist');
+        return prev.filter(id => id !== candidateId);
+      } else {
+        toast.success('Candidate shortlisted successfully');
+        return [...prev, candidateId];
+      }
+    });
   };
 
   // Mock data for demonstration
@@ -380,7 +433,7 @@ const RecruiterPanel = () => {
                   {/* Actions */}
                   <div className="flex justify-between items-center">
                     <div className="flex space-x-2">
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" onClick={() => handleViewProfile(candidate)}>
                         <Eye className="w-4 h-4 mr-1" />
                         View Profile
                       </Button>
@@ -389,13 +442,21 @@ const RecruiterPanel = () => {
                       </Button>
                     </div>
                     <div className="flex space-x-2">
-                      <Button size="sm" variant="outline">
-                        <Heart className="w-4 h-4 mr-1" />
-                        Watchlist
+                      <Button 
+                        size="sm" 
+                        variant={watchlist.includes(candidate.id) ? "default" : "outline"}
+                        onClick={() => handleToggleWatchlist(candidate.id)}
+                      >
+                        <Heart className={`w-4 h-4 mr-1 ${watchlist.includes(candidate.id) ? 'fill-current' : ''}`} />
+                        {watchlist.includes(candidate.id) ? 'Watchlisted' : 'Watchlist'}
                       </Button>
-                      <Button size="sm">
+                      <Button 
+                        size="sm"
+                        variant={shortlisted.includes(candidate.id) ? "default" : "outline"}
+                        onClick={() => handleToggleShortlist(candidate.id)}
+                      >
                         <CheckCircle2 className="w-4 h-4 mr-1" />
-                        Shortlist
+                        {shortlisted.includes(candidate.id) ? 'Shortlisted' : 'Shortlist'}
                       </Button>
                     </div>
                   </div>
@@ -819,6 +880,141 @@ const RecruiterPanel = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Profile Dialog */}
+      <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Candidate Profile</DialogTitle>
+            <DialogDescription>
+              Detailed profile information for {selectedCandidate?.name}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedCandidate && (
+            <div className="space-y-6">
+              {/* Basic Information */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-semibold mb-2">Personal Information</h4>
+                  <div className="space-y-2 text-sm">
+                    <p><strong>Name:</strong> {selectedCandidate.name}</p>
+                    <p><strong>Email:</strong> {selectedCandidate.email}</p>
+                    <p><strong>Location:</strong> {selectedCandidate.location}</p>
+                    <p><strong>Availability:</strong> {selectedCandidate.availability}</p>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Education</h4>
+                  <div className="space-y-2 text-sm">
+                    <p><strong>College:</strong> {selectedCandidate.college}</p>
+                    <p><strong>CGPA:</strong> {selectedCandidate.cgpa}</p>
+                    <p><strong>Experience:</strong> {selectedCandidate.experience}</p>
+                    <p><strong>Expected Salary:</strong> {selectedCandidate.expectedSalary}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Skills */}
+              <div>
+                <h4 className="font-semibold mb-2">Skills & Technologies</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedCandidate.skills.map((skill: string) => (
+                    <Badge key={skill} variant="secondary">{skill}</Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quiz Scores */}
+              <div>
+                <h4 className="font-semibold mb-2">Quiz Performance</h4>
+                <div className="grid grid-cols-3 gap-4">
+                  {Object.entries(selectedCandidate.quizScores).map(([topic, score]) => (
+                    <div key={topic} className="text-center p-3 border rounded">
+                      <p className="text-sm text-muted-foreground capitalize">{topic}</p>
+                      <p className="text-2xl font-bold">{score}/10</p>
+                      <Progress value={Number(score) * 10} className="mt-2" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* AI Pitch */}
+              <div>
+                <h4 className="font-semibold mb-2">AI Assessment</h4>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <p className="text-sm">{selectedCandidate.aiPitch}</p>
+                  <div className="mt-2">
+                    <span className="text-sm font-medium">Overall Score: </span>
+                    <span className="text-lg font-bold text-green-600">{selectedCandidate.overallScore}/10</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Links */}
+              <div>
+                <h4 className="font-semibold mb-2">Professional Links</h4>
+                <div className="flex space-x-4">
+                  <Button variant="outline" size="sm">
+                    LinkedIn Profile
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    GitHub Profile
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Resume Dialog */}
+      <Dialog open={resumeDialogOpen} onOpenChange={setResumeDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle>Resume - {selectedCandidate?.name}</DialogTitle>
+            <DialogDescription>
+              Candidate resume and portfolio
+            </DialogDescription>
+          </DialogHeader>
+          {selectedCandidate && (
+            <div className="space-y-4">
+              <div className="bg-gray-100 p-4 rounded-lg text-center">
+                <FileText className="w-12 h-12 mx-auto mb-2 text-gray-500" />
+                <p className="text-sm text-gray-600 mb-4">Resume preview would be displayed here</p>
+                <div className="flex justify-center space-x-2">
+                  <Button variant="outline" size="sm">
+                    Download PDF
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    View Full Screen
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Resume Summary */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-semibold mb-2">Key Highlights</h4>
+                  <ul className="text-sm space-y-1 list-disc list-inside">
+                    <li>{selectedCandidate.experience} of relevant experience</li>
+                    <li>Strong background in {selectedCandidate.skills.slice(0, 2).join(', ')}</li>
+                    <li>Graduated from {selectedCandidate.college}</li>
+                    <li>Available for {selectedCandidate.availability}</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Contact Information</h4>
+                  <div className="text-sm space-y-1">
+                    <p>{selectedCandidate.email}</p>
+                    <p>{selectedCandidate.location}</p>
+                    <p>Expected: {selectedCandidate.expectedSalary}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
