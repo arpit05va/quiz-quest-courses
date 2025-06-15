@@ -49,7 +49,9 @@ import {
   TrendingUp,
   Linkedin,
   Github,
-  Plus
+  Plus,
+  Edit,
+  Save
 } from 'lucide-react';
 
 const RecruiterPanel = () => {
@@ -63,7 +65,10 @@ const RecruiterPanel = () => {
   // Dialog states
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [resumeDialogOpen, setResumeDialogOpen] = useState(false);
+  const [applicationsDialogOpen, setApplicationsDialogOpen] = useState(false);
+  const [editJobDialogOpen, setEditJobDialogOpen] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState<any>(null);
+  const [selectedJob, setSelectedJob] = useState<any>(null);
   
   // Watchlist and shortlist states
   const [watchlist, setWatchlist] = useState<number[]>([]);
@@ -121,6 +126,49 @@ const RecruiterPanel = () => {
 
   // Available tags
   const availableTags = ['Urgent', 'Work From Home', 'Diversity', 'Entry Level', 'Remote', 'Full-time', 'Part-time'];
+
+  // Mock applications data
+  const mockApplications = [
+    {
+      id: 1,
+      candidateId: 1,
+      name: 'John Smith',
+      email: 'john.smith@email.com',
+      appliedDate: '2024-01-15',
+      status: 'Under Review',
+      resumeUrl: '#',
+      coverLetter: 'I am excited to apply for this position...',
+      skills: ['React', 'Node.js', 'TypeScript'],
+      experience: '3 years',
+      expectedSalary: '12-15 LPA'
+    },
+    {
+      id: 2,
+      candidateId: 2,
+      name: 'Sarah Wilson',
+      email: 'sarah.wilson@email.com',
+      appliedDate: '2024-01-14',
+      status: 'Shortlisted',
+      resumeUrl: '#',
+      coverLetter: 'With my background in backend development...',
+      skills: ['Python', 'Django', 'PostgreSQL'],
+      experience: '2 years',
+      expectedSalary: '10-12 LPA'
+    },
+    {
+      id: 3,
+      candidateId: 3,
+      name: 'Mike Johnson',
+      email: 'mike.johnson@email.com',
+      appliedDate: '2024-01-13',
+      status: 'Applied',
+      resumeUrl: '#',
+      coverLetter: 'I have been working with React for the past 2 years...',
+      skills: ['React', 'JavaScript', 'CSS'],
+      experience: '2 years',
+      expectedSalary: '8-12 LPA'
+    }
+  ];
 
   // Set active tab based on URL parameter
   useEffect(() => {
@@ -271,6 +319,55 @@ const RecruiterPanel = () => {
   const handleDeleteJob = (jobId: number) => {
     setJobs(prev => prev.filter(job => job.id !== jobId));
     toast.success('Job deleted successfully');
+  };
+
+  // New handlers for View Applications and Edit
+  const handleViewApplications = (job: any) => {
+    setSelectedJob(job);
+    setApplicationsDialogOpen(true);
+  };
+
+  const handleEditJob = (job: any) => {
+    setSelectedJob(job);
+    setJobForm({
+      title: job.title,
+      type: job.type,
+      location: job.location,
+      salary: job.salary,
+      skills: job.skills || [],
+      description: job.description,
+      batch: job.batch || '',
+      degree: job.degree || '',
+      cgpa: job.cgpa || '',
+      deadline: job.deadline || '',
+      tags: job.tags || []
+    });
+    setEditJobDialogOpen(true);
+  };
+
+  const handleUpdateJob = () => {
+    if (!selectedJob) return;
+
+    // Validate required fields
+    if (!jobForm.title || !jobForm.type || !jobForm.location || !jobForm.salary || !jobForm.description) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    setJobs(prev => prev.map(job => 
+      job.id === selectedJob.id 
+        ? { ...job, ...jobForm }
+        : job
+    ));
+
+    setEditJobDialogOpen(false);
+    setSelectedJob(null);
+    toast.success('Job updated successfully!');
+  };
+
+  const handleApplicationStatusChange = (applicationId: number, newStatus: string) => {
+    // In a real app, this would update the backend
+    toast.success(`Application status updated to ${newStatus}`);
   };
 
   // Handle candidate actions
@@ -797,12 +894,12 @@ const RecruiterPanel = () => {
 
                     <div className="flex justify-between items-center">
                       <div className="flex space-x-2">
-                        <Button size="sm" variant="outline">
+                        <Button size="sm" variant="outline" onClick={() => handleViewApplications(job)}>
                           <Eye className="w-4 h-4 mr-1" />
                           View Applications
                         </Button>
-                        <Button size="sm" variant="outline">
-                          <FileText className="w-4 h-4 mr-1" />
+                        <Button size="sm" variant="outline" onClick={() => handleEditJob(job)}>
+                          <Edit className="w-4 h-4 mr-1" />
                           Edit
                         </Button>
                       </div>
@@ -1110,6 +1207,261 @@ const RecruiterPanel = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Applications Dialog */}
+      <Dialog open={applicationsDialogOpen} onOpenChange={setApplicationsDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Applications - {selectedJob?.title}</DialogTitle>
+            <DialogDescription>
+              View and manage applications for this position
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-muted-foreground">
+                Total Applications: {mockApplications.length}
+              </p>
+              <div className="flex space-x-2">
+                <Badge variant="outline">Under Review: 1</Badge>
+                <Badge variant="outline">Shortlisted: 1</Badge>
+                <Badge variant="outline">Applied: 1</Badge>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              {mockApplications.map((application) => (
+                <div key={application.id} className="border rounded-lg p-4">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h4 className="font-semibold">{application.name}</h4>
+                      <p className="text-sm text-muted-foreground">{application.email}</p>
+                      <p className="text-sm text-muted-foreground">Applied: {application.appliedDate}</p>
+                      <p className="text-sm text-muted-foreground">Experience: {application.experience}</p>
+                      <p className="text-sm text-muted-foreground">Expected: {application.expectedSalary}</p>
+                    </div>
+                    <div className="text-right">
+                      <Badge 
+                        variant={
+                          application.status === 'Shortlisted' ? 'default' :
+                          application.status === 'Under Review' ? 'secondary' : 'outline'
+                        }
+                      >
+                        {application.status}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <div className="mb-3">
+                    <p className="text-sm font-medium mb-1">Skills:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {application.skills.map((skill) => (
+                        <Badge key={skill} variant="outline" className="text-xs">{skill}</Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mb-3">
+                    <p className="text-sm font-medium mb-1">Cover Letter:</p>
+                    <p className="text-sm text-muted-foreground">{application.coverLetter}</p>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <div className="flex space-x-2">
+                      <Button size="sm" variant="outline">
+                        <Eye className="w-4 h-4 mr-1" />
+                        View Resume
+                      </Button>
+                      <Button size="sm" variant="outline">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        Schedule Interview
+                      </Button>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Select 
+                        defaultValue={application.status}
+                        onValueChange={(value) => handleApplicationStatusChange(application.id, value)}
+                      >
+                        <SelectTrigger className="w-32">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Applied">Applied</SelectItem>
+                          <SelectItem value="Under Review">Under Review</SelectItem>
+                          <SelectItem value="Shortlisted">Shortlisted</SelectItem>
+                          <SelectItem value="Interviewed">Interviewed</SelectItem>
+                          <SelectItem value="Rejected">Rejected</SelectItem>
+                          <SelectItem value="Hired">Hired</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Job Dialog */}
+      <Dialog open={editJobDialogOpen} onOpenChange={setEditJobDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Job Posting</DialogTitle>
+            <DialogDescription>
+              Update the job posting details
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-job-title">Job Title *</Label>
+                <Input 
+                  id="edit-job-title" 
+                  placeholder="e.g., Senior React Developer" 
+                  value={jobForm.title}
+                  onChange={(e) => handleJobFormChange('title', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-job-type">Job Type *</Label>
+                <Select value={jobForm.type} onValueChange={(value) => handleJobFormChange('type', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select job type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="fulltime">Full-time</SelectItem>
+                    <SelectItem value="internship">Internship</SelectItem>
+                    <SelectItem value="freelance">Freelance</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="edit-location">Location *</Label>
+                <Select value={jobForm.location} onValueChange={(value) => handleJobFormChange('location', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select location type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="remote">Remote</SelectItem>
+                    <SelectItem value="onsite">On-site</SelectItem>
+                    <SelectItem value="hybrid">Hybrid</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="edit-salary">Salary Range *</Label>
+                <Input 
+                  id="edit-salary" 
+                  placeholder="e.g., 15-20 LPA" 
+                  value={jobForm.salary}
+                  onChange={(e) => handleJobFormChange('salary', e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="edit-skills">Required Skills</Label>
+              <div className="flex space-x-2">
+                <Input 
+                  id="edit-skills" 
+                  placeholder="Start typing skills..." 
+                  value={skillInput}
+                  onChange={(e) => setSkillInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleAddSkill()}
+                />
+                <Button type="button" onClick={handleAddSkill}>
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {jobForm.skills.map((skill) => (
+                  <Badge key={skill} variant="secondary" className="cursor-pointer" onClick={() => handleRemoveSkill(skill)}>
+                    {skill} <X className="w-3 h-3 ml-1" />
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="edit-description">Job Description *</Label>
+              <Textarea
+                id="edit-description"
+                placeholder="Detailed job description..."
+                rows={6}
+                value={jobForm.description}
+                onChange={(e) => handleJobFormChange('description', e.target.value)}
+              />
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              <div>
+                <Label htmlFor="edit-batch">Batch/Year</Label>
+                <Input 
+                  id="edit-batch" 
+                  placeholder="e.g., 2024" 
+                  value={jobForm.batch}
+                  onChange={(e) => handleJobFormChange('batch', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-degree">Degree</Label>
+                <Input 
+                  id="edit-degree" 
+                  placeholder="e.g., B.Tech, M.Tech" 
+                  value={jobForm.degree}
+                  onChange={(e) => handleJobFormChange('degree', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-cgpa">Minimum CGPA</Label>
+                <Input 
+                  id="edit-cgpa" 
+                  placeholder="e.g., 7.0" 
+                  value={jobForm.cgpa}
+                  onChange={(e) => handleJobFormChange('cgpa', e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="edit-deadline">Application Deadline</Label>
+              <Input 
+                id="edit-deadline" 
+                type="date" 
+                value={jobForm.deadline}
+                onChange={(e) => handleJobFormChange('deadline', e.target.value)}
+              />
+            </div>
+
+            <div>
+              <Label>Tags</Label>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {availableTags.map((tag) => (
+                  <Badge 
+                    key={tag} 
+                    variant={jobForm.tags.includes(tag) ? "default" : "outline"}
+                    className="cursor-pointer"
+                    onClick={() => jobForm.tags.includes(tag) ? handleRemoveTag(tag) : handleAddTag(tag)}
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setEditJobDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleUpdateJob}>
+                <Save className="w-4 h-4 mr-2" />
+                Update Job
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Profile Dialog */}
       <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
