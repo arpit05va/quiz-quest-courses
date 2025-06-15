@@ -170,6 +170,16 @@ const RecruiterPanel = () => {
     }
   ];
 
+  // New state for interview scheduling
+  const [scheduleInterviewDialogOpen, setScheduleInterviewDialogOpen] = useState(false);
+  const [selectedCandidateForInterview, setSelectedCandidateForInterview] = useState<any>(null);
+  const [interviewForm, setInterviewForm] = useState({
+    date: '',
+    time: '',
+    platform: '',
+    notes: ''
+  });
+
   // Set active tab based on URL parameter
   useEffect(() => {
     const tab = searchParams.get('tab');
@@ -405,6 +415,52 @@ const RecruiterPanel = () => {
         return [...prev, candidateId];
       }
     });
+  };
+
+  // New handlers for candidate management buttons
+  const handleViewFullProfile = (candidate: any) => {
+    setSelectedCandidate(candidate);
+    setProfileDialogOpen(true);
+  };
+
+  const handleScheduleInterview = (candidate: any) => {
+    setSelectedCandidateForInterview(candidate);
+    setScheduleInterviewDialogOpen(true);
+  };
+
+  const handleInterviewFormChange = (field: string, value: string) => {
+    setInterviewForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleScheduleInterviewSubmit = () => {
+    if (!interviewForm.date || !interviewForm.time || !interviewForm.platform) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    // In a real app, this would save to backend
+    toast.success(`Interview scheduled with ${selectedCandidateForInterview?.name} on ${interviewForm.date} at ${interviewForm.time}`);
+    
+    // Reset form
+    setInterviewForm({
+      date: '',
+      time: '',
+      platform: '',
+      notes: ''
+    });
+    setScheduleInterviewDialogOpen(false);
+    setSelectedCandidateForInterview(null);
+  };
+
+  const handleApproveCandidate = (candidateId: number) => {
+    toast.success('Candidate approved and moved to next stage');
+  };
+
+  const handleRejectCandidate = (candidateId: number) => {
+    toast.success('Candidate rejected and notification sent');
   };
 
   // Mock data for demonstration
@@ -944,10 +1000,28 @@ const RecruiterPanel = () => {
                         <p className="text-sm text-muted-foreground">{candidate.email}</p>
                         <div className="mt-2 space-y-1">
                           <div className="flex items-center space-x-2">
-                            <Badge variant="outline">LinkedIn</Badge>
-                            <Badge variant="outline">GitHub</Badge>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => window.open(candidate.linkedin, '_blank')}
+                              className="flex items-center space-x-1"
+                            >
+                              <Linkedin className="w-3 h-3 text-blue-600" />
+                              <span className="text-xs">LinkedIn</span>
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => window.open(candidate.github, '_blank')}
+                              className="flex items-center space-x-1"
+                            >
+                              <Github className="w-3 h-3 text-gray-800" />
+                              <span className="text-xs">GitHub</span>
+                            </Button>
                           </div>
                           <p className="text-sm">Expected: {candidate.expectedSalary}</p>
+                          <p className="text-sm">Location: {candidate.location}</p>
+                          <p className="text-sm">Experience: {candidate.experience}</p>
                         </div>
                       </div>
 
@@ -961,27 +1035,65 @@ const RecruiterPanel = () => {
                             <span className="text-sm font-medium">{score as number}/10</span>
                           </div>
                         ))}
+                        <div className="mt-2">
+                          <p className="text-sm font-medium">Skills:</p>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {candidate.skills.slice(0, 3).map((skill) => (
+                              <Badge key={skill} variant="outline" className="text-xs">{skill}</Badge>
+                            ))}
+                            {candidate.skills.length > 3 && (
+                              <Badge variant="outline" className="text-xs">+{candidate.skills.length - 3}</Badge>
+                            )}
+                          </div>
+                        </div>
                       </div>
 
                       {/* Actions */}
                       <div className="space-y-2">
-                        <Button size="sm" className="w-full">
+                        <Button 
+                          size="sm" 
+                          className="w-full"
+                          onClick={() => handleViewFullProfile(candidate)}
+                        >
                           <Eye className="w-4 h-4 mr-2" />
                           View Full Profile
                         </Button>
-                        <Button size="sm" variant="outline" className="w-full">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="w-full"
+                          onClick={() => handleScheduleInterview(candidate)}
+                        >
                           <Calendar className="w-4 h-4 mr-2" />
                           Schedule Interview
                         </Button>
                         <div className="flex space-x-2">
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="flex-1 text-green-600 hover:text-green-700 hover:bg-green-50"
+                            onClick={() => handleApproveCandidate(candidate.id)}
+                            title="Approve Candidate"
+                          >
                             <CheckCircle2 className="w-4 h-4" />
                           </Button>
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+                            onClick={() => handleRejectCandidate(candidate.id)}
+                            title="Reject Candidate"
+                          >
                             <X className="w-4 h-4" />
                           </Button>
-                          <Button size="sm" variant="outline">
-                            <Heart className="w-4 h-4" />
+                          <Button 
+                            size="sm" 
+                            variant={watchlist.includes(candidate.id) ? "default" : "outline"}
+                            className="flex-1"
+                            onClick={() => handleToggleWatchlist(candidate.id)}
+                            title={watchlist.includes(candidate.id) ? "Remove from Watchlist" : "Add to Watchlist"}
+                          >
+                            <Heart className={`w-4 h-4 ${watchlist.includes(candidate.id) ? 'fill-current' : ''}`} />
                           </Button>
                         </div>
                       </div>
@@ -1207,6 +1319,75 @@ const RecruiterPanel = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Schedule Interview Dialog */}
+      <Dialog open={scheduleInterviewDialogOpen} onOpenChange={setScheduleInterviewDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Schedule Interview</DialogTitle>
+            <DialogDescription>
+              Schedule an interview with {selectedCandidateForInterview?.name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="interview-date">Date *</Label>
+                <Input 
+                  id="interview-date" 
+                  type="date" 
+                  value={interviewForm.date}
+                  onChange={(e) => handleInterviewFormChange('date', e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                />
+              </div>
+              <div>
+                <Label htmlFor="interview-time">Time *</Label>
+                <Input 
+                  id="interview-time" 
+                  type="time" 
+                  value={interviewForm.time}
+                  onChange={(e) => handleInterviewFormChange('time', e.target.value)}
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="interview-platform">Platform *</Label>
+              <Select value={interviewForm.platform} onValueChange={(value) => handleInterviewFormChange('platform', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select platform" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="zoom">Zoom</SelectItem>
+                  <SelectItem value="meet">Google Meet</SelectItem>
+                  <SelectItem value="teams">MS Teams</SelectItem>
+                  <SelectItem value="phone">Phone Call</SelectItem>
+                  <SelectItem value="inperson">In Person</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="interview-notes">Notes (Optional)</Label>
+              <Textarea 
+                id="interview-notes" 
+                placeholder="Add any notes or special instructions..."
+                value={interviewForm.notes}
+                onChange={(e) => handleInterviewFormChange('notes', e.target.value)}
+                rows={3}
+              />
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setScheduleInterviewDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleScheduleInterviewSubmit}>
+                <Calendar className="w-4 h-4 mr-2" />
+                Schedule Interview
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Applications Dialog */}
       <Dialog open={applicationsDialogOpen} onOpenChange={setApplicationsDialogOpen}>
