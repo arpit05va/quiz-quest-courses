@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -22,6 +21,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
+import QuizSection from '@/components/QuizSection';
 
 const CourseDetail = () => {
   const { id } = useParams();
@@ -468,8 +468,9 @@ console.log(greeting); // Output: Hello, Alice!
             <Card className="border-none shadow-lg">
               <CardContent className="p-6">
                 <Tabs defaultValue="overview" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3">
+                  <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="quizzes">Quizzes</TabsTrigger>
                     <TabsTrigger value="resources">Resources</TabsTrigger>
                     <TabsTrigger value="discussion">Discussion</TabsTrigger>
                   </TabsList>
@@ -499,6 +500,13 @@ console.log(greeting); // Output: Hello, Alice!
                         </div>
                       </div>
                     </div>
+                  </TabsContent>
+                  <TabsContent value="quizzes" className="mt-4">
+                    <QuizSection 
+                      contentType="course" 
+                      contentId={id || '1'} 
+                      contentTitle={course.title} 
+                    />
                   </TabsContent>
                   <TabsContent value="resources" className="mt-4">
                     <div className="space-y-3">

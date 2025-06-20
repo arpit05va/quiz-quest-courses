@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, ChevronRight, SkipForward, Send, Clock, Brain } from 'lucide-react';
 import DashboardWrapper from '@/components/DashboardWrapper';
+import { useAuthCheck } from '@/hooks/useAuthCheck';
 
 interface Question {
   id: number;
@@ -37,6 +37,15 @@ const QuizDetailPage = () => {
   const [answers, setAnswers] = useState<{ [key: number]: number }>({});
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [animationClass, setAnimationClass] = useState('animate-fade-in');
+  
+  const { isAuthenticated, checkAuthAndExecute, AuthDialog } = useAuthCheck();
+
+  // Check authentication on component mount
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   // Enhanced mock quiz data with difficulty-based questions
   useEffect(() => {
@@ -151,6 +160,18 @@ const QuizDetailPage = () => {
     };
     setQuiz(mockQuiz);
   }, [id, selectedDifficulty]);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <AuthDialog />
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Please log in to access quizzes</h2>
+          <p className="text-muted-foreground">You need to be logged in to take quizzes.</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!quiz) {
     return <DashboardWrapper title="Loading..."><div>Loading quiz...</div></DashboardWrapper>;

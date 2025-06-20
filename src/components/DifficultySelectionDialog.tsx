@@ -31,7 +31,7 @@ const DifficultySelectionDialog = ({
       level: 'Beginner',
       icon: Brain,
       description: 'Perfect for those new to the topic',
-      color: 'bg-green-100 hover:bg-green-200 text-green-800 border-green-300',
+      color: 'bg-green-100 hover:bg-green-200 text-green-800 border-green-300 dark:bg-green-900/20 dark:hover:bg-green-900/30 dark:text-green-300 dark:border-green-700',
       questions: '8-10 questions',
       time: '15 minutes'
     },
@@ -39,7 +39,7 @@ const DifficultySelectionDialog = ({
       level: 'Intermediate',
       icon: Star,
       description: 'For those with some experience',
-      color: 'bg-blue-100 hover:bg-blue-200 text-blue-800 border-blue-300',
+      color: 'bg-blue-100 hover:bg-blue-200 text-blue-800 border-blue-300 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 dark:text-blue-300 dark:border-blue-700',
       questions: '12-15 questions',
       time: '20 minutes'
     },
@@ -47,7 +47,7 @@ const DifficultySelectionDialog = ({
       level: 'Advanced',
       icon: Zap,
       description: 'Challenge yourself with complex topics',
-      color: 'bg-purple-100 hover:bg-purple-200 text-purple-800 border-purple-300',
+      color: 'bg-purple-100 hover:bg-purple-200 text-purple-800 border-purple-300 dark:bg-purple-900/20 dark:hover:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700',
       questions: '15-20 questions',
       time: '25 minutes'
     },
@@ -55,7 +55,7 @@ const DifficultySelectionDialog = ({
       level: 'Expert',
       icon: Award,
       description: 'For true masters of the subject',
-      color: 'bg-red-100 hover:bg-red-200 text-red-800 border-red-300',
+      color: 'bg-red-100 hover:bg-red-200 text-red-800 border-red-300 dark:bg-red-900/20 dark:hover:bg-red-900/30 dark:text-red-300 dark:border-red-700',
       questions: '20-25 questions',
       time: '30 minutes'
     }
@@ -71,13 +71,13 @@ const DifficultySelectionDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl bg-background border-border">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">
+          <DialogTitle className="text-2xl font-bold text-center text-foreground">
             Select Difficulty Level
           </DialogTitle>
-          <DialogDescription className="text-center text-lg">
-            Choose your challenge level for: <span className="font-semibold">{quizTitle}</span>
+          <DialogDescription className="text-center text-lg text-muted-foreground">
+            Choose your challenge level for: <span className="font-semibold text-foreground">{quizTitle}</span>
           </DialogDescription>
         </DialogHeader>
 
@@ -88,12 +88,12 @@ const DifficultySelectionDialog = ({
               className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 transform hover:scale-105 ${
                 selectedDifficulty === diff.level
                   ? `${diff.color} ring-2 ring-primary scale-105 shadow-lg`
-                  : 'bg-gray-50 hover:bg-gray-100 border-gray-200'
+                  : 'bg-card hover:bg-accent border-border text-card-foreground'
               }`}
               onClick={() => setSelectedDifficulty(diff.level)}
             >
               <div className="flex items-center space-x-3 mb-3">
-                <div className={`p-2 rounded-full ${selectedDifficulty === diff.level ? 'bg-white/20' : 'bg-primary/10'}`}>
+                <div className={`p-2 rounded-full ${selectedDifficulty === diff.level ? 'bg-white/20 dark:bg-black/20' : 'bg-primary/10'}`}>
                   <diff.icon className={`w-5 h-5 ${selectedDifficulty === diff.level ? 'text-current' : 'text-primary'}`} />
                 </div>
                 <div>

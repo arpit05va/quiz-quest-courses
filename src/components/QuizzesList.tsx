@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Award, CheckCircle2, Timer, Eye } from 'lucide-react';
 import DifficultySelectionDialog from './DifficultySelectionDialog';
+import { useAuthCheck } from '@/hooks/useAuthCheck';
 
 const QuizzesList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [difficultyDialogOpen, setDifficultyDialogOpen] = useState(false);
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
   const navigate = useNavigate();
+  const { checkAuthAndExecute, AuthDialog } = useAuthCheck();
 
   const quizzes = [
     {
@@ -70,9 +72,11 @@ const QuizzesList = () => {
   );
 
   const handleStartQuiz = (quiz: any) => {
-    console.log(`Preparing to start quiz ${quiz.id}`);
-    setSelectedQuiz(quiz);
-    setDifficultyDialogOpen(true);
+    checkAuthAndExecute(() => {
+      console.log(`Preparing to start quiz ${quiz.id}`);
+      setSelectedQuiz(quiz);
+      setDifficultyDialogOpen(true);
+    });
   };
 
   const handleDifficultySelect = (difficulty: string) => {
@@ -81,48 +85,57 @@ const QuizzesList = () => {
   };
 
   const handleRetakeQuiz = (quizId: number) => {
-    console.log(`Retaking quiz ${quizId}`);
-    const quiz = quizzes.find(q => q.id === quizId);
-    if (quiz) {
-      setSelectedQuiz(quiz);
-      setDifficultyDialogOpen(true);
-    }
+    checkAuthAndExecute(() => {
+      console.log(`Retaking quiz ${quizId}`);
+      const quiz = quizzes.find(q => q.id === quizId);
+      if (quiz) {
+        setSelectedQuiz(quiz);
+        setDifficultyDialogOpen(true);
+      }
+    });
   };
 
   const handleViewResult = (quizId: number) => {
-    console.log(`Viewing result for quiz ${quizId}`);
-    // Create mock result data for viewing
-    const mockResult = {
-      quizId: quizId,
-      quizTitle: `Quiz ${quizId} Results`,
-      answers: { 1: 0, 2: 2, 3: 1 },
-      questions: [
-        {
-          id: 1,
-          question: 'Sample question 1?',
-          options: ['Option A', 'Option B', 'Option C', 'Option D'],
-          correctAnswer: 0,
-          explanation: 'This is the explanation for question 1.'
-        },
-        {
-          id: 2,
-          question: 'Sample question 2?',
-          options: ['Option A', 'Option B', 'Option C', 'Option D'],
-          correctAnswer: 1,
-          explanation: 'This is the explanation for question 2.'
-        },
-        {
-          id: 3,
-          question: 'Sample question 3?',
-          options: ['Option A', 'Option B', 'Option C', 'Option D'],
-          correctAnswer: 2,
-          explanation: 'This is the explanation for question 3.'
-        }
-      ],
-      submittedAt: new Date().toISOString()
-    };
-    localStorage.setItem(`quiz-result-${quizId}`, JSON.stringify(mockResult));
-    navigate(`/quiz/${quizId}/summary`);
+    checkAuthAndExecute(() => {
+      console.log(`Viewing result for quiz ${quizId}`);
+      const quiz = quizzes.find(q => q.id === quizId);
+      if (quiz) {
+        // Create mock result data for viewing
+        const mockResult = {
+          quizId: quizId,
+          quizTitle: quiz.title,
+          answers: { 1: 0, 2: 2, 3: 1 },
+          questions: [
+            {
+              id: 1,
+              question: 'Sample question 1?',
+              options: ['Option A', 'Option B', 'Option C', 'Option D'],
+              correctAnswer: 0,
+              explanation: 'This is the explanation for question 1.'
+            },
+            {
+              id: 2,
+              question: 'Sample question 2?',
+              options: ['Option A', 'Option B', 'Option C', 'Option D'],
+              correctAnswer: 1,
+              explanation: 'This is the explanation for question 2.'
+            },
+            {
+              id: 3,
+              question: 'Sample question 3?',
+              options: ['Option A', 'Option B', 'Option C', 'Option D'],
+              correctAnswer: 2,
+              explanation: 'This is the explanation for question 3.'
+            }
+          ],
+          submittedAt: new Date().toISOString(),
+          difficulty: 'Intermediate',
+          score: 67
+        };
+        localStorage.setItem(`quiz-result-${quizId}`, JSON.stringify(mockResult));
+        navigate(`/quiz/${quizId}/summary`);
+      }
+    });
   };
 
   return (
@@ -220,6 +233,7 @@ const QuizzesList = () => {
         onDifficultySelect={handleDifficultySelect}
         quizTitle={selectedQuiz?.title || ''}
       />
+      <AuthDialog />
     </div>
   );
 };
