@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,9 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Award, CheckCircle2, Timer, Eye } from 'lucide-react';
+import DifficultySelectionDialog from './DifficultySelectionDialog';
 
 const QuizzesList = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [difficultyDialogOpen, setDifficultyDialogOpen] = useState(false);
+  const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
   const navigate = useNavigate();
 
   const quizzes = [
@@ -67,14 +69,24 @@ const QuizzesList = () => {
     quiz.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleStartQuiz = (quizId: number) => {
-    console.log(`Starting quiz ${quizId}`);
-    navigate(`/quiz/${quizId}`);
+  const handleStartQuiz = (quiz: any) => {
+    console.log(`Preparing to start quiz ${quiz.id}`);
+    setSelectedQuiz(quiz);
+    setDifficultyDialogOpen(true);
+  };
+
+  const handleDifficultySelect = (difficulty: string) => {
+    console.log(`Starting quiz ${selectedQuiz.id} with difficulty: ${difficulty}`);
+    navigate(`/quiz/${selectedQuiz.id}?difficulty=${difficulty}`);
   };
 
   const handleRetakeQuiz = (quizId: number) => {
     console.log(`Retaking quiz ${quizId}`);
-    navigate(`/quiz/${quizId}`);
+    const quiz = quizzes.find(q => q.id === quizId);
+    if (quiz) {
+      setSelectedQuiz(quiz);
+      setDifficultyDialogOpen(true);
+    }
   };
 
   const handleViewResult = (quizId: number) => {
@@ -136,7 +148,7 @@ const QuizzesList = () => {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
         {filteredQuizzes.map((quiz, index) => (
-          <Card key={quiz.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift">
+          <Card key={quiz.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in group">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -180,8 +192,8 @@ const QuizzesList = () => {
               
               <div className="flex flex-col space-y-2">
                 <Button 
-                  className="w-full" 
-                  onClick={() => quiz.completed ? handleRetakeQuiz(quiz.id) : handleStartQuiz(quiz.id)}
+                  className="w-full transition-all duration-300 hover:scale-105" 
+                  onClick={() => quiz.completed ? handleRetakeQuiz(quiz.id) : handleStartQuiz(quiz)}
                   variant={quiz.completed ? "outline" : "default"}
                 >
                   {quiz.completed ? 'Retake Quiz' : 'Start Quiz'}
@@ -189,7 +201,7 @@ const QuizzesList = () => {
                 {quiz.completed && (
                   <Button 
                     variant="ghost" 
-                    className="w-full"
+                    className="w-full transition-all duration-300 hover:scale-105"
                     onClick={() => handleViewResult(quiz.id)}
                   >
                     <Eye className="w-4 h-4 mr-2" />
@@ -201,6 +213,13 @@ const QuizzesList = () => {
           </Card>
         ))}
       </div>
+
+      <DifficultySelectionDialog
+        open={difficultyDialogOpen}
+        onOpenChange={setDifficultyDialogOpen}
+        onDifficultySelect={handleDifficultySelect}
+        quizTitle={selectedQuiz?.title || ''}
+      />
     </div>
   );
 };
