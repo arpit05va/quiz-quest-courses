@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,23 +26,26 @@ const LoginDialog = ({ open, onOpenChange }: LoginDialogProps = {}) => {
   const isOpen = open !== undefined ? open : internalOpen;
   const setIsOpen = onOpenChange || setInternalOpen;
 
+  const handleSuccessfulLogin = (userEmail: string) => {
+    console.log('Login successful for:', userEmail);
+    localStorage.setItem('user', JSON.stringify({ email: userEmail }));
+    setIsOpen(false);
+    
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new CustomEvent('userLoggedIn'));
+    
+    // Don't reload the page, let the components handle the state change
+  };
+
   const handleEmailLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email login:', { email, password });
-    // Add login logic here
-    localStorage.setItem('user', JSON.stringify({ email }));
-    setIsOpen(false);
-    // Refresh the page to update auth state
-    window.location.reload();
+    console.log('Email login attempt:', { email, password });
+    handleSuccessfulLogin(email);
   };
 
   const handleGoogleLogin = () => {
-    console.log('Google login');
-    // Add Google login logic here
-    localStorage.setItem('user', JSON.stringify({ email: 'google-user@example.com' }));
-    setIsOpen(false);
-    // Refresh the page to update auth state
-    window.location.reload();
+    console.log('Google login attempt');
+    handleSuccessfulLogin('google-user@example.com');
   };
 
   // If external control is provided, don't render the trigger button
@@ -157,7 +159,6 @@ const LoginDialog = ({ open, onOpenChange }: LoginDialogProps = {}) => {
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-6 py-4">
-          {/* Google Login Button */}
           <Button
             onClick={handleGoogleLogin}
             variant="outline"
@@ -193,7 +194,6 @@ const LoginDialog = ({ open, onOpenChange }: LoginDialogProps = {}) => {
             </div>
           </div>
 
-          {/* Email Login Form */}
           <form onSubmit={handleEmailLogin} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>

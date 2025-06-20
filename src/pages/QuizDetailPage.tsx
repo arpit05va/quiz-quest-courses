@@ -37,14 +37,24 @@ const QuizDetailPage = () => {
   const [answers, setAnswers] = useState<{ [key: number]: number }>({});
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [animationClass, setAnimationClass] = useState('animate-fade-in');
+  const [authChecked, setAuthChecked] = useState(false);
   
-  const { isAuthenticated, checkAuthAndExecute, AuthDialog } = useAuthCheck();
+  const { isAuthenticated, AuthDialog } = useAuthCheck();
 
-  // Check authentication on component mount
+  // Handle authentication - only redirect if definitely not authenticated
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/');
-    }
+    console.log('Auth effect - isAuthenticated:', isAuthenticated);
+    
+    // Give a moment for auth to be checked
+    const timer = setTimeout(() => {
+      setAuthChecked(true);
+      if (!isAuthenticated) {
+        console.log('User not authenticated, redirecting to home');
+        navigate('/');
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [isAuthenticated, navigate]);
 
   // Enhanced mock quiz data with difficulty-based questions
@@ -161,15 +171,23 @@ const QuizDetailPage = () => {
     setQuiz(mockQuiz);
   }, [id, selectedDifficulty]);
 
+  // Show loading while auth is being checked
+  if (!authChecked) {
+    return <DashboardWrapper title="Loading..."><div>Checking authentication...</div></DashboardWrapper>;
+  }
+
+  // Show auth prompt if not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <AuthDialog />
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Please log in to access quizzes</h2>
-          <p className="text-muted-foreground">You need to be logged in to take quizzes.</p>
+      <DashboardWrapper title="Authentication Required">
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl font-bold">Please log in to access quizzes</h2>
+            <p className="text-muted-foreground">You need to be logged in to take quizzes.</p>
+            <AuthDialog />
+          </div>
         </div>
-      </div>
+      </DashboardWrapper>
     );
   }
 
