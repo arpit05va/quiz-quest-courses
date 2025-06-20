@@ -79,6 +79,37 @@ const QuizzesList = () => {
 
   const handleViewResult = (quizId: number) => {
     console.log(`Viewing result for quiz ${quizId}`);
+    // Create mock result data for viewing
+    const mockResult = {
+      quizId: quizId,
+      quizTitle: `Quiz ${quizId} Results`,
+      answers: { 1: 0, 2: 2, 3: 1 },
+      questions: [
+        {
+          id: 1,
+          question: 'Sample question 1?',
+          options: ['Option A', 'Option B', 'Option C', 'Option D'],
+          correctAnswer: 0,
+          explanation: 'This is the explanation for question 1.'
+        },
+        {
+          id: 2,
+          question: 'Sample question 2?',
+          options: ['Option A', 'Option B', 'Option C', 'Option D'],
+          correctAnswer: 1,
+          explanation: 'This is the explanation for question 2.'
+        },
+        {
+          id: 3,
+          question: 'Sample question 3?',
+          options: ['Option A', 'Option B', 'Option C', 'Option D'],
+          correctAnswer: 2,
+          explanation: 'This is the explanation for question 3.'
+        }
+      ],
+      submittedAt: new Date().toISOString()
+    };
+    localStorage.setItem(`quiz-result-${quizId}`, JSON.stringify(mockResult));
     navigate(`/quiz/${quizId}/summary`);
   };
 
