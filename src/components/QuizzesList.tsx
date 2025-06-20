@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Award, CheckCircle2, Timer } from 'lucide-react';
+import { Search, Award, CheckCircle2, Timer, Eye } from 'lucide-react';
 
 const QuizzesList = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -74,7 +74,12 @@ const QuizzesList = () => {
 
   const handleRetakeQuiz = (quizId: number) => {
     console.log(`Retaking quiz ${quizId}`);
-    navigate(`/quiz/${quizId}/retake`);
+    navigate(`/quiz/${quizId}`);
+  };
+
+  const handleViewResult = (quizId: number) => {
+    console.log(`Viewing result for quiz ${quizId}`);
+    navigate(`/quiz/${quizId}/summary`);
   };
 
   return (
@@ -142,17 +147,22 @@ const QuizzesList = () => {
                 </div>
               </div>
               
-              <div className="flex space-x-2">
+              <div className="flex flex-col space-y-2">
                 <Button 
-                  className="flex-1" 
+                  className="w-full" 
                   onClick={() => quiz.completed ? handleRetakeQuiz(quiz.id) : handleStartQuiz(quiz.id)}
                   variant={quiz.completed ? "outline" : "default"}
                 >
                   {quiz.completed ? 'Retake Quiz' : 'Start Quiz'}
                 </Button>
                 {quiz.completed && (
-                  <Button variant="ghost">
-                    View Results
+                  <Button 
+                    variant="ghost" 
+                    className="w-full"
+                    onClick={() => handleViewResult(quiz.id)}
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    View Result
                   </Button>
                 )}
               </div>
