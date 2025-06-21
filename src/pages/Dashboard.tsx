@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Progress } from '@/components/ui/progress';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,13 +14,103 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap, Library, Code, Zap } from 'lucide-react';
+import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap, Library, Code, Zap, PlayCircle } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
+import { useAuthCheck } from '@/hooks/useAuthCheck';
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('courses');
   const navigate = useNavigate();
+  const { isAuthenticated, showLoginDialog } = useAuthCheck();
+
+  // Mock enrolled courses data (in real app, this would come from API)
+  const enrolledCourses = [
+    {
+      id: 1,
+      title: 'Introduction to Web Development',
+      description: 'Learn HTML, CSS, and JavaScript from scratch with hands-on projects.',
+      duration: '12 weeks',
+      students: 1250,
+      rating: 4.8,
+      image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&h=250&fit=crop',
+      price: '$99',
+      category: 'Programming',
+      level: 'Beginner',
+      progress: 65,
+      instructor: 'John Smith'
+    },
+    {
+      id: 3,
+      title: 'Digital Marketing Mastery',
+      description: 'Complete guide to SEO, social media, and online advertising.',
+      duration: '8 weeks',
+      students: 2100,
+      rating: 4.7,
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop',
+      price: '$79',
+      category: 'Marketing',
+      level: 'Beginner',
+      progress: 25,
+      instructor: 'Sarah Johnson'
+    }
+  ];
+
+  // All available courses (excluding enrolled ones)
+  const availableCourses = [
+    {
+      id: 2,
+      title: 'Data Science Fundamentals',
+      description: 'Master Python, statistics, and machine learning for data analysis.',
+      duration: '16 weeks',
+      students: 890,
+      rating: 4.9,
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop',
+      price: '$149',
+      category: 'Data Science',
+      level: 'Intermediate',
+      instructor: 'Dr. Michael Chen'
+    },
+    {
+      id: 4,
+      title: 'Mobile App Development',
+      description: 'Build iOS and Android apps using React Native and Flutter.',
+      duration: '20 weeks',
+      students: 675,
+      rating: 4.6,
+      image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=250&fit=crop',
+      price: '$199',
+      category: 'Programming',
+      level: 'Advanced',
+      instructor: 'Alex Rodriguez'
+    },
+    {
+      id: 5,
+      title: 'UI/UX Design Principles',
+      description: 'Master design thinking and create beautiful user interfaces.',
+      duration: '10 weeks',
+      students: 945,
+      rating: 4.8,
+      image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=250&fit=crop',
+      price: '$129',
+      category: 'Design',
+      level: 'Intermediate',
+      instructor: 'Emily Davis'
+    },
+    {
+      id: 6,
+      title: 'Cybersecurity Essentials',
+      description: 'Learn to protect systems and networks from digital attacks.',
+      duration: '14 weeks',
+      students: 623,
+      rating: 4.7,
+      image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&h=250&fit=crop',
+      price: '$179',
+      category: 'Security',
+      level: 'Advanced',
+      instructor: 'James Wilson'
+    }
+  ];
 
   const courses = [
     {
@@ -270,7 +361,7 @@ const Dashboard = () => {
     }
   ];
 
-  const filteredCourses = courses.filter(course =>
+  const filteredAvailableCourses = availableCourses.filter(course =>
     course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     course.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -281,6 +372,15 @@ const Dashboard = () => {
   };
 
   const handleEnrollCourse = (courseId: number) => {
+    if (!isAuthenticated) {
+      showLoginDialog();
+      return;
+    }
+    // Navigate to course details page instead of direct enrollment
+    navigate(`/course/${courseId}/details`);
+  };
+
+  const handleContinueCourse = (courseId: number) => {
     navigate(`/course/${courseId}`);
   };
 
@@ -583,97 +683,217 @@ const Dashboard = () => {
           </p>
         </div>
 
-        {/* Quick Stats - More Compact */}
-        {activeTab === 'courses' && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-2">
-                  <BookOpen className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Enrolled</p>
-                    <p className="text-2xl font-bold text-primary">3</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-2">
-                  <Star className="h-5 w-5 text-secondary" />
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Completed</p>
-                    <p className="text-2xl font-bold text-secondary">1</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-2">
-                  <Clock className="h-5 w-5 text-green-600" />
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Study Hours</p>
-                    <p className="text-2xl font-bold text-green-600">47</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-2">
-                  <Award className="h-5 w-5 text-yellow-600" />
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Certificates</p>
-                    <p className="text-2xl font-bold text-yellow-600">1</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
         {/* Content Sections */}
         {activeTab === 'courses' && (
-          <section className="mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-              <h2 className="text-3xl font-bold text-foreground mb-4 md:mb-0 animate-bounce-in">
-                Discover New Courses
-              </h2>
-              
-              {/* Search Bar */}
-              <div className="max-w-md w-full md:w-auto animate-scale-in" style={{ animationDelay: '0.4s' }}>
-                <div className="relative group">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 group-focus-within:text-primary transition-colors duration-300" />
-                  <Input
-                    type="text"
-                    placeholder="Search courses..."
-                    className="pl-10 pr-4 py-3 w-full rounded-full border-2 border-border focus:border-primary transition-all duration-300 hover:shadow-lg focus:shadow-xl"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
+          <>
+            {/* Enrolled Courses Section */}
+            {isAuthenticated && enrolledCourses.length > 0 && (
+              <section className="mb-12">
+                <h2 className="text-3xl font-bold text-foreground mb-6 animate-bounce-in">
+                  Your Enrolled Courses
+                </h2>
+                
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {enrolledCourses.map((course, index) => (
+                    <Card key={course.id} className="group hover:shadow-xl transition-all duration-500 border-none shadow-lg animate-fade-in overflow-hidden hover-lift relative" style={{ animationDelay: `${index * 0.1}s` }}>
+                      <div className="relative overflow-hidden">
+                        <img
+                          src={course.image}
+                          alt={course.title}
+                          className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        <div className="absolute top-4 left-4">
+                          <Badge className="bg-green-600 text-white">
+                            Enrolled
+                          </Badge>
+                        </div>
+                        <div className="absolute top-4 right-4">
+                          <Badge variant="secondary" className="bg-secondary-500 text-white">
+                            {course.level}
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <CardContent className="p-6">
+                        <h3 className="text-xl font-semibold text-foreground mb-2 line-clamp-2">
+                          {course.title}
+                        </h3>
+                        <p className="text-muted-foreground text-sm mb-3">By {course.instructor}</p>
+                        
+                        <div className="mb-4">
+                          <div className="flex justify-between text-sm mb-2">
+                            <span>Progress</span>
+                            <span>{course.progress}%</span>
+                          </div>
+                          <Progress value={course.progress} className="h-2" />
+                        </div>
+                        
+                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                          <div className="flex items-center space-x-1">
+                            <Clock className="w-4 h-4" />
+                            <span>{course.duration}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <span>{course.rating}</span>
+                          </div>
+                        </div>
+                        
+                        <Button 
+                          onClick={() => handleContinueCourse(course.id)}
+                          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold transition-all duration-300"
+                        >
+                          <PlayCircle className="w-4 h-4 mr-2" />
+                          Continue Learning
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <BookOpen className="h-5 w-5 text-primary" />
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Enrolled</p>
+                      <p className="text-2xl font-bold text-primary">{enrolledCourses.length}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Star className="h-5 w-5 text-secondary" />
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Completed</p>
+                      <p className="text-2xl font-bold text-secondary">1</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Clock className="h-5 w-5 text-green-600" />
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Study Hours</p>
+                      <p className="text-2xl font-bold text-green-600">47</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover-lift">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Award className="h-5 w-5 text-yellow-600" />
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Certificates</p>
+                      <p className="text-2xl font-bold text-yellow-600">1</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Discover New Courses Section */}
+            <section className="mb-8">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                <h2 className="text-3xl font-bold text-foreground mb-4 md:mb-0 animate-bounce-in">
+                  Discover New Courses
+                </h2>
+                
+                {/* Search Bar */}
+                <div className="max-w-md w-full md:w-auto animate-scale-in" style={{ animationDelay: '0.4s' }}>
+                  <div className="relative group">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 group-focus-within:text-primary transition-colors duration-300" />
+                    <Input
+                      type="text"
+                      placeholder="Search courses..."
+                      className="pl-10 pr-4 py-3 w-full rounded-full border-2 border-border focus:border-primary transition-all duration-300 hover:shadow-lg focus:shadow-xl"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Courses Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredCourses.map((course, index) => (
-                <CourseCard key={course.id} course={course} index={index} />
-              ))}
-            </div>
-
-            {filteredCourses.length === 0 && (
-              <div className="text-center py-12 animate-fade-in">
-                <BookOpen className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-foreground mb-2">No courses found</h3>
-                <p className="text-muted-foreground">Try adjusting your search terms</p>
+              {/* Available Courses Grid */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredAvailableCourses.map((course, index) => (
+                  <Card key={course.id} className="group hover:shadow-xl transition-all duration-500 border-none shadow-lg animate-fade-in overflow-hidden hover-lift relative" style={{ animationDelay: `${index * 0.1}s` }}>
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={course.image}
+                        alt={course.title}
+                        className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 left-4">
+                        <Badge className="bg-white/90 text-gray-800 hover:bg-white transition-all duration-300">
+                          {course.category}
+                        </Badge>
+                      </div>
+                      <div className="absolute top-4 right-4">
+                        <Badge variant="secondary" className="bg-secondary-500 text-white">
+                          {course.level}
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-semibold text-foreground mb-2 line-clamp-2">
+                        {course.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mb-2">By {course.instructor}</p>
+                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{course.description}</p>
+                      
+                      <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                        <div className="flex items-center space-x-1">
+                          <Clock className="w-4 h-4" />
+                          <span>{course.duration}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <span>{course.rating}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-2xl font-bold text-primary">{course.price}</span>
+                        <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                          <Users className="w-4 h-4" />
+                          <span>{course.students.toLocaleString()}</span>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        onClick={() => handleEnrollCourse(course.id)}
+                        className="w-full bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-semibold transition-all duration-300"
+                      >
+                        Enroll Now
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-            )}
-          </section>
+
+              {filteredAvailableCourses.length === 0 && (
+                <div className="text-center py-12 animate-fade-in">
+                  <BookOpen className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-foreground mb-2">No courses found</h3>
+                  <p className="text-muted-foreground">Try adjusting your search terms</p>
+                </div>
+              )}
+            </section>
+          </>
         )}
 
         {/* Enhanced Tutorials Section - Same style as courses */}

@@ -1,60 +1,57 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import Index from "./pages/Index";
-import Dashboard from "./pages/Dashboard";
-import Courses from "./pages/Courses";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import CourseDetail from "./pages/CourseDetail";
-import TutorialDetail from "./pages/TutorialDetail";
-import ArticleDetail from "./pages/ArticleDetail";
-import NotFound from "./pages/NotFound";
-import UserProfilePage from "./pages/UserProfilePage";
-import RecruiterPanelPage from "./pages/RecruiterPanelPage";
-import StudentPanelPage from "./pages/StudentPanelPage";
-import TutorialsPage from "./pages/TutorialsPage";
-import ArticlesPage from "./pages/ArticlesPage";
-import QuizzesPage from "./pages/QuizzesPage";
-import QuizDetailPage from "./pages/QuizDetailPage";
-import QuizSummaryPage from "./pages/QuizSummaryPage";
 
-const queryClient = new QueryClient();
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './components/ThemeProvider';
+import { Toaster } from './components/ui/sonner';
+import Index from './pages/Index';
+import Dashboard from './pages/Dashboard';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Courses from './pages/Courses';
+import CourseDetail from './pages/CourseDetail';
+import CourseDetailsPage from './pages/CourseDetailsPage';
+import TutorialsPage from './pages/TutorialsPage';
+import TutorialDetail from './pages/TutorialDetail';
+import ArticlesPage from './pages/ArticlesPage';
+import ArticleDetail from './pages/ArticleDetail';
+import QuizzesPage from './pages/QuizzesPage';
+import QuizDetailPage from './pages/QuizDetailPage';
+import QuizSummaryPage from './pages/QuizSummaryPage';
+import StudentPanelPage from './pages/StudentPanelPage';
+import RecruiterPanelPage from './pages/RecruiterPanelPage';
+import UserProfilePage from './pages/UserProfilePage';
+import NotFound from './pages/NotFound';
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="light" storageKey="eduplatform-theme">
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+function App() {
+  return (
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Router>
+        <div className="min-h-screen">
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/dashboard/profile" element={<UserProfilePage />} />
-            <Route path="/dashboard/recruiter" element={<RecruiterPanelPage />} />
-            <Route path="/dashboard/student" element={<StudentPanelPage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/courses" element={<Courses />} />
+            <Route path="/course/:id" element={<CourseDetail />} />
+            <Route path="/course/:courseId/details" element={<CourseDetailsPage />} />
             <Route path="/tutorials" element={<TutorialsPage />} />
+            <Route path="/tutorial/:id" element={<TutorialDetail />} />
             <Route path="/articles" element={<ArticlesPage />} />
+            <Route path="/article/:id" element={<ArticleDetail />} />
             <Route path="/quizzes" element={<QuizzesPage />} />
             <Route path="/quiz/:id" element={<QuizDetailPage />} />
             <Route path="/quiz/:id/summary" element={<QuizSummaryPage />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/course/:id" element={<CourseDetail />} />
-            <Route path="/tutorial/:id" element={<TutorialDetail />} />
-            <Route path="/article/:id" element={<ArticleDetail />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/quiz/:id/retake" element={<QuizDetailPage />} />
+            <Route path="/dashboard/student" element={<StudentPanelPage />} />
+            <Route path="/dashboard/recruiter" element={<RecruiterPanelPage />} />
+            <Route path="/dashboard/profile" element={<UserProfilePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+        </div>
+        <Toaster />
+      </Router>
     </ThemeProvider>
-  </QueryClientProvider>
-);
+  );
+}
 
 export default App;
