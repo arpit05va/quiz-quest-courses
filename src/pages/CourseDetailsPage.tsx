@@ -147,10 +147,9 @@ Perfect for beginners looking to break into the data science field or profession
   }
 
   const handleBuyNow = () => {
-    // In a real app, this would integrate with payment gateway
-    console.log(`Purchasing course ${course.id}`);
-    // For now, simulate enrollment and redirect to course content
-    navigate(`/course/${course.id}`);
+    // Navigate to payment page instead of direct enrollment
+    console.log(`Redirecting to payment for course ${course.id}`);
+    navigate(`/payment/${course.id}`);
   };
 
   return (

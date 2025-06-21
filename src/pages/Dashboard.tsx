@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,40 +21,103 @@ import { useAuthCheck } from '@/hooks/useAuthCheck';
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('courses');
+  const [enrolledCourses, setEnrolledCourses] = useState<any[]>([]);
   const navigate = useNavigate();
   const { isAuthenticated, setShowLoginDialog } = useAuthCheck();
 
-  // Mock enrolled courses data (in real app, this would come from API)
-  const enrolledCourses = [
-    {
-      id: 1,
-      title: 'Introduction to Web Development',
-      description: 'Learn HTML, CSS, and JavaScript from scratch with hands-on projects.',
-      duration: '12 weeks',
-      students: 1250,
-      rating: 4.8,
-      image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&h=250&fit=crop',
-      price: '$99',
-      category: 'Programming',
-      level: 'Beginner',
-      progress: 65,
-      instructor: 'John Smith'
-    },
-    {
-      id: 3,
-      title: 'Digital Marketing Mastery',
-      description: 'Complete guide to SEO, social media, and online advertising.',
-      duration: '8 weeks',
-      students: 2100,
-      rating: 4.7,
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop',
-      price: '$79',
-      category: 'Marketing',
-      level: 'Beginner',
-      progress: 25,
-      instructor: 'Sarah Johnson'
+  // Check for enrolled courses from localStorage
+  useEffect(() => {
+    if (isAuthenticated) {
+      const enrollments = JSON.parse(localStorage.getItem('enrollments') || '[]');
+      const enrolledCoursesData = enrollments.map((enrollment: any) => {
+        // Find the course data
+        const allCourses = [
+          {
+            id: 1,
+            title: 'Introduction to Web Development',
+            description: 'Learn HTML, CSS, and JavaScript from scratch with hands-on projects.',
+            duration: '12 weeks',
+            students: 1250,
+            rating: 4.8,
+            image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&h=250&fit=crop',
+            price: '$99',
+            category: 'Programming',
+            level: 'Beginner',
+            instructor: 'John Smith'
+          },
+          {
+            id: 2,
+            title: 'Data Science Fundamentals',
+            description: 'Master Python, statistics, and machine learning for data analysis.',
+            duration: '16 weeks',
+            students: 890,
+            rating: 4.9,
+            image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop',
+            price: '$149',
+            category: 'Data Science',
+            level: 'Intermediate',
+            instructor: 'Dr. Michael Chen'
+          },
+          {
+            id: 3,
+            title: 'Digital Marketing Mastery',
+            description: 'Complete guide to SEO, social media, and online advertising.',
+            duration: '8 weeks',
+            students: 2100,
+            rating: 4.7,
+            image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop',
+            price: '$79',
+            category: 'Marketing',
+            level: 'Beginner',
+            instructor: 'Sarah Johnson'
+          }
+        ];
+        
+        const courseData = allCourses.find(c => c.id === enrollment.courseId);
+        if (courseData) {
+          return {
+            ...courseData,
+            progress: enrollment.progress || 0
+          };
+        }
+        return null;
+      }).filter(Boolean);
+      
+      setEnrolledCourses(enrolledCoursesData);
     }
-  ];
+  }, [isAuthenticated]);
+
+  // Mock enrolled courses data (removed - now using localStorage)
+  // const enrolledCourses = [
+  //   {
+  //     id: 1,
+  //     title: 'Introduction to Web Development',
+  //     description: 'Learn HTML, CSS, and JavaScript from scratch with hands-on projects.',
+  //     duration: '12 weeks',
+  //     students: 1250,
+  //     rating: 4.8,
+  //     image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&h=250&fit=crop',
+  //     price: '$99',
+  //     category: 'Programming',
+  //     level: 'Beginner',
+  //     progress: 65,
+  //     instructor: 'John Smith'
+  //   },
+  //   {
+  //     id: 3,
+  //     title: 'Digital Marketing Mastery',
+  //     description: 'Complete guide to SEO, social media, and online advertising.',
+  //     duration: '8 weeks',
+  //     students: 2100,
+  //     rating: 4.7,
+  //     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop',
+  //     price: '$79',
+  //     category: 'Marketing',
+  //     level: 'Beginner',
+  //     progress: 25,
+  //     instructor: 'Sarah Johnson'
+  //   }
+  // ];
 
   // All available courses (excluding enrolled ones)
   const availableCourses = [
@@ -110,7 +173,7 @@ const Dashboard = () => {
       level: 'Advanced',
       instructor: 'James Wilson'
     }
-  ];
+  ].filter(course => !enrolledCourses.find(enrolled => enrolled.id === course.id));
 
   const courses = [
     {
@@ -886,7 +949,7 @@ const Dashboard = () => {
                   </div>
                   
                   <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                    <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                       {tutorial.title}
                     </h3>
                     <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
@@ -1013,7 +1076,7 @@ const Dashboard = () => {
             <h2 className="text-3xl font-bold text-foreground mb-6">Practice Quizzes & Assessments</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
               {quizzes.map((quiz, index) => (
-                <Card key={quiz.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-fade-in" style={{ animationDelay: `${0.1 * index}s` }}>
+                <Card key={quiz.id} className="border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift" style={{ animationDelay: `${0.1 * index}s` }}>
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">

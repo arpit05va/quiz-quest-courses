@@ -9,6 +9,8 @@ import Contact from './pages/Contact';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
 import CourseDetailsPage from './pages/CourseDetailsPage';
+import PaymentPage from './pages/PaymentPage';
+import CourseLearnPage from './pages/CourseLearnPage';
 import TutorialsPage from './pages/TutorialsPage';
 import TutorialDetail from './pages/TutorialDetail';
 import ArticlesPage from './pages/ArticlesPage';
@@ -34,6 +36,8 @@ function App() {
             <Route path="/courses" element={<Courses />} />
             <Route path="/course/:id" element={<CourseDetail />} />
             <Route path="/course/:courseId/details" element={<CourseDetailsPage />} />
+            <Route path="/payment/:courseId" element={<PaymentPage />} />
+            <Route path="/course/:courseId/learn" element={<CourseLearnPage />} />
             <Route path="/tutorials" element={<TutorialsPage />} />
             <Route path="/tutorial/:id" element={<TutorialDetail />} />
             <Route path="/articles" element={<ArticlesPage />} />
