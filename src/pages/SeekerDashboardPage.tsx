@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -6,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Filter, Search, Star, MessageSquare, Video, Calendar, Bell, User, Home, Gift } from 'lucide-react';
+import DashboardWrapper from '@/components/DashboardWrapper';
 
 const SeekerDashboardPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -67,79 +67,98 @@ const SeekerDashboardPage = () => {
   ];
 
   const sidebarItems = [
-    { key: 'dashboard', label: 'Dashboard', icon: Home },
-    { key: 'find-experts', label: 'Find Experts', icon: Search },
-    { key: 'bookings', label: 'My Bookings', icon: Calendar },
-    { key: 'messages', label: 'Messages', icon: MessageSquare },
-    { key: 'rewards', label: 'Rewards', icon: Gift }
+    { key: 'dashboard', label: 'Dashboard', icon: Home, color: 'bg-blue-500' },
+    { key: 'find-experts', label: 'Find Experts', icon: Search, color: 'bg-green-500' },
+    { key: 'bookings', label: 'My Bookings', icon: Calendar, color: 'bg-purple-500' },
+    { key: 'messages', label: 'Messages', icon: MessageSquare, color: 'bg-orange-500' },
+    { key: 'rewards', label: 'Rewards', icon: Gift, color: 'bg-pink-500' }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
-        {/* Header */}
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-              <User className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold text-gray-900">ExpertConnect</span>
+    <DashboardWrapper title="ExpertConnect - Find Your Perfect Expert">
+      <div className="min-h-screen bg-gray-50 flex gap-6">
+        {/* Animated Card-based Sidebar */}
+        <div className="w-80 space-y-4">
+          {/* User Profile Card */}
+          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in bg-gradient-to-br from-blue-50 to-indigo-50">
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-4">
+                <Avatar className="w-16 h-16 ring-4 ring-blue-100">
+                  <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="Profile" />
+                  <AvatarFallback>JD</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="font-bold text-lg text-gray-900">John Doe</h3>
+                  <p className="text-sm text-gray-600">Job Seeker</p>
+                  <div className="flex items-center space-x-1 mt-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-xs text-green-600 font-medium">Online</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Navigation Cards */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-gray-500 px-2">Navigation</h3>
+            {sidebarItems.map((item, index) => (
+              <Card
+                key={item.key}
+                className={`cursor-pointer border-none shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 animate-slide-in ${
+                  activeTab === item.key
+                    ? 'ring-2 ring-blue-500 bg-blue-50'
+                    : 'hover:bg-gray-50'
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={() => setActiveTab(item.key)}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className={`p-3 rounded-xl ${item.color} shadow-sm`}>
+                      <item.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <span className={`font-medium transition-colors ${
+                        activeTab === item.key ? 'text-blue-600' : 'text-gray-700'
+                      }`}>
+                        {item.label}
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
+
+          {/* Quick Stats Card */}
+          <Card className="border-none shadow-lg bg-gradient-to-br from-purple-50 to-pink-50 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+            <CardContent className="p-6">
+              <h3 className="font-semibold text-gray-900 mb-3">Quick Stats</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Sessions Booked</span>
+                  <span className="font-medium">5</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Experts Connected</span>
+                  <span className="font-medium">12</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Rewards Points</span>
+                  <span className="font-medium text-purple-600">250</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Navigation */}
-        <div className="flex-1 p-6">
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-4">Navigation</h3>
-            <nav className="space-y-2">
-              {sidebarItems.map((item) => (
-                <button
-                  key={item.key}
-                  onClick={() => setActiveTab(item.key)}
-                  className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
-                    activeTab === item.key
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-gray-600 hover:bg-gray-50'
-                  }`}
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span>{item.label}</span>
-                </button>
-              ))}
-            </nav>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Top Header */}
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Find Your Perfect Expert</h1>
-              <p className="text-gray-600">Connect with industry leaders and accelerate your career growth</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm">
-                <Bell className="w-5 h-5" />
-                <span className="ml-2">Notifications</span>
-              </Button>
-              <Button variant="ghost" size="sm">
-                <User className="w-5 h-5" />
-                <span className="ml-2">Profile</span>
-              </Button>
-            </div>
-          </div>
-        </header>
-
-        {/* Content Area */}
-        <main className="flex-1 p-6">
+        {/* Main Content */}
+        <div className="flex-1">
           {activeTab === 'find-experts' && (
             <div className="space-y-6">
               {/* Search and Filters */}
-              <Card>
+              <Card className="border-none shadow-lg">
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row gap-4">
                     <div className="relative flex-1">
@@ -151,7 +170,7 @@ const SeekerDashboardPage = () => {
                         className="pl-10"
                       />
                     </div>
-                    <Button variant="outline" className="flex items-center space-x-2">
+                    <Button variant="outline" className="flex items-center space-x-2 hover:scale-105 transition-transform">
                       <Filter className="w-4 h-4" />
                       <span>Filters</span>
                     </Button>
@@ -165,7 +184,7 @@ const SeekerDashboardPage = () => {
                         variant={selectedCategory === category ? "default" : "outline"}
                         size="sm"
                         onClick={() => setSelectedCategory(category)}
-                        className="text-xs"
+                        className="text-xs hover:scale-105 transition-transform"
                       >
                         {category}
                       </Button>
@@ -175,12 +194,16 @@ const SeekerDashboardPage = () => {
               </Card>
 
               {/* Experts Grid */}
-              <div className="grid lg:grid-cols-3 gap-6">
-                {experts.map((expert) => (
-                  <Card key={expert.id} className="hover:shadow-lg transition-shadow">
+              <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {experts.map((expert, index) => (
+                  <Card 
+                    key={expert.id} 
+                    className="border-none shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 animate-fade-in"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-center space-x-3 mb-4">
-                        <Avatar className="w-16 h-16">
+                        <Avatar className="w-16 h-16 ring-2 ring-gray-100">
                           <AvatarImage src={expert.image} alt={expert.name} />
                           <AvatarFallback>{expert.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                         </Avatar>
@@ -213,13 +236,13 @@ const SeekerDashboardPage = () => {
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-lg">${expert.hourlyRate}/hour</span>
+                        <span className="font-bold text-lg text-green-600">${expert.hourlyRate}/hour</span>
                         <div className="flex space-x-2">
-                          <Button size="sm" variant="outline" className="flex items-center space-x-1">
+                          <Button size="sm" variant="outline" className="flex items-center space-x-1 hover:scale-105 transition-transform">
                             <MessageSquare className="w-3 h-3" />
                             <span>Message</span>
                           </Button>
-                          <Button size="sm" className="flex items-center space-x-1">
+                          <Button size="sm" className="flex items-center space-x-1 hover:scale-105 transition-transform">
                             <Video className="w-3 h-3" />
                             <span>Book</span>
                           </Button>
@@ -232,8 +255,9 @@ const SeekerDashboardPage = () => {
             </div>
           )}
 
+          {/* Other tabs content */}
           {activeTab === 'bookings' && (
-            <Card>
+            <Card className="border-none shadow-lg">
               <CardHeader>
                 <CardTitle>My Bookings</CardTitle>
               </CardHeader>
@@ -241,7 +265,7 @@ const SeekerDashboardPage = () => {
                 {myBookings.length > 0 ? (
                   <div className="space-y-4">
                     {myBookings.map((booking) => (
-                      <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                         <div className="flex items-center space-x-3">
                           <Avatar className="w-10 h-10">
                             <AvatarFallback>{booking.expertName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
@@ -259,7 +283,7 @@ const SeekerDashboardPage = () => {
                           <Badge variant={booking.status === 'confirmed' ? 'default' : 'secondary'}>
                             {booking.status}
                           </Badge>
-                          <Button size="sm" variant="outline">
+                          <Button size="sm" variant="outline" className="hover:scale-105 transition-transform">
                             View Details
                           </Button>
                         </div>
@@ -277,13 +301,13 @@ const SeekerDashboardPage = () => {
           )}
 
           {activeTab === 'rewards' && (
-            <Card>
+            <Card className="border-none shadow-lg">
               <CardHeader>
                 <CardTitle>Rewards</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center animate-pulse">
                     <Star className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="font-semibold mb-2">Unlock Rewards</h3>
@@ -292,9 +316,9 @@ const SeekerDashboardPage = () => {
               </CardContent>
             </Card>
           )}
-        </main>
+        </div>
       </div>
-    </div>
+    </DashboardWrapper>
   );
 };
 

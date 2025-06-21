@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -6,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { CalendarDays, Clock, DollarSign, MessageSquare, Star, TrendingUp, Users, Video, Home, Settings, BarChart3, CreditCard, CheckCircle, Clock as ClockIcon } from 'lucide-react';
+import DashboardWrapper from '@/components/DashboardWrapper';
 
 const ExpertDashboardPage = () => {
   const [availableForBookings, setAvailableForBookings] = useState(true);
@@ -51,79 +53,112 @@ const ExpertDashboardPage = () => {
   ];
 
   const sidebarItems = [
-    { key: 'dashboard', label: 'Dashboard', icon: Home },
-    { key: 'bookings', label: 'Bookings', icon: CalendarDays },
-    { key: 'messages', label: 'Messages', icon: MessageSquare },
-    { key: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { key: 'payments', label: 'Payments', icon: CreditCard },
-    { key: 'settings', label: 'Settings', icon: Settings }
+    { key: 'dashboard', label: 'Dashboard', icon: Home, color: 'bg-blue-500' },
+    { key: 'bookings', label: 'Bookings', icon: CalendarDays, color: 'bg-green-500' },
+    { key: 'messages', label: 'Messages', icon: MessageSquare, color: 'bg-purple-500' },
+    { key: 'analytics', label: 'Analytics', icon: BarChart3, color: 'bg-orange-500' },
+    { key: 'payments', label: 'Payments', icon: CreditCard, color: 'bg-pink-500' },
+    { key: 'settings', label: 'Settings', icon: Settings, color: 'bg-gray-500' }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
-        {/* User Profile Section */}
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center space-x-3 mb-4">
-            <Avatar className="w-12 h-12">
-              <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="Profile" />
-              <AvatarFallback>SV</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="font-medium text-gray-900">Susheel Vashistha</p>
-              <p className="text-sm text-gray-600">Expert</p>
-            </div>
-          </div>
-        </div>
+    <DashboardWrapper title="ExpertConnect - Expert Dashboard">
+      <div className="min-h-screen bg-gray-50 flex gap-6">
+        {/* Animated Card-based Sidebar */}
+        <div className="w-80 space-y-4">
+          {/* Expert Profile Card */}
+          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in bg-gradient-to-br from-blue-50 to-indigo-50">
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-4 mb-4">
+                <Avatar className="w-16 h-16 ring-4 ring-blue-100">
+                  <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="Profile" />
+                  <AvatarFallback>SV</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="font-bold text-lg text-gray-900">Susheel Vashistha</h3>
+                  <p className="text-sm text-gray-600">Industry Expert</p>
+                  <div className="flex items-center space-x-2 mt-2">
+                    <div className={`w-2 h-2 rounded-full ${availableForBookings ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
+                    <span className={`text-xs font-medium ${availableForBookings ? 'text-green-600' : 'text-gray-500'}`}>
+                      {availableForBookings ? 'Available' : 'Offline'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700">Available for bookings</span>
+                <Switch
+                  checked={availableForBookings}
+                  onCheckedChange={setAvailableForBookings}
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Navigation */}
-        <div className="flex-1 p-6">
-          <nav className="space-y-2">
-            {sidebarItems.map((item) => (
-              <button
+          {/* Navigation Cards */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-gray-500 px-2">Navigation</h3>
+            {sidebarItems.map((item, index) => (
+              <Card
                 key={item.key}
-                onClick={() => setActiveTab(item.key)}
-                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
+                className={`cursor-pointer border-none shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 animate-slide-in ${
                   activeTab === item.key
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-gray-600 hover:bg-gray-50'
+                    ? 'ring-2 ring-blue-500 bg-blue-50'
+                    : 'hover:bg-gray-50'
                 }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={() => setActiveTab(item.key)}
               >
-                <item.icon className="w-5 h-5" />
-                <span>{item.label}</span>
-              </button>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className={`p-3 rounded-xl ${item.color} shadow-sm`}>
+                      <item.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <span className={`font-medium transition-colors ${
+                        activeTab === item.key ? 'text-blue-600' : 'text-gray-700'
+                      }`}>
+                        {item.label}
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
-          </nav>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Top Header */}
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Hi, Susheel</h1>
-              <p className="text-gray-600">Welcome back to your expert dashboard</p>
-            </div>
-            <div className="flex items-center space-x-3">
-              <span className="text-sm font-medium text-gray-700">Available for bookings</span>
-              <Switch
-                checked={availableForBookings}
-                onCheckedChange={setAvailableForBookings}
-              />
-            </div>
           </div>
-        </header>
 
-        {/* Content Area */}
-        <main className="flex-1 p-6">
+          {/* Quick Stats Card */}
+          <Card className="border-none shadow-lg bg-gradient-to-br from-green-50 to-emerald-50 animate-fade-in" style={{ animationDelay: '0.7s' }}>
+            <CardContent className="p-6">
+              <h3 className="font-semibold text-gray-900 mb-3">Quick Overview</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Total Earnings</span>
+                  <span className="font-bold text-green-600">${expertStats.totalEarnings}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Sessions</span>
+                  <span className="font-medium">{expertStats.sessionsCompleted}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Rating</span>
+                  <div className="flex items-center space-x-1">
+                    <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                    <span className="font-medium">{expertStats.rating}</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1">
           {activeTab === 'dashboard' && (
             <div className="space-y-6">
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card>
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
@@ -137,7 +172,7 @@ const ExpertDashboardPage = () => {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in" style={{ animationDelay: '0.1s' }}>
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
@@ -151,7 +186,7 @@ const ExpertDashboardPage = () => {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in" style={{ animationDelay: '0.2s' }}>
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
@@ -165,7 +200,7 @@ const ExpertDashboardPage = () => {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in" style={{ animationDelay: '0.3s' }}>
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
@@ -181,7 +216,7 @@ const ExpertDashboardPage = () => {
               </div>
 
               {/* Profile Completion */}
-              <Card>
+              <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in" style={{ animationDelay: '0.4s' }}>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <TrendingUp className="w-5 h-5" />
@@ -217,14 +252,14 @@ const ExpertDashboardPage = () => {
               {/* Main Content Grid */}
               <div className="grid lg:grid-cols-2 gap-6">
                 {/* Upcoming Sessions */}
-                <Card>
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in" style={{ animationDelay: '0.5s' }}>
                   <CardHeader>
                     <CardTitle>Upcoming Sessions</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
                       {upcomingSessions.map((session) => (
-                        <div key={session.id} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div key={session.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                           <div className="flex items-center space-x-3">
                             <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                               <span className="text-blue-600 font-medium text-sm">
@@ -253,14 +288,14 @@ const ExpertDashboardPage = () => {
                 </Card>
 
                 {/* Connection Requests */}
-                <Card>
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in" style={{ animationDelay: '0.6s' }}>
                   <CardHeader>
                     <CardTitle>Connection Requests</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
                       {connectionRequests.map((request) => (
-                        <div key={request.id} className="p-4 border rounded-lg">
+                        <div key={request.id} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex items-center space-x-3">
                               <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
@@ -279,10 +314,10 @@ const ExpertDashboardPage = () => {
                           </div>
                           <p className="text-sm text-gray-600 mb-3">{request.message}</p>
                           <div className="flex space-x-2">
-                            <Button size="sm" className="flex-1">
+                            <Button size="sm" className="flex-1 hover:scale-105 transition-transform">
                               Accept
                             </Button>
-                            <Button size="sm" variant="outline" className="flex-1">
+                            <Button size="sm" variant="outline" className="flex-1 hover:scale-105 transition-transform">
                               Decline
                             </Button>
                           </div>
@@ -298,13 +333,22 @@ const ExpertDashboardPage = () => {
           {/* Other tab content would go here */}
           {activeTab !== 'dashboard' && (
             <div className="text-center py-12">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h3>
-              <p className="text-gray-600">This section is coming soon!</p>
+              <Card className="border-none shadow-lg max-w-md mx-auto">
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <Settings className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+                  </h3>
+                  <p className="text-gray-600">This section is coming soon!</p>
+                </CardContent>
+              </Card>
             </div>
           )}
-        </main>
+        </div>
       </div>
-    </div>
+    </DashboardWrapper>
   );
 };
 
