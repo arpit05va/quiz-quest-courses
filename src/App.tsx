@@ -21,6 +21,8 @@ import QuizSummaryPage from './pages/QuizSummaryPage';
 import StudentPanelPage from './pages/StudentPanelPage';
 import RecruiterPanelPage from './pages/RecruiterPanelPage';
 import UserProfilePage from './pages/UserProfilePage';
+import ExpertDashboardPage from './pages/ExpertDashboardPage';
+import SeekerDashboardPage from './pages/SeekerDashboardPage';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -49,6 +51,8 @@ function App() {
             <Route path="/dashboard/student" element={<StudentPanelPage />} />
             <Route path="/dashboard/recruiter" element={<RecruiterPanelPage />} />
             <Route path="/dashboard/profile" element={<UserProfilePage />} />
+            <Route path="/expertconnect/expert" element={<ExpertDashboardPage />} />
+            <Route path="/expertconnect/seeker" element={<SeekerDashboardPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

@@ -1,3 +1,4 @@
+
 import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { BookOpen, User, Settings, LogOut, ChevronDown, GraduationCap, Briefcase, Search, FileText, Eye, Calendar, BarChart3, Users, Play, Award, Library, Code, Zap } from 'lucide-react';
+import { BookOpen, User, Settings, LogOut, ChevronDown, GraduationCap, Briefcase, Search, FileText, Eye, Calendar, BarChart3, Users, Play, Award, Library, Code, Zap, MessageSquare, Video } from 'lucide-react';
 
 interface DashboardWrapperProps {
   children: ReactNode;
@@ -64,13 +65,6 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
               </div>
             </div>
 
-            {/* Page Title - Show only codeXMania */}
-{/*             <div className="hidden md:block">
-              <h1 className="text-xl font-semibold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                codeXMania
-              </h1>
-            </div> */}
-
             {/* Navigation Dropdowns */}
             <div className="hidden lg:flex items-center space-x-2">
               <Button
@@ -109,6 +103,38 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
                   <DropdownMenuItem onClick={() => navigate('/quizzes')}>
                     <Award className="w-4 h-4 mr-2" />
                     Quizzes
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* ExpertConnect Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-2">
+                    <Users className="w-4 h-4" />
+                    <span>ExpertConnect</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
+                  <DropdownMenuLabel>Connect with Experts</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/expertconnect/seeker')}>
+                    <Search className="w-4 h-4 mr-2" />
+                    Find Experts
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/expertconnect/expert')}>
+                    <Video className="w-4 h-4 mr-2" />
+                    Expert Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    My Messages
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Calendar className="w-4 h-4 mr-2" />
+                    My Bookings
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
