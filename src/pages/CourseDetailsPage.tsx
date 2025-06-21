@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -131,7 +130,7 @@ Perfect for beginners looking to break into the data science field or profession
     // Add more courses as needed
   };
 
-  const course = courseData[courseId as keyof typeof courseData];
+  const course = courseData[parseInt(courseId || '1') as keyof typeof courseData];
 
   if (!course) {
     return (
