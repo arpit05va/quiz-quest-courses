@@ -1,17 +1,18 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Filter, Search, Star, MessageSquare, Video, Calendar, Bell, User, Home, Gift } from 'lucide-react';
+import { Filter, Search, Star, MessageSquare, Video, Calendar, Bell, User, Home, Gift, TrendingUp, Clock, CheckCircle } from 'lucide-react';
 import DashboardWrapper from '@/components/DashboardWrapper';
+import CollapsibleSidebar from '@/components/CollapsibleSidebar';
+import ChatInterface from '@/components/ChatInterface';
 
 const SeekerDashboardPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
-  const [activeTab, setActiveTab] = useState('find-experts');
+  const [activeTab, setActiveTab] = useState('dashboard');
 
   const categories = [
     'All Categories (3)',
@@ -87,11 +88,41 @@ const SeekerDashboardPage = () => {
     }
   ];
 
+  const chatUsers = [
+    {
+      id: 1,
+      name: 'Pranita Bajoria',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b332c2c2?w=150&h=150&fit=crop&crop=face',
+      lastMessage: 'Thanks for your question about product strategy...',
+      timestamp: '2024-06-21T10:30:00',
+      unread: 2,
+      isOnline: true
+    },
+    {
+      id: 2,
+      name: 'Aishwarya Srinivasan',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+      lastMessage: 'I can help you with the technical interview preparation...',
+      timestamp: '2024-06-20T15:45:00',
+      unread: 0,
+      isOnline: false
+    },
+    {
+      id: 3,
+      name: 'Colleen Ballesteros',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+      lastMessage: 'Looking forward to our session!',
+      timestamp: '2024-06-19T14:20:00',
+      unread: 1,
+      isOnline: true
+    }
+  ];
+
   const sidebarItems = [
     { key: 'dashboard', label: 'Dashboard', icon: Home, color: 'bg-blue-500' },
     { key: 'find-experts', label: 'Find Experts', icon: Search, color: 'bg-green-500' },
     { key: 'bookings', label: 'My Bookings', icon: Calendar, color: 'bg-purple-500' },
-    { key: 'messages', label: 'Messages', icon: MessageSquare, color: 'bg-orange-500' },
+    { key: 'chat', label: 'Chat', icon: MessageSquare, color: 'bg-orange-500' },
     { key: 'rewards', label: 'Rewards', icon: Gift, color: 'bg-pink-500' }
   ];
 
@@ -107,6 +138,49 @@ const SeekerDashboardPage = () => {
     
     return matchesSearch && matchesCategory;
   });
+
+  const userProfile = (
+    <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 dark:bg-gray-800">
+      <CardContent className="p-6">
+        <div className="flex items-center space-x-4">
+          <Avatar className="w-16 h-16 ring-4 ring-blue-100 dark:ring-blue-800">
+            <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="Profile" />
+            <AvatarFallback>JD</AvatarFallback>
+          </Avatar>
+          <div>
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white">John Doe</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Job Seeker</p>
+            <div className="flex items-center space-x-1 mt-1">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-xs text-green-600 dark:text-green-400 font-medium">Online</span>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const quickStats = (
+    <Card className="border-none shadow-lg bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 dark:bg-gray-800 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+      <CardContent className="p-6">
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Quick Stats</h3>
+        <div className="space-y-3">
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-600 dark:text-gray-300">Sessions Booked</span>
+            <span className="font-medium dark:text-white">5</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-600 dark:text-gray-300">Experts Connected</span>
+            <span className="font-medium dark:text-white">12</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-600 dark:text-gray-300">Rewards Points</span>
+            <span className="font-medium text-purple-600 dark:text-purple-400">250</span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
 
   const handleBookExpert = (expertId: number) => {
     console.log('Booking expert:', expertId);
@@ -132,84 +206,97 @@ const SeekerDashboardPage = () => {
   return (
     <DashboardWrapper title="ExpertConnect - Find Your Perfect Expert">
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex gap-6">
-        {/* Animated Card-based Sidebar */}
-        <div className="w-80 space-y-4">
-          {/* User Profile Card */}
-          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 dark:bg-gray-800">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <Avatar className="w-16 h-16 ring-4 ring-blue-100 dark:ring-blue-800">
-                  <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="Profile" />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="font-bold text-lg text-gray-900 dark:text-white">John Doe</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Job Seeker</p>
-                  <div className="flex items-center space-x-1 mt-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-xs text-green-600 dark:text-green-400 font-medium">Online</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Collapsible Sidebar */}
+        <CollapsibleSidebar
+          items={sidebarItems}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          userProfile={userProfile}
+          quickStats={quickStats}
+        />
 
-          {/* Navigation Cards */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 px-2">Navigation</h3>
-            {sidebarItems.map((item, index) => (
-              <Card
-                key={item.key}
-                className={`cursor-pointer border-none shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 animate-slide-in ${
-                  activeTab === item.key
-                    ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:ring-blue-400'
-                    : 'hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800'
-                }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
-                onClick={() => setActiveTab(item.key)}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-center space-x-3">
-                    <div className={`p-3 rounded-xl ${item.color} shadow-sm`}>
-                      <item.icon className="w-5 h-5 text-white" />
-                    </div>
+        {/* Main Content */}
+        <div className="flex-1">
+          {/* Dashboard Tab */}
+          {activeTab === 'dashboard' && (
+            <div className="space-y-6">
+              {/* Welcome Section */}
+              <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+                <CardContent className="p-8">
+                  <div className="flex items-center justify-between">
                     <div>
-                      <span className={`font-medium transition-colors ${
-                        activeTab === item.key ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-200'
-                      }`}>
-                        {item.label}
-                      </span>
+                      <h1 className="text-3xl font-bold mb-2">Welcome back, John!</h1>
+                      <p className="text-blue-100 text-lg">Ready to connect with industry experts?</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold">5</div>
+                      <div className="text-blue-100">Active Connections</div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
 
-          {/* Quick Stats Card */}
-          <Card className="border-none shadow-lg bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 dark:bg-gray-800 animate-fade-in" style={{ animationDelay: '0.6s' }}>
-            <CardContent className="p-6">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Quick Stats</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">Sessions Booked</span>
-                  <span className="font-medium dark:text-white">5</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">Experts Connected</span>
-                  <span className="font-medium dark:text-white">12</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">Rewards Points</span>
-                  <span className="font-medium text-purple-600 dark:text-purple-400">250</span>
-                </div>
+              {/* Quick Actions */}
+              <div className="grid md:grid-cols-3 gap-6">
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer" onClick={() => setActiveTab('find-experts')}>
+                  <CardContent className="p-6 text-center">
+                    <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <Search className="w-6 h-6 text-green-600 dark:text-green-400" />
+                    </div>
+                    <h3 className="font-semibold mb-2 dark:text-white">Find Experts</h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">Discover industry professionals</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer" onClick={() => setActiveTab('bookings')}>
+                  <CardContent className="p-6 text-center">
+                    <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <Calendar className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <h3 className="font-semibold mb-2 dark:text-white">My Sessions</h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">Manage your bookings</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer" onClick={() => setActiveTab('chat')}>
+                  <CardContent className="p-6 text-center">
+                    <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <MessageSquare className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                    </div>
+                    <h3 className="font-semibold mb-2 dark:text-white">Messages</h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">Chat with experts</p>
+                  </CardContent>
+                </Card>
               </div>
-            </CardContent>
-          </Card>
-        </div>
 
-        {/* Main Content */}
-        <div className="flex-1">
+              {/* Recent Activity */}
+              <Card className="border-none shadow-lg dark:bg-gray-800">
+                <CardHeader>
+                  <CardTitle className="dark:text-white">Recent Activity</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <div>
+                        <p className="font-medium dark:text-white">Session completed with Pranita Bajoria</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">2 hours ago</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                      <Calendar className="w-5 h-5 text-blue-500" />
+                      <div>
+                        <p className="font-medium dark:text-white">New session scheduled with Mike Chen</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">Yesterday</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Find Experts Tab */}
           {activeTab === 'find-experts' && (
             <div className="space-y-6">
               {/* Search and Filters */}
@@ -388,46 +475,14 @@ const SeekerDashboardPage = () => {
             </Card>
           )}
 
-          {/* Messages Tab */}
-          {activeTab === 'messages' && (
+          {/* Chat Tab */}
+          {activeTab === 'chat' && (
             <Card className="border-none shadow-lg dark:bg-gray-800">
               <CardHeader>
-                <CardTitle className="dark:text-white">Messages</CardTitle>
+                <CardTitle className="dark:text-white">Chat</CardTitle>
               </CardHeader>
-              <CardContent>
-                {messages.length > 0 ? (
-                  <div className="space-y-4">
-                    {messages.map((message) => (
-                      <div key={message.id} className="flex items-center space-x-4 p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer dark:border-gray-600">
-                        <Avatar className="w-12 h-12">
-                          <AvatarImage src={message.avatar} alt={message.expertName} />
-                          <AvatarFallback>{message.expertName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <h4 className="font-medium dark:text-white">{message.expertName}</h4>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-xs text-gray-500 dark:text-gray-400">
-                                {new Date(message.timestamp).toLocaleDateString()}
-                              </span>
-                              {message.unread > 0 && (
-                                <Badge variant="destructive" className="text-xs">
-                                  {message.unread}
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{message.lastMessage}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600 dark:text-gray-300">No messages yet. Start a conversation with an expert!</p>
-                  </div>
-                )}
+              <CardContent className="p-0">
+                <ChatInterface users={chatUsers} />
               </CardContent>
             </Card>
           )}

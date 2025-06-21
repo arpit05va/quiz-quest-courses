@@ -7,6 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { CalendarDays, Clock, DollarSign, MessageSquare, Star, TrendingUp, Users, Video, Home, Settings, BarChart3, CreditCard, CheckCircle, Clock as ClockIcon } from 'lucide-react';
 import DashboardWrapper from '@/components/DashboardWrapper';
+import CollapsibleSidebar from '@/components/CollapsibleSidebar';
+import ChatInterface from '@/components/ChatInterface';
 
 const ExpertDashboardPage = () => {
   const [availableForBookings, setAvailableForBookings] = useState(true);
@@ -72,10 +74,31 @@ const ExpertDashboardPage = () => {
     }
   ];
 
+  const chatUsers = [
+    {
+      id: 1,
+      name: 'Sarah Johnson',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b332c2c2?w=150&h=150&fit=crop&crop=face',
+      lastMessage: 'Thank you for the session! Could you send me those resources?',
+      timestamp: '2024-06-21T16:30:00',
+      unread: 1,
+      isOnline: true
+    },
+    {
+      id: 2,
+      name: 'Mike Chen',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+      lastMessage: 'Looking forward to our session tomorrow!',
+      timestamp: '2024-06-21T14:20:00',
+      unread: 0,
+      isOnline: false
+    }
+  ];
+
   const sidebarItems = [
     { key: 'dashboard', label: 'Dashboard', icon: Home, color: 'bg-blue-500' },
     { key: 'bookings', label: 'Bookings', icon: CalendarDays, color: 'bg-green-500' },
-    { key: 'messages', label: 'Messages', icon: MessageSquare, color: 'bg-purple-500' },
+    { key: 'chat', label: 'Chat', icon: MessageSquare, color: 'bg-purple-500' },
     { key: 'analytics', label: 'Analytics', icon: BarChart3, color: 'bg-orange-500' },
     { key: 'payments', label: 'Payments', icon: CreditCard, color: 'bg-pink-500' },
     { key: 'settings', label: 'Settings', icon: Settings, color: 'bg-gray-500' }
@@ -95,96 +118,72 @@ const ExpertDashboardPage = () => {
     window.open(meetingLink, '_blank');
   };
 
+  const userProfile = (
+    <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 dark:bg-gray-800">
+      <CardContent className="p-6">
+        <div className="flex items-center space-x-4 mb-4">
+          <Avatar className="w-16 h-16 ring-4 ring-blue-100 dark:ring-blue-800">
+            <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="Profile" />
+            <AvatarFallback>SV</AvatarFallback>
+          </Avatar>
+          <div>
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white">Susheel Vashistha</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Industry Expert</p>
+            <div className="flex items-center space-x-2 mt-2">
+              <div className={`w-2 h-2 rounded-full ${availableForBookings ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
+              <span className={`text-xs font-medium ${availableForBookings ? 'text-green-600 dark:text-green-400' : 'text-gray-500'}`}>
+                {availableForBookings ? 'Available' : 'Offline'}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Available for bookings</span>
+          <Switch
+            checked={availableForBookings}
+            onCheckedChange={setAvailableForBookings}
+          />
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const quickStats = (
+    <Card className="border-none shadow-lg bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 dark:bg-gray-800 animate-fade-in" style={{ animationDelay: '0.7s' }}>
+      <CardContent className="p-6">
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Quick Overview</h3>
+        <div className="space-y-3">
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-600 dark:text-gray-300">Total Earnings</span>
+            <span className="font-bold text-green-600 dark:text-green-400">${expertStats.totalEarnings}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-600 dark:text-gray-300">Sessions</span>
+            <span className="font-medium dark:text-white">{expertStats.sessionsCompleted}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-600 dark:text-gray-300">Rating</span>
+            <div className="flex items-center space-x-1">
+              <Star className="w-3 h-3 text-yellow-500 fill-current" />
+              <span className="font-medium dark:text-white">{expertStats.rating}</span>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <DashboardWrapper title="ExpertConnect - Expert Dashboard">
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex gap-6">
-        {/* Animated Card-based Sidebar */}
-        <div className="w-80 space-y-4">
-          {/* Expert Profile Card */}
-          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 dark:bg-gray-800">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4 mb-4">
-                <Avatar className="w-16 h-16 ring-4 ring-blue-100 dark:ring-blue-800">
-                  <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="Profile" />
-                  <AvatarFallback>SV</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="font-bold text-lg text-gray-900 dark:text-white">Susheel Vashistha</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Industry Expert</p>
-                  <div className="flex items-center space-x-2 mt-2">
-                    <div className={`w-2 h-2 rounded-full ${availableForBookings ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
-                    <span className={`text-xs font-medium ${availableForBookings ? 'text-green-600 dark:text-green-400' : 'text-gray-500'}`}>
-                      {availableForBookings ? 'Available' : 'Offline'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Available for bookings</span>
-                <Switch
-                  checked={availableForBookings}
-                  onCheckedChange={setAvailableForBookings}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Navigation Cards */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 px-2">Navigation</h3>
-            {sidebarItems.map((item, index) => (
-              <Card
-                key={item.key}
-                className={`cursor-pointer border-none shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 animate-slide-in ${
-                  activeTab === item.key
-                    ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:ring-blue-400'
-                    : 'hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800'
-                }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
-                onClick={() => setActiveTab(item.key)}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-center space-x-3">
-                    <div className={`p-3 rounded-xl ${item.color} shadow-sm`}>
-                      <item.icon className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <span className={`font-medium transition-colors ${
-                        activeTab === item.key ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-200'
-                      }`}>
-                        {item.label}
-                      </span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Quick Stats Card */}
-          <Card className="border-none shadow-lg bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 dark:bg-gray-800 animate-fade-in" style={{ animationDelay: '0.7s' }}>
-            <CardContent className="p-6">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Quick Overview</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">Total Earnings</span>
-                  <span className="font-bold text-green-600 dark:text-green-400">${expertStats.totalEarnings}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">Sessions</span>
-                  <span className="font-medium dark:text-white">{expertStats.sessionsCompleted}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">Rating</span>
-                  <div className="flex items-center space-x-1">
-                    <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                    <span className="font-medium dark:text-white">{expertStats.rating}</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Collapsible Sidebar */}
+        <CollapsibleSidebar
+          items={sidebarItems}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          userProfile={userProfile}
+          quickStats={quickStats}
+        />
 
         {/* Main Content */}
         <div className="flex-1">
@@ -424,65 +423,139 @@ const ExpertDashboardPage = () => {
             </Card>
           )}
 
-          {/* Messages Tab */}
-          {activeTab === 'messages' && (
+          {/* Chat Tab */}
+          {activeTab === 'chat' && (
             <Card className="border-none shadow-lg dark:bg-gray-800">
               <CardHeader>
-                <CardTitle className="dark:text-white">Messages</CardTitle>
+                <CardTitle className="dark:text-white">Chat</CardTitle>
               </CardHeader>
-              <CardContent>
-                {messages.length > 0 ? (
-                  <div className="space-y-4">
-                    {messages.map((message) => (
-                      <div key={message.id} className="flex items-center space-x-4 p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer dark:border-gray-600">
-                        <Avatar className="w-12 h-12">
-                          <AvatarImage src={message.avatar} alt={message.clientName} />
-                          <AvatarFallback>{message.clientName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <h4 className="font-medium dark:text-white">{message.clientName}</h4>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-xs text-gray-500 dark:text-gray-400">
-                                {new Date(message.timestamp).toLocaleDateString()}
-                              </span>
-                              {message.unread > 0 && (
-                                <Badge variant="destructive" className="text-xs">
-                                  {message.unread}
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{message.lastMessage}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600 dark:text-gray-300">No messages yet.</p>
-                  </div>
-                )}
+              <CardContent className="p-0">
+                <ChatInterface users={chatUsers} />
               </CardContent>
             </Card>
           )}
 
-          {/* Other tabs content */}
-          {!['dashboard', 'bookings', 'messages'].includes(activeTab) && (
-            <div className="text-center py-12">
-              <Card className="border-none shadow-lg max-w-md mx-auto dark:bg-gray-800">
-                <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <Settings className="w-8 h-8 text-white" />
+          {/* Analytics Tab */}
+          {activeTab === 'analytics' && (
+            <Card className="border-none shadow-lg dark:bg-gray-800">
+              <CardHeader>
+                <CardTitle className="dark:text-white">Analytics</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                  <Card className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-blue-100">Total Revenue</p>
+                        <p className="text-2xl font-bold">${expertStats.totalEarnings}</p>
+                      </div>
+                      <DollarSign className="w-8 h-8 text-blue-200" />
+                    </div>
+                  </Card>
+                  <Card className="p-4 bg-gradient-to-r from-green-500 to-green-600 text-white">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-green-100">Sessions</p>
+                        <p className="text-2xl font-bold">{expertStats.sessionsCompleted}</p>
+                      </div>
+                      <Users className="w-8 h-8 text-green-200" />
+                    </div>
+                  </Card>
+                  <Card className="p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-purple-100">Rating</p>
+                        <p className="text-2xl font-bold">{expertStats.rating}</p>
+                      </div>
+                      <Star className="w-8 h-8 text-purple-200" />
+                    </div>
+                  </Card>
+                  <Card className="p-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-orange-100">Response Rate</p>
+                        <p className="text-2xl font-bold">{expertStats.responseRate}%</p>
+                      </div>
+                      <TrendingUp className="w-8 h-8 text-orange-200" />
+                    </div>
+                  </Card>
+                </div>
+                <div className="text-center py-8">
+                  <h3 className="text-xl font-semibold mb-2 dark:text-white">Detailed Analytics Coming Soon</h3>
+                  <p className="text-gray-600 dark:text-gray-300">Charts and detailed insights will be available here</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Payments Tab */}
+          {activeTab === 'payments' && (
+            <Card className="border-none shadow-lg dark:bg-gray-800">
+              <CardHeader>
+                <CardTitle className="dark:text-white">Payments</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <Card className="p-4 border-2 border-green-200 dark:border-green-800">
+                      <div className="text-center">
+                        <DollarSign className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                        <h3 className="font-semibold dark:text-white">Total Earnings</h3>
+                        <p className="text-2xl font-bold text-green-600">${expertStats.totalEarnings}</p>
+                      </div>
+                    </Card>
+                    <Card className="p-4 border-2 border-blue-200 dark:border-blue-800">
+                      <div className="text-center">
+                        <Clock className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                        <h3 className="font-semibold dark:text-white">Pending</h3>
+                        <p className="text-2xl font-bold text-blue-600">$450</p>
+                      </div>
+                    </Card>
+                    <Card className="p-4 border-2 border-purple-200 dark:border-purple-800">
+                      <div className="text-center">
+                        <CheckCircle className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+                        <h3 className="font-semibold dark:text-white">Paid Out</h3>
+                        <p className="text-2xl font-bold text-purple-600">$12,000</p>
+                      </div>
+                    </Card>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                    {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300">This section is coming soon!</p>
-                </CardContent>
-              </Card>
-            </div>
+                  <div className="text-center py-8">
+                    <h3 className="text-xl font-semibold mb-2 dark:text-white">Payment History</h3>
+                    <p className="text-gray-600 dark:text-gray-300">Detailed payment history and management tools coming soon</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Settings Tab */}
+          {activeTab === 'settings' && (
+            <Card className="border-none shadow-lg dark:bg-gray-800">
+              <CardHeader>
+                <CardTitle className="dark:text-white">Settings</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold dark:text-white">Availability Settings</h3>
+                    <div className="flex items-center justify-between p-4 border rounded-lg dark:border-gray-600">
+                      <div>
+                        <h4 className="font-medium dark:text-white">Available for Bookings</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">Allow new clients to book sessions with you</p>
+                      </div>
+                      <Switch
+                        checked={availableForBookings}
+                        onCheckedChange={setAvailableForBookings}
+                      />
+                    </div>
+                  </div>
+                  <div className="text-center py-8">
+                    <h3 className="text-xl font-semibold mb-2 dark:text-white">More Settings</h3>
+                    <p className="text-gray-600 dark:text-gray-300">Additional settings and preferences will be available here</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           )}
         </div>
       </div>
