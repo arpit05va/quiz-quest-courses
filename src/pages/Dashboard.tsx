@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, LogOut } from 'lucide-react';
-import { CourseCard } from '@/components/CourseCard';
+import CourseCard from '@/components/CourseCard';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 import { useToast } from "@/components/ui/use-toast"
 import {
@@ -22,7 +23,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { ModeToggle } from '@/components/ModeToggle';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { useTheme } from 'next-themes';
 import { Skeleton } from "@/components/ui/skeleton"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -238,6 +239,110 @@ const Dashboard = () => {
       category: 'DevOps',
       level: 'Advanced',
       instructor: 'Carlos Mendez'
+    },
+    {
+      id: 13,
+      title: 'Full Stack JavaScript',
+      description: 'Complete MERN stack development with MongoDB, Express, React, and Node.js.',
+      duration: '16 weeks',
+      students: 1890,
+      rating: 4.8,
+      image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&h=250&fit=crop',
+      price: '$199',
+      category: 'Full Stack',
+      level: 'Intermediate',
+      instructor: 'James Wilson'
+    },
+    {
+      id: 14,
+      title: 'Game Development with Unity',
+      description: 'Create 2D and 3D games using Unity engine and C# programming.',
+      duration: '14 weeks',
+      students: 756,
+      rating: 4.6,
+      image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=400&h=250&fit=crop',
+      price: '$179',
+      category: 'Game Development',
+      level: 'Intermediate',
+      instructor: 'Maya Rodriguez'
+    },
+    {
+      id: 15,
+      title: 'Database Design & SQL',
+      description: 'Master relational databases, SQL queries, and database optimization.',
+      duration: '8 weeks',
+      students: 1234,
+      rating: 4.7,
+      image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=250&fit=crop',
+      price: '$89',
+      category: 'Database',
+      level: 'Beginner',
+      instructor: 'Robert Chen'
+    },
+    {
+      id: 16,
+      title: 'Artificial Intelligence Fundamentals',
+      description: 'Introduction to AI concepts, algorithms, and practical applications.',
+      duration: '12 weeks',
+      students: 892,
+      rating: 4.9,
+      image: 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=400&h=250&fit=crop',
+      price: '$259',
+      category: 'AI/ML',
+      level: 'Advanced',
+      instructor: 'Dr. Anna Kim'
+    },
+    {
+      id: 17,
+      title: 'E-commerce Development',
+      description: 'Build complete online stores with payment gateways and inventory management.',
+      duration: '10 weeks',
+      students: 1045,
+      rating: 4.5,
+      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=250&fit=crop',
+      price: '$149',
+      category: 'Web Development',
+      level: 'Intermediate',
+      instructor: 'Sophie Turner'
+    },
+    {
+      id: 18,
+      title: 'iOS App Development with Swift',
+      description: 'Create native iOS applications using Swift and Xcode.',
+      duration: '14 weeks',
+      students: 623,
+      rating: 4.8,
+      image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=250&fit=crop',
+      price: '$189',
+      category: 'Mobile',
+      level: 'Advanced',
+      instructor: 'Alex Thompson'
+    },
+    {
+      id: 19,
+      title: 'Digital Photography Masterclass',
+      description: 'Learn professional photography techniques and photo editing.',
+      duration: '6 weeks',
+      students: 2156,
+      rating: 4.6,
+      image: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&h=250&fit=crop',
+      price: '$99',
+      category: 'Photography',
+      level: 'Beginner',
+      instructor: 'Elena Martinez'
+    },
+    {
+      id: 20,
+      title: 'Quantum Computing Basics',
+      description: 'Introduction to quantum computing principles and programming.',
+      duration: '16 weeks',
+      students: 234,
+      rating: 4.9,
+      image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=250&fit=crop',
+      price: '$399',
+      category: 'Quantum',
+      level: 'Expert',
+      instructor: 'Dr. Michael Zhang'
     }
   ];
 
@@ -294,7 +399,7 @@ const Dashboard = () => {
                 <span className="text-lg font-semibold text-foreground">Dashboard</span>
               </div>
               <div className="space-x-2 flex items-center">
-                <ModeToggle />
+                <ThemeToggle />
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline">
