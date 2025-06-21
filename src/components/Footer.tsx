@@ -64,7 +64,7 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-muted-foreground">
                 <Mail className="w-5 h-5" />
-                <span>hello@codexmania.com</span>
+                <span>support@codexmania.com</span>
               </div>
               <div className="flex items-center space-x-3 text-muted-foreground">
                 <Phone className="w-5 h-5" />
@@ -101,7 +101,7 @@ const Footer = () => {
         <div className="border-t border-border mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-muted-foreground text-center md:text-left">
-              © 2024 codeXMania. All rights reserved.
+              © 2025 codeXMania. All rights reserved.
             </p>
             <div className="mt-4 md:mt-0">
               <AnimatedSocialLogos />
