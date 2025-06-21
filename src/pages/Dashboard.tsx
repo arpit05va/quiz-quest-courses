@@ -22,7 +22,7 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('courses');
   const navigate = useNavigate();
-  const { isAuthenticated, showLoginDialog } = useAuthCheck();
+  const { isAuthenticated, setShowLoginDialog } = useAuthCheck();
 
   // Mock enrolled courses data (in real app, this would come from API)
   const enrolledCourses = [
@@ -373,7 +373,7 @@ const Dashboard = () => {
 
   const handleEnrollCourse = (courseId: number) => {
     if (!isAuthenticated) {
-      showLoginDialog();
+      setShowLoginDialog(true);
       return;
     }
     // Navigate to course details page instead of direct enrollment
@@ -829,59 +829,12 @@ const Dashboard = () => {
               {/* Available Courses Grid */}
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredAvailableCourses.map((course, index) => (
-                  <Card key={course.id} className="group hover:shadow-xl transition-all duration-500 border-none shadow-lg animate-fade-in overflow-hidden hover-lift relative" style={{ animationDelay: `${index * 0.1}s` }}>
-                    <div className="relative overflow-hidden">
-                      <img
-                        src={course.image}
-                        alt={course.title}
-                        className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                      <div className="absolute top-4 left-4">
-                        <Badge className="bg-white/90 text-gray-800 hover:bg-white transition-all duration-300">
-                          {course.category}
-                        </Badge>
-                      </div>
-                      <div className="absolute top-4 right-4">
-                        <Badge variant="secondary" className="bg-secondary-500 text-white">
-                          {course.level}
-                        </Badge>
-                      </div>
-                    </div>
-                    
-                    <CardContent className="p-6">
-                      <h3 className="text-xl font-semibold text-foreground mb-2 line-clamp-2">
-                        {course.title}
-                      </h3>
-                      <p className="text-muted-foreground text-sm mb-2">By {course.instructor}</p>
-                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{course.description}</p>
-                      
-                      <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                        <div className="flex items-center space-x-1">
-                          <Clock className="w-4 h-4" />
-                          <span>{course.duration}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                          <span>{course.rating}</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="text-2xl font-bold text-primary">{course.price}</span>
-                        <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                          <Users className="w-4 h-4" />
-                          <span>{course.students.toLocaleString()}</span>
-                        </div>
-                      </div>
-                      
-                      <Button 
-                        onClick={() => handleEnrollCourse(course.id)}
-                        className="w-full bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-semibold transition-all duration-300"
-                      >
-                        Enroll Now
-                      </Button>
-                    </CardContent>
-                  </Card>
+                  <CourseCard 
+                    key={course.id} 
+                    course={course} 
+                    index={index} 
+                    isEnrolled={false}
+                  />
                 ))}
               </div>
 

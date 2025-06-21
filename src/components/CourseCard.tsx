@@ -28,11 +28,11 @@ interface CourseCardProps {
 
 const CourseCard = ({ course, index, isEnrolled = false }: CourseCardProps) => {
   const navigate = useNavigate();
-  const { isAuthenticated, showLoginDialog } = useAuthCheck();
+  const { isAuthenticated, setShowLoginDialog } = useAuthCheck();
 
   const handleEnrollClick = () => {
     if (!isAuthenticated) {
-      showLoginDialog();
+      setShowLoginDialog(true);
       return;
     }
     // Navigate to course details page for enrollment
