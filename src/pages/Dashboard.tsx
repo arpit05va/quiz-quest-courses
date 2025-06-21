@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap, Library, Code, Zap, PlayCircle } from 'lucide-react';
+import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap, Library, Code, Zap, PlayCircle, Video } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 
@@ -86,38 +86,6 @@ const Dashboard = () => {
       setEnrolledCourses(enrolledCoursesData);
     }
   }, [isAuthenticated]);
-
-  // Mock enrolled courses data (removed - now using localStorage)
-  // const enrolledCourses = [
-  //   {
-  //     id: 1,
-  //     title: 'Introduction to Web Development',
-  //     description: 'Learn HTML, CSS, and JavaScript from scratch with hands-on projects.',
-  //     duration: '12 weeks',
-  //     students: 1250,
-  //     rating: 4.8,
-  //     image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&h=250&fit=crop',
-  //     price: '$99',
-  //     category: 'Programming',
-  //     level: 'Beginner',
-  //     progress: 65,
-  //     instructor: 'John Smith'
-  //   },
-  //   {
-  //     id: 3,
-  //     title: 'Digital Marketing Mastery',
-  //     description: 'Complete guide to SEO, social media, and online advertising.',
-  //     duration: '8 weeks',
-  //     students: 2100,
-  //     rating: 4.7,
-  //     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop',
-  //     price: '$79',
-  //     category: 'Marketing',
-  //     level: 'Beginner',
-  //     progress: 25,
-  //     instructor: 'Sarah Johnson'
-  //   }
-  // ];
 
   // All available courses (excluding enrolled ones)
   const availableCourses = [
@@ -549,6 +517,29 @@ const Dashboard = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              {/* ExpertConnect Dropdown - NEW */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-2">
+                    <Users className="w-4 h-4" />
+                    <span>ExpertConnect</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
+                  <DropdownMenuLabel>Connect with Experts</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/expertconnect/seeker')}>
+                    <Search className="w-4 h-4 mr-2" />
+                    Find Experts
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/expertconnect/expert')}>
+                    <Video className="w-4 h-4 mr-2" />
+                    Expert Dashboard
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               
               {/* Student Panel Dropdown */}
               <DropdownMenu>
@@ -705,6 +696,15 @@ const Dashboard = () => {
               <Button
                 variant="ghost"
                 size="sm"
+                onClick={() => navigate('/expertconnect/seeker')}
+                className="flex items-center space-x-1 whitespace-nowrap"
+              >
+                <Users className="w-4 h-4" />
+                <span>ExpertConnect</span>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => navigate('/dashboard/profile')}
                 className="flex items-center space-x-1 whitespace-nowrap"
               >
@@ -736,14 +736,42 @@ const Dashboard = () => {
 
       {/* Dashboard Content */}
       <main className="container mx-auto px-4 py-8">
-        {/* Welcome Section */}
+        {/* Welcome Section with ExpertConnect CTA */}
         <div className="mb-8 animate-fade-in">
           <h1 className="text-4xl font-bold text-foreground mb-2 animate-bounce-in">
             Your Learning Dashboard
           </h1>
-          <p className="text-xl text-muted-foreground animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <p className="text-xl text-muted-foreground animate-fade-in mb-4" style={{ animationDelay: '0.2s' }}>
             Continue your educational journey with our curated content
           </p>
+          
+          {/* ExpertConnect Quick Access */}
+          <div className="bg-gradient-to-r from-purple-500 to-blue-600 rounded-lg p-6 text-white mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-bold mb-2">🚀 New: ExpertConnect</h3>
+                <p className="text-purple-100 mb-4">Connect with industry experts for personalized mentoring and career guidance</p>
+                <div className="flex space-x-3">
+                  <Button 
+                    onClick={() => navigate('/expertconnect/seeker')}
+                    className="bg-white text-purple-600 hover:bg-gray-100"
+                  >
+                    Find Experts
+                  </Button>
+                  <Button 
+                    onClick={() => navigate('/expertconnect/expert')}
+                    variant="outline"
+                    className="border-white text-white hover:bg-white hover:text-purple-600"
+                  >
+                    Become Expert
+                  </Button>
+                </div>
+              </div>
+              <div className="hidden lg:block">
+                <Users className="w-24 h-24 text-purple-200" />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Content Sections */}
