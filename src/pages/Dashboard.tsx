@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -63,8 +62,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     const storedEnrollments = localStorage.getItem('enrollments');
+    console.log('Stored enrollments from localStorage:', storedEnrollments);
     if (storedEnrollments) {
-      setEnrollments(JSON.parse(storedEnrollments));
+      const parsedEnrollments = JSON.parse(storedEnrollments);
+      console.log('Parsed enrollments:', parsedEnrollments);
+      setEnrollments(parsedEnrollments);
+    } else {
+      console.log('No enrollments found in localStorage');
+      setEnrollments([]);
     }
   }, []);
 
@@ -79,7 +84,10 @@ const Dashboard = () => {
   };
 
   const filterEnrolledCourses = (courses: any[]) => {
-    return courses.filter(course => enrollments.some(e => e.courseId === course.id));
+    const enrolledCourses = courses.filter(course => enrollments.some(e => e.courseId === course.id));
+    console.log('Filtered enrolled courses:', enrolledCourses);
+    console.log('Current enrollments:', enrollments);
+    return enrolledCourses;
   };
 
   // Enhanced course data with more variety
@@ -456,16 +464,32 @@ const Dashboard = () => {
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filterEnrolledCourses(courses).map((course, index) => (
-                  <CourseCard
-                    key={course.id}
-                    course={course}
-                    index={index}
-                    isEnrolled={true}
-                  />
-                ))}
-              </div>
+              <>
+                {filterEnrolledCourses(courses).length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {filterEnrolledCourses(courses).map((course, index) => (
+                      <CourseCard
+                        key={course.id}
+                        course={course}
+                        index={index}
+                        isEnrolled={true}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 border-2 border-dashed border-muted rounded-lg">
+                    <h3 className="text-xl font-semibold text-muted-foreground mb-2">No Enrolled Courses Yet</h3>
+                    <p className="text-muted-foreground mb-4">Start your learning journey by enrolling in a course below!</p>
+                    <Button
+                      onClick={() => navigate('/courses')}
+                      variant="outline"
+                    >
+                      Browse Courses
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
 
             <div className="text-center mt-8 sm:hidden">
