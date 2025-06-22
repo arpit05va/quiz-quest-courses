@@ -1,9 +1,10 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Search, Play, Users, Clock, Star, BookOpen, Award, Zap } from 'lucide-react';
+import { Search, Play, Users, Clock, Star, BookOpen, Award, Zap, Briefcase, UserCheck, MessageCircle, TrendingUp, Shield, Target } from 'lucide-react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import CourseCard from '@/components/CourseCard';
@@ -88,26 +89,73 @@ const Index = () => {
     }
   ];
 
-  const features = [
+  const keyPanels = [
+    {
+      icon: Briefcase,
+      title: 'Aspirant Panel',
+      description: 'Find jobs that match your skills, apply easily, and prepare with our interview readiness tools.',
+      image: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=500&h=300&fit=crop',
+      bgGradient: 'from-blue-500 to-cyan-500',
+      delay: '0.2s'
+    },
+    {
+      icon: UserCheck,
+      title: 'HR Panel',
+      description: 'Post job openings, screen jobseekers, and streamline your recruitment process efficiently.',
+      image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&h=300&fit=crop',
+      bgGradient: 'from-purple-500 to-pink-500',
+      delay: '0.4s'
+    },
+    {
+      icon: MessageCircle,
+      title: 'Expert Connect',
+      description: 'Connect with industry experts for career guidance, resume reviews, and mentorship.',
+      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=300&fit=crop',
+      bgGradient: 'from-green-500 to-teal-500',
+      delay: '0.6s'
+    }
+  ];
+
+  const enhancedFeatures = [
+    {
+      icon: Target,
+      title: 'Aspirant Job Tools & Interview Prep',
+      description: 'Comprehensive tools for job search and interview preparation'
+    },
+    {
+      icon: TrendingUp,
+      title: 'HR Hiring Workflow',
+      description: 'Streamlined recruitment process for efficient hiring'
+    },
+    {
+      icon: MessageCircle,
+      title: 'Direct Industry Expert Access',
+      description: 'Connect directly with experienced professionals'
+    },
     {
       icon: Play,
       title: 'Interactive Video Lectures',
-      description: 'High-quality video content with interactive elements and real-time Q&A.'
+      description: 'High-quality video content with interactive elements'
     },
     {
       icon: BookOpen,
       title: 'Comprehensive Materials',
-      description: 'Access to downloadable resources, code samples, and reading materials.'
+      description: 'Access to downloadable resources and code samples'
     },
     {
       icon: Zap,
       title: 'Interactive Quizzes',
-      description: 'Test your knowledge with engaging quizzes after each lesson.'
+      description: 'Test your knowledge with engaging quizzes'
     },
     {
       icon: Award,
-      title: 'Certificates',
-      description: 'Earn industry-recognized certificates upon course completion.'
+      title: 'Industry Certificates',
+      description: 'Earn recognized certificates upon completion'
+    },
+    {
+      icon: Shield,
+      title: 'Secure Platform',
+      description: 'Safe and secure learning environment'
     }
   ];
 
@@ -129,9 +177,61 @@ const Index = () => {
       <div id="home">
         <HeroSection />
       </div>
+
+      {/* Key Panels Feature Highlights Section */}
+      <section className="py-20 px-4 bg-muted/20 relative overflow-hidden">
+        <div className="container mx-auto">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-4xl font-bold text-foreground mb-4 animate-bounce-in">Explore Our Key Panels</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              Discover our comprehensive platforms designed for aspirants, HR professionals, and industry experts
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {keyPanels.map((panel, index) => (
+              <Card 
+                key={index} 
+                className="group cursor-pointer border-none shadow-xl hover:shadow-2xl transition-all duration-500 animate-fade-in hover-lift relative overflow-hidden bg-card/80 backdrop-blur-sm" 
+                style={{ animationDelay: panel.delay }}
+              >
+                {/* Background gradient overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${panel.bgGradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
+                
+                <CardHeader className="relative z-10 text-center">
+                  <div className={`mx-auto w-20 h-20 bg-gradient-to-r ${panel.bgGradient} rounded-full flex items-center justify-center mb-6 animate-float group-hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110`}>
+                    <panel.icon className="w-10 h-10 text-white group-hover:animate-bounce" />
+                  </div>
+                  <CardTitle className="text-2xl font-bold group-hover:text-primary-600 transition-colors duration-300">
+                    {panel.title}
+                  </CardTitle>
+                </CardHeader>
+                
+                <CardContent className="relative z-10">
+                  <div className="mb-6 rounded-lg overflow-hidden">
+                    <img 
+                      src={panel.image} 
+                      alt={panel.title}
+                      className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <p className="text-muted-foreground text-center leading-relaxed">
+                    {panel.description}
+                  </p>
+                  <div className="mt-6 text-center">
+                    <Button className={`bg-gradient-to-r ${panel.bgGradient} hover:from-primary/90 hover:to-secondary/90 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 hover-lift`}>
+                      Explore Now
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
       
-      {/* Features Section with enhanced animations */}
-      <section id="about" className="py-20 px-4 bg-background relative">
+      {/* Enhanced Why Choose Our Platform Section with Horizontal Scroll */}
+      <section id="about" className="py-20 px-4 bg-background relative overflow-hidden">
         <div className="container mx-auto">
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-4xl font-bold text-foreground mb-4 animate-bounce-in">Why Choose Our Platform?</h2>
@@ -139,24 +239,43 @@ const Index = () => {
               We provide the most comprehensive and engaging learning experience with cutting-edge technology
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="text-center border-none shadow-lg hover:shadow-xl transition-all duration-500 animate-fade-in hover-lift group relative overflow-hidden" style={{ animationDelay: `${index * 0.1 + 0.3}s` }}>
-                {/* Card shimmer effect */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute inset-0 animate-shimmer"></div>
-                </div>
-                <CardHeader className="relative z-10">
-                  <div className="mx-auto w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mb-4 animate-gradient group-hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
-                    <feature.icon className="w-8 h-8 text-white group-hover:animate-bounce" />
+          
+          {/* Horizontal Scrolling Container */}
+          <div className="relative">
+            <div className="flex gap-6 overflow-x-auto pb-6 scroll-smooth" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(156, 163, 175, 0.5) transparent' }}>
+              {enhancedFeatures.map((feature, index) => (
+                <Card 
+                  key={index} 
+                  className="min-w-[300px] text-center border-none shadow-lg hover:shadow-xl transition-all duration-500 animate-fade-in hover-lift group relative overflow-hidden bg-card/90 backdrop-blur-sm flex-shrink-0" 
+                  style={{ animationDelay: `${index * 0.1 + 0.3}s` }}
+                >
+                  {/* Card shimmer effect */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute inset-0 animate-shimmer"></div>
                   </div>
-                  <CardTitle className="text-xl font-semibold group-hover:text-primary-600 transition-colors duration-300">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="relative z-10">
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+                  <CardHeader className="relative z-10">
+                    <div className="mx-auto w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mb-4 animate-gradient group-hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
+                      <feature.icon className="w-8 h-8 text-white group-hover:animate-bounce" />
+                    </div>
+                    <CardTitle className="text-xl font-semibold group-hover:text-primary-600 transition-colors duration-300 min-h-[3rem] flex items-center justify-center">
+                      {feature.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="relative z-10">
+                    <p className="text-muted-foreground">{feature.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            {/* Gradient fade edges for scroll indication */}
+            <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-background to-transparent pointer-events-none z-10"></div>
+            <div className="absolute top-0 right-0 w-20 h-full bg-gradient-to-l from-background to-transparent pointer-events-none z-10"></div>
+          </div>
+          
+          {/* Scroll indicator */}
+          <div className="text-center mt-8 animate-fade-in" style={{ animationDelay: '1s' }}>
+            <p className="text-muted-foreground text-sm">← Scroll to explore more features →</p>
           </div>
         </div>
       </section>
