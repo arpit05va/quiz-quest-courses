@@ -689,7 +689,7 @@ var twoSum = function(nums, target) {
                       <Textarea
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
-                        className={`font-mono h-full min-h-full resize-none border-0 rounded-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-4 transition-all duration-200 ${
+                        className={`font-mono h-full w-full resize-none border-0 rounded-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-4 transition-all duration-200 ${
                           editorTheme === 'dark' 
                             ? 'bg-gray-900 text-gray-100' 
                             : editorTheme === 'monokai'
@@ -701,7 +701,8 @@ var twoSum = function(nums, target) {
                           fontSize: `${fontSize}px`,
                           lineHeight: '1.6',
                           fontFamily: 'JetBrains Mono, Consolas, Monaco, "Courier New", monospace',
-                          tabSize: 4
+                          tabSize: 4,
+                          minHeight: '100%'
                         }}
                       />
                       <div className="absolute bottom-2 right-2 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded">
