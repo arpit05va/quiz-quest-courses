@@ -5,11 +5,11 @@ import AnimatedSocialLogos from './AnimatedSocialLogos';
 const Footer = () => {
   const footerLinks = {
     'Quick Links': [
-      { name: 'About Us', href: '#' },
-      { name: 'Courses', href: '#' },
-      { name: 'Pricing', href: '#' },
-      { name: 'Blog', href: '#' },
-      { name: 'Contact', href: '#' }
+      { name: 'About Us', href: '/about' },
+      { name: 'Courses', href: '/courses' },
+      // { name: 'Pricing', href: '#' },
+      // { name: 'Blog', href: '#' },
+      { name: 'Contact', href: '/contact' }
     ],
     'Support': [
       { name: 'Help Center', href: '#' },

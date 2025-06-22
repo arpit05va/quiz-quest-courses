@@ -13,8 +13,8 @@ const Header = () => {
   const location = useLocation();
 
   const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Dashboard', href: '/dashboard' },
+    // { name: 'Home', href: '/' },
+    // { name: 'Dashboard', href: '/dashboard' },
     { name: 'Courses', href: '/courses' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' }
@@ -53,10 +53,10 @@ const Header = () => {
             {/* Enhanced Text Logo */}
             <div className="flex flex-col">
               <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent group-hover:from-purple-500 group-hover:via-blue-500 group-hover:to-cyan-400 transition-all duration-300">
-                code<span className="text-orange-500 group-hover:text-orange-400 transition-colors duration-300">X</span>Mania
+                code<span className="text-orange-500 group-hover:text-orange-400 transition-colors duration-300">X</span>mania
               </span>
               <span className="text-xs text-muted-foreground font-medium tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
-                Learn • Code • Excel
+                Code • Connect • Conquer
               </span>
             </div>
           </Link>
