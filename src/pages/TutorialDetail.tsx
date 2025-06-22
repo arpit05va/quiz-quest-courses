@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -19,10 +18,12 @@ import {
   Award,
   Maximize,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Code2
 } from 'lucide-react';
 import DashboardWrapper from '@/components/DashboardWrapper';
 import QuizSection from '@/components/QuizSection';
+import ProblemPractice from '@/components/ProblemPractice';
 
 const TutorialDetail = () => {
   const { id } = useParams();
@@ -30,6 +31,7 @@ const TutorialDetail = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [completedSections, setCompletedSections] = useState(new Set([0]));
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showProblemPractice, setShowProblemPractice] = useState(false);
 
   // Mock tutorial data with sections structure similar to course lessons
   const tutorial = {
@@ -226,6 +228,17 @@ function ExpensiveComponent({ items, filter }) {
 
   const currentSectionData = tutorial.sections[currentSection];
   const completionPercentage = (completedSections.size / tutorial.sections.length) * 100;
+
+  // Show Problem Practice if requested
+  if (showProblemPractice) {
+    return (
+      <ProblemPractice 
+        contentType="tutorial" 
+        contentId={id || '1'} 
+        onClose={() => setShowProblemPractice(false)}
+      />
+    );
+  }
 
   if (isFullscreen) {
     return (
@@ -450,9 +463,10 @@ function ExpensiveComponent({ items, filter }) {
             <Card className="border-none shadow-lg">
               <CardContent className="p-6">
                 <Tabs defaultValue="overview" className="w-full">
-                  <TabsList className="grid w-full grid-cols-4">
+                  <TabsList className="grid w-full grid-cols-5">
                     <TabsTrigger value="overview">Overview</TabsTrigger>
                     <TabsTrigger value="quizzes">Practice Quizzes</TabsTrigger>
+                    <TabsTrigger value="coding">Coding Practice</TabsTrigger>
                     <TabsTrigger value="resources">Resources</TabsTrigger>
                     <TabsTrigger value="discussion">Discussion</TabsTrigger>
                   </TabsList>
@@ -489,6 +503,53 @@ function ExpensiveComponent({ items, filter }) {
                       contentId={id || '1'} 
                       contentTitle={tutorial.title} 
                     />
+                  </TabsContent>
+                  <TabsContent value="coding" className="mt-4">
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="p-2 rounded-lg bg-primary/10">
+                          <Code2 className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold">Coding Practice</h3>
+                          <p className="text-muted-foreground">Practice coding problems related to this tutorial</p>
+                        </div>
+                      </div>
+                      
+                      <Card className="border-none shadow-lg">
+                        <CardContent className="p-6">
+                          <div className="text-center">
+                            <Code2 className="w-16 h-16 text-primary mx-auto mb-4" />
+                            <h4 className="text-xl font-semibold mb-2">Interactive Coding Environment</h4>
+                            <p className="text-muted-foreground mb-6">
+                              Practice with real coding problems that reinforce the concepts you've learned in this tutorial.
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                              <div className="text-center p-4 bg-muted/50 rounded-lg">
+                                <span className="text-2xl font-bold text-green-600">2</span>
+                                <p className="text-sm text-muted-foreground">Easy Problems</p>
+                              </div>
+                              <div className="text-center p-4 bg-muted/50 rounded-lg">
+                                <span className="text-2xl font-bold text-yellow-600">1</span>
+                                <p className="text-sm text-muted-foreground">Medium Problems</p>
+                              </div>
+                              <div className="text-center p-4 bg-muted/50 rounded-lg">
+                                <span className="text-2xl font-bold text-red-600">1</span>
+                                <p className="text-sm text-muted-foreground">Hard Problems</p>
+                              </div>
+                            </div>
+                            <Button 
+                              size="lg" 
+                              onClick={() => setShowProblemPractice(true)}
+                              className="bg-primary hover:bg-primary/90"
+                            >
+                              <Code2 className="w-5 h-5 mr-2" />
+                              Start Coding Practice
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
                   </TabsContent>
                   <TabsContent value="resources" className="mt-4">
                     <div className="space-y-3">
