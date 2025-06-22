@@ -28,6 +28,7 @@ import SeekerDashboardPage from './pages/SeekerDashboardPage';
 import AspirantPanelPage from './pages/AspirantPanelPage';
 import HRPanelPage from './pages/HRPanelPage';
 import ExpertConnectPage from './pages/ExpertConnectPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
             <Route path="/aspirant-panel" element={<AspirantPanelPage />} />
             <Route path="/hr-panel" element={<HRPanelPage />} />
             <Route path="/expert-connect" element={<ExpertConnectPage />} />
+            <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
