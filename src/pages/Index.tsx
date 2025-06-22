@@ -7,6 +7,7 @@ import { Search, Play, Users, Clock, Star, BookOpen, Award, Zap, Briefcase, User
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import CourseCard from '@/components/CourseCard';
@@ -15,6 +16,7 @@ import Footer from '@/components/Footer';
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   // Auto-scrolling carousel for features
   const [featuresEmblaRef] = useEmblaCarousel(
@@ -124,7 +126,8 @@ const Index = () => {
       description: 'Find jobs that match your skills, apply easily, and prepare with our interview readiness tools.',
       image: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=500&h=300&fit=crop',
       bgGradient: 'from-blue-500 to-cyan-500',
-      delay: '0.2s'
+      delay: '0.2s',
+      route: '/aspirant-panel'
     },
     {
       icon: UserCheck,
@@ -132,7 +135,8 @@ const Index = () => {
       description: 'Post job openings, screen jobseekers, and streamline your recruitment process efficiently.',
       image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&h=300&fit=crop',
       bgGradient: 'from-purple-500 to-pink-500',
-      delay: '0.4s'
+      delay: '0.4s',
+      route: '/hr-panel'
     },
     {
       icon: MessageCircle,
@@ -140,7 +144,8 @@ const Index = () => {
       description: 'Connect with industry experts for career guidance, resume reviews, and mentorship.',
       image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=300&fit=crop',
       bgGradient: 'from-green-500 to-teal-500',
-      delay: '0.6s'
+      delay: '0.6s',
+      route: '/expert-connect'
     }
   ];
 
@@ -202,6 +207,10 @@ const Index = () => {
     course.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleExplorePanel = (route: string) => {
+    navigate(route);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 relative overflow-hidden">
       {/* Animated background particles */}
@@ -257,7 +266,10 @@ const Index = () => {
                     {panel.description}
                   </p>
                   <div className="mt-6 text-center">
-                    <Button className={`bg-gradient-to-r ${panel.bgGradient} hover:from-primary/90 hover:to-secondary/90 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 hover-lift`}>
+                    <Button 
+                      onClick={() => handleExplorePanel(panel.route)}
+                      className={`bg-gradient-to-r ${panel.bgGradient} hover:from-primary/90 hover:to-secondary/90 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 hover-lift`}
+                    >
                       Explore Now
                     </Button>
                   </div>
