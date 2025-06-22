@@ -1,6 +1,7 @@
 
 import DashboardWrapper from '@/components/DashboardWrapper';
 import AdminSidebar from '@/components/admin/AdminSidebar';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { useSearchParams } from 'react-router-dom';
 import UserManagement from '@/components/admin/UserManagement';
 import CourseManagement from '@/components/admin/CourseManagement';
@@ -34,6 +35,10 @@ const AdminDashboardPage = () => {
 
   return (
     <DashboardWrapper title="Admin Dashboard">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <ThemeToggle />
+      </div>
       <div className="flex gap-6 h-full">
         <AdminSidebar activeTab={activeTab} />
         <div className="flex-1 space-y-6">
