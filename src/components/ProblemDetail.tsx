@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { toast } from 'sonner';
 import { 
   ArrowLeft, 
   Play, 
@@ -26,7 +27,11 @@ import {
   ThumbsUp,
   ThumbsDown,
   Share2,
-  Copy
+  Copy,
+  MoreVertical,
+  FileText,
+  Trophy,
+  Users
 } from 'lucide-react';
 
 interface ProblemDetailProps {
@@ -42,6 +47,9 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ problemId }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState('description');
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false);
+  const [isStarred, setIsStarred] = useState(false);
 
   // Mock problem data
   const problemData = {
@@ -50,8 +58,11 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ problemId }) => {
       title: "Two Sum",
       difficulty: "Easy",
       category: "Array",
+      topics: ["Array", "Hash Table"],
+      companies: ["Amazon", "Google", "Facebook"],
       likes: 1250,
       dislikes: 85,
+      solved: true,
       description: `Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
 
 You may assume that each input would have exactly one solution, and you may not use the same element twice.
@@ -67,6 +78,11 @@ You can return the answer in any order.`,
           input: "nums = [3,2,4], target = 6",
           output: "[1,2]",
           explanation: "Because nums[1] + nums[2] == 6, we return [1, 2]."
+        },
+        {
+          input: "nums = [3,3], target = 6",
+          output: "[0,1]",
+          explanation: "Because nums[0] + nums[1] == 6, we return [0, 1]."
         }
       ],
       constraints: [
@@ -105,8 +121,11 @@ A better approach is to use a hash map to store the numbers we've seen and their
       title: "Isomorphic Strings",
       difficulty: "Easy", 
       category: "String",
+      topics: ["Hash Table", "String"],
+      companies: ["LinkedIn", "Google"],
       likes: 892,
       dislikes: 156,
+      solved: false,
       description: `Given two strings s and t, determine if they are isomorphic.
 
 Two strings s and t are isomorphic if the characters in s can be replaced to get t.
@@ -159,31 +178,33 @@ Use two hash maps:
   ];
 
   const problem = problemData[parseInt(problemId) as keyof typeof problemData] || problemData[1];
+  const problemIds = Object.keys(problemData).map(Number).sort((a, b) => a - b);
+  const currentIndex = problemIds.indexOf(problem.id);
 
   const starterCodes = {
     java: `class Solution {
-    public boolean isIsomorphic(String s, String t) {
+    public int[] twoSum(int[] nums, int target) {
         
     }
 }`,
     python: `class Solution:
-    def isIsomorphic(self, s: str, t: str) -> bool:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
         `,
     cpp: `class Solution {
 public:
-    bool isIsomorphic(string s, string t) {
+    vector<int> twoSum(vector<int>& nums, int target) {
         
     }
 };`,
     javascript: `/**
- * @param {string} s
- * @param {string} t
- * @return {boolean}
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
  */
-var isIsomorphic = function(s, t) {
+var twoSum = function(nums, target) {
     
 };`,
-    typescript: `function isIsomorphic(s: string, t: string): boolean {
+    typescript: `function twoSum(nums: number[], target: number): number[] {
     
 }`
   };
@@ -196,11 +217,12 @@ var isIsomorphic = function(s, t) {
     setIsRunning(true);
     setTimeout(() => {
       setTestResults([
-        { input: 's = "egg", t = "add"', expected: 'true', actual: 'true', passed: true },
-        { input: 's = "foo", t = "bar"', expected: 'false', actual: 'false', passed: true },
-        { input: 's = "paper", t = "title"', expected: 'true', actual: 'true', passed: true }
+        { input: 'nums = [2,7,11,15], target = 9', expected: '[0,1]', actual: '[0,1]', passed: true },
+        { input: 'nums = [3,2,4], target = 6', expected: '[1,2]', actual: '[1,2]', passed: true },
+        { input: 'nums = [3,3], target = 6', expected: '[0,1]', actual: '[0,1]', passed: true }
       ]);
       setIsRunning(false);
+      toast.success('Code executed successfully!');
     }, 2000);
   };
 
@@ -208,7 +230,53 @@ var isIsomorphic = function(s, t) {
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
+      toast.success('Solution submitted successfully!');
     }, 3000);
+  };
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      const prevId = problemIds[currentIndex - 1];
+      navigate(`/problem/${prevId}`);
+    } else {
+      toast.error('This is the first problem');
+    }
+  };
+
+  const handleNext = () => {
+    if (currentIndex < problemIds.length - 1) {
+      const nextId = problemIds[currentIndex + 1];
+      navigate(`/problem/${nextId}`);
+    } else {
+      toast.error('This is the last problem');
+    }
+  };
+
+  const handleLike = () => {
+    if (isDisliked) setIsDisliked(false);
+    setIsLiked(!isLiked);
+    toast.success(isLiked ? 'Like removed' : 'Problem liked!');
+  };
+
+  const handleDislike = () => {
+    if (isLiked) setIsLiked(false);
+    setIsDisliked(!isDisliked);
+    toast.success(isDisliked ? 'Dislike removed' : 'Feedback recorded');
+  };
+
+  const handleStar = () => {
+    setIsStarred(!isStarred);
+    toast.success(isStarred ? 'Removed from favorites' : 'Added to favorites!');
+  };
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success('Problem link copied to clipboard!');
+  };
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(code);
+    toast.success('Code copied to clipboard!');
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -239,11 +307,23 @@ var isIsomorphic = function(s, t) {
               <div className="h-6 w-px bg-border" />
               
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="hover:bg-muted"
+                  onClick={handlePrevious}
+                  disabled={currentIndex === 0}
+                >
                   <ChevronLeft className="w-4 h-4" />
                   <span className="ml-1">Prev</span>
                 </Button>
-                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="hover:bg-muted"
+                  onClick={handleNext}
+                  disabled={currentIndex === problemIds.length - 1}
+                >
                   <span className="mr-1">Next</span>
                   <ChevronRight className="w-4 h-4" />
                 </Button>
@@ -252,18 +332,33 @@ var isIsomorphic = function(s, t) {
 
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className={`hover:bg-muted ${isLiked ? 'text-green-600' : ''}`}
+                  onClick={handleLike}
+                >
                   <ThumbsUp className="w-4 h-4" />
-                  <span className="ml-1">{problem.likes}</span>
+                  <span className="ml-1">{problem.likes + (isLiked ? 1 : 0)}</span>
                 </Button>
-                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className={`hover:bg-muted ${isDisliked ? 'text-red-600' : ''}`}
+                  onClick={handleDislike}
+                >
                   <ThumbsDown className="w-4 h-4" />
-                  <span className="ml-1">{problem.dislikes}</span>
+                  <span className="ml-1">{problem.dislikes + (isDisliked ? 1 : 0)}</span>
                 </Button>
-                <Button variant="ghost" size="sm" className="hover:bg-muted">
-                  <Star className="w-4 h-4" />
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className={`hover:bg-muted ${isStarred ? 'text-yellow-500' : ''}`}
+                  onClick={handleStar}
+                >
+                  <Star className={`w-4 h-4 ${isStarred ? 'fill-current' : ''}`} />
                 </Button>
-                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                <Button variant="ghost" size="sm" className="hover:bg-muted" onClick={handleShare}>
                   <Share2 className="w-4 h-4" />
                 </Button>
               </div>
@@ -300,28 +395,48 @@ var isIsomorphic = function(s, t) {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <h1 className="text-2xl font-bold">{problem.id}. {problem.title}</h1>
-                    <Badge className={getDifficultyColor(problem.difficulty)}>
-                      {problem.difficulty}
+                    {problem.solved && (
+                      <div className="flex items-center text-green-600 text-sm font-medium">
+                        <CheckCircle className="w-4 h-4 mr-1" />
+                        Solved
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2 mt-2">
+                  <Badge className={getDifficultyColor(problem.difficulty)}>
+                    {problem.difficulty}
+                  </Badge>
+                  {problem.topics.map(topic => (
+                    <Badge key={topic} variant="outline" className="text-xs">
+                      {topic}
                     </Badge>
-                    <Badge variant="outline">{problem.category}</Badge>
+                  ))}
+                  <div className="flex items-center space-x-1">
+                    <Trophy className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Hint</span>
                   </div>
                 </div>
               </CardHeader>
               
               <CardContent className="flex-1 p-0">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-                  <TabsList className="grid w-full grid-cols-3 mx-6">
+                  <TabsList className="grid w-full grid-cols-4 mx-6">
                     <TabsTrigger value="description" className="flex items-center space-x-2">
-                      <BookOpen className="w-4 h-4" />
+                      <FileText className="w-4 h-4" />
                       <span>Description</span>
                     </TabsTrigger>
-                    <TabsTrigger value="solution" className="flex items-center space-x-2">
-                      <Lightbulb className="w-4 h-4" />
-                      <span>Solution</span>
+                    <TabsTrigger value="editorial" className="flex items-center space-x-2">
+                      <BookOpen className="w-4 h-4" />
+                      <span>Editorial</span>
                     </TabsTrigger>
-                    <TabsTrigger value="discussion" className="flex items-center space-x-2">
-                      <MessageSquare className="w-4 h-4" />
-                      <span>Discussion</span>
+                    <TabsTrigger value="solutions" className="flex items-center space-x-2">
+                      <Lightbulb className="w-4 h-4" />
+                      <span>Solutions</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="submissions" className="flex items-center space-x-2">
+                      <Users className="w-4 h-4" />
+                      <span>Submissions</span>
                     </TabsTrigger>
                   </TabsList>
                   
@@ -339,26 +454,26 @@ var isIsomorphic = function(s, t) {
                             <h3 className="font-semibold mb-3 text-lg">Examples</h3>
                             <div className="space-y-4">
                               {problem.examples.map((example, index) => (
-                                <div key={index} className="p-4 bg-muted/30 rounded-lg border">
+                                <div key={index} className="p-4 bg-muted/20 rounded-lg border">
                                   <p className="font-medium mb-3">Example {index + 1}:</p>
-                                  <div className="space-y-2 text-sm">
+                                  <div className="space-y-2 text-sm font-mono">
                                     <div className="grid gap-2">
                                       <div>
                                         <span className="font-medium text-foreground">Input: </span>
-                                        <code className="bg-muted px-2 py-1 rounded text-xs font-mono">
+                                        <code className="bg-muted px-2 py-1 rounded text-xs">
                                           {example.input}
                                         </code>
                                       </div>
                                       <div>
                                         <span className="font-medium text-foreground">Output: </span>
-                                        <code className="bg-muted px-2 py-1 rounded text-xs font-mono">
+                                        <code className="bg-muted px-2 py-1 rounded text-xs">
                                           {example.output}
                                         </code>
                                       </div>
                                       {example.explanation && (
                                         <div>
                                           <span className="font-medium text-foreground">Explanation: </span>
-                                          <span className="text-muted-foreground">{example.explanation}</span>
+                                          <span className="text-muted-foreground font-sans">{example.explanation}</span>
                                         </div>
                                       )}
                                     </div>
@@ -376,11 +491,24 @@ var isIsomorphic = function(s, t) {
                               ))}
                             </ul>
                           </div>
+
+                          {problem.companies && (
+                            <div>
+                              <h3 className="font-semibold mb-3 text-lg">Companies</h3>
+                              <div className="flex flex-wrap gap-2">
+                                {problem.companies.map((company, index) => (
+                                  <Badge key={index} variant="secondary" className="text-xs">
+                                    {company}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </ScrollArea>
                     </TabsContent>
                     
-                    <TabsContent value="solution" className="h-full mt-4">
+                    <TabsContent value="editorial" className="h-full mt-4">
                       <ScrollArea className="h-full">
                         <div className="space-y-4 pr-4">
                           <div className="p-6 bg-muted/30 rounded-lg border">
@@ -403,30 +531,24 @@ var isIsomorphic = function(s, t) {
                       </ScrollArea>
                     </TabsContent>
                     
-                    <TabsContent value="discussion" className="h-full mt-4">
+                    <TabsContent value="solutions" className="h-full mt-4">
                       <ScrollArea className="h-full">
                         <div className="space-y-4 pr-4">
-                          {problem.discussions.map((discussion) => (
-                            <div key={discussion.id} className="p-4 border rounded-lg bg-card">
-                              <div className="flex items-start justify-between mb-2">
-                                <div className="flex items-center space-x-2">
-                                  <span className="font-medium">{discussion.author}</span>
-                                  <span className="text-xs text-muted-foreground">{discussion.time}</span>
-                                </div>
-                              </div>
-                              <p className="text-sm text-muted-foreground mb-3">{discussion.content}</p>
-                              <div className="flex items-center space-x-4">
-                                <Button variant="ghost" size="sm" className="h-8">
-                                  <ThumbsUp className="w-3 h-3 mr-1" />
-                                  {discussion.likes}
-                                </Button>
-                                <Button variant="ghost" size="sm" className="h-8">
-                                  <MessageSquare className="w-3 h-3 mr-1" />
-                                  {discussion.replies} replies
-                                </Button>
-                              </div>
-                            </div>
-                          ))}
+                          <div className="text-center text-muted-foreground py-8">
+                            <Code className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                            <p>Community solutions will appear here</p>
+                          </div>
+                        </div>
+                      </ScrollArea>
+                    </TabsContent>
+
+                    <TabsContent value="submissions" className="h-full mt-4">
+                      <ScrollArea className="h-full">
+                        <div className="space-y-4 pr-4">
+                          <div className="text-center text-muted-foreground py-8">
+                            <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                            <p>Your submissions will appear here</p>
+                          </div>
                         </div>
                       </ScrollArea>
                     </TabsContent>
@@ -440,78 +562,99 @@ var isIsomorphic = function(s, t) {
           <div className="flex flex-col space-y-4">
             {/* Code Editor */}
             <Card className="flex-1 border-border">
-              <CardHeader className="pb-3">
+              <CardHeader className="pb-3 bg-gray-50 dark:bg-gray-900/50">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center space-x-2">
-                    <Code className="w-5 h-5" />
-                    <span>Code Editor</span>
+                  <CardTitle className="flex items-center space-x-2 text-sm">
+                    <Code className="w-4 h-4" />
+                    <span>Code</span>
+                    <Badge variant="outline" className="text-xs font-mono">
+                      {selectedLanguage}
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      Auto
+                    </Badge>
                   </CardTitle>
                   <div className="flex items-center space-x-2">
-                    <Button variant="ghost" size="sm" className="hover:bg-muted">
-                      <Copy className="w-4 h-4" />
+                    <Button variant="ghost" size="sm" className="hover:bg-muted h-8" onClick={handleCopyCode}>
+                      <Copy className="w-3 h-3" />
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={handleRunCode}
-                      disabled={isRunning}
-                      className="flex items-center space-x-2"
-                    >
-                      {isRunning ? (
-                        <Clock className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Play className="w-4 h-4" />
-                      )}
-                      <span>{isRunning ? 'Running...' : 'Run'}</span>
-                    </Button>
-                    <Button 
-                      onClick={handleSubmit}
-                      disabled={isSubmitting}
-                      className="flex items-center space-x-2 bg-green-600 hover:bg-green-700"
-                    >
-                      {isSubmitting ? (
-                        <Clock className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Send className="w-4 h-4" />
-                      )}
-                      <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
+                    <Button variant="ghost" size="sm" className="hover:bg-muted h-8">
+                      <MoreVertical className="w-3 h-3" />
                     </Button>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="flex-1 p-4">
-                <Textarea
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  className="font-mono text-sm h-full min-h-[350px] resize-none bg-muted/20 border-muted"
-                  placeholder="Write your code here..."
-                />
+              <CardContent className="flex-1 p-0">
+                <div className="relative h-full">
+                  <Textarea
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    className="font-mono text-sm h-full min-h-[350px] resize-none border-0 bg-gray-50 dark:bg-gray-900/50 rounded-none focus:ring-0 p-4"
+                    placeholder="Write your code here..."
+                    style={{ 
+                      lineHeight: '1.5',
+                      fontFamily: 'JetBrains Mono, Consolas, Monaco, monospace'
+                    }}
+                  />
+                  <div className="absolute bottom-2 right-2 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded">
+                    Ln 1, Col 1
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
-            {/* Test Cases Panel */}
+            {/* Test Cases and Console */}
             <Card className="border-border">
-              <CardContent className="p-4">
+              <CardContent className="p-0">
                 <Tabs defaultValue="testcase" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="testcase">Test Cases</TabsTrigger>
-                    <TabsTrigger value="result">Results</TabsTrigger>
-                  </TabsList>
+                  <div className="flex items-center justify-between px-4 py-3 border-b">
+                    <TabsList className="h-8">
+                      <TabsTrigger value="testcase" className="text-xs">Testcase</TabsTrigger>
+                      <TabsTrigger value="result" className="text-xs">Test Result</TabsTrigger>
+                    </TabsList>
+                    <div className="flex items-center space-x-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={handleRunCode}
+                        disabled={isRunning}
+                        className="flex items-center space-x-2 h-8"
+                      >
+                        {isRunning ? (
+                          <Clock className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <Play className="w-3 h-3" />
+                        )}
+                        <span>{isRunning ? 'Running...' : 'Run'}</span>
+                      </Button>
+                      <Button 
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
+                        className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 h-8"
+                      >
+                        {isSubmitting ? (
+                          <Clock className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <Send className="w-3 h-3" />
+                        )}
+                        <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
+                      </Button>
+                    </div>
+                  </div>
                   
-                  <TabsContent value="testcase" className="mt-4">
+                  <TabsContent value="testcase" className="p-4">
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium mb-2 block">Custom Input</label>
+                        <label className="text-sm font-medium mb-2 block">Case 1</label>
                         <Textarea
-                          value={customInput}
-                          onChange={(e) => setCustomInput(e.target.value)}
-                          placeholder='s = "egg"\nt = "add"'
-                          className="font-mono text-sm h-20 bg-muted/20 border-muted"
+                          value="nums = [2,7,11,15]\ntarget = 9"
+                          readOnly
+                          className="font-mono text-sm h-16 bg-muted/20 border-muted resize-none"
                         />
                       </div>
                       
                       <div className="flex space-x-2">
-                        <Button variant="outline" size="sm" className="flex-1">
+                        <Button variant="outline" size="sm" className="flex-1 bg-blue-50 border-blue-200 text-blue-700">
                           Case 1
                         </Button>
                         <Button variant="outline" size="sm" className="flex-1">
@@ -525,13 +668,13 @@ var isIsomorphic = function(s, t) {
                     </div>
                   </TabsContent>
                   
-                  <TabsContent value="result" className="mt-4">
+                  <TabsContent value="result" className="p-4">
                     {testResults.length > 0 ? (
                       <div className="space-y-3 max-h-48 overflow-y-auto">
                         {testResults.map((result, index) => (
                           <div key={index} className="p-3 border rounded-lg bg-muted/20">
                             <div className="flex items-center justify-between mb-2">
-                              <span className="text-sm font-medium">Test Case {index + 1}</span>
+                              <span className="text-sm font-medium">Case {index + 1}</span>
                               <div className="flex items-center space-x-2">
                                 {result.passed ? (
                                   <CheckCircle className="w-4 h-4 text-green-600" />
@@ -546,7 +689,7 @@ var isIsomorphic = function(s, t) {
                             <div className="text-xs space-y-1 font-mono">
                               <div><span className="font-medium">Input:</span> {result.input}</div>
                               <div><span className="font-medium">Expected:</span> {result.expected}</div>
-                              <div><span className="font-medium">Actual:</span> {result.actual}</div>
+                              <div><span className="font-medium">Output:</span> {result.actual}</div>
                             </div>
                           </div>
                         ))}
@@ -554,7 +697,7 @@ var isIsomorphic = function(s, t) {
                     ) : (
                       <div className="text-center text-muted-foreground py-8">
                         <Play className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                        <p>Run your code to see test results</p>
+                        <p>You must run your code first</p>
                       </div>
                     )}
                   </TabsContent>
