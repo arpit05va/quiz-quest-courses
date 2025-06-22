@@ -36,7 +36,7 @@ const Index = () => {
   const courses = [
     {
       id: 1,
-      title: 'Introduction to Web Development',
+      title: 'Web Development',
       description: 'Learn HTML, CSS, and JavaScript from scratch with hands-on projects.',
       duration: '12 weeks',
       students: 1250,
