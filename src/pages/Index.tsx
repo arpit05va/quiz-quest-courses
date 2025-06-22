@@ -1,10 +1,12 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Search, Play, Users, Clock, Star, BookOpen, Award, Zap, Briefcase, UserCheck, MessageCircle, TrendingUp, Shield, Target } from 'lucide-react';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import CourseCard from '@/components/CourseCard';
@@ -13,6 +15,18 @@ import Footer from '@/components/Footer';
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Auto-scrolling carousel for features
+  const [featuresEmblaRef] = useEmblaCarousel(
+    { loop: true, align: 'start' },
+    [Autoplay({ delay: 3000 })]
+  );
+
+  // Auto-scrolling carousel for testimonials
+  const [testimonialsEmblaRef] = useEmblaCarousel(
+    { loop: true, align: 'start' },
+    [Autoplay({ delay: 4000 })]
+  );
 
   const courses = [
     {
@@ -86,6 +100,20 @@ const Index = () => {
       content: 'The flexibility to learn at my own pace while working full-time was perfect. The course content is always up-to-date.',
       avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face',
       rating: 5
+    },
+    {
+      name: 'David Kumar',
+      role: 'Product Manager',
+      content: 'Excellent platform with real-world projects. The mentorship program helped me transition into tech successfully.',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face',
+      rating: 5
+    },
+    {
+      name: 'Lisa Thompson',
+      role: 'UX Designer',
+      content: 'The design courses are comprehensive and up-to-date with industry standards. Highly recommend!',
+      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=60&h=60&fit=crop&crop=face',
+      rating: 5
     }
   ];
 
@@ -156,6 +184,16 @@ const Index = () => {
       icon: Shield,
       title: 'Secure Platform',
       description: 'Safe and secure learning environment'
+    },
+    {
+      icon: Users,
+      title: 'Community Support',
+      description: 'Connect with fellow learners and instructors'
+    },
+    {
+      icon: Clock,
+      title: 'Flexible Learning',
+      description: 'Learn at your own pace, anytime, anywhere'
     }
   ];
 
@@ -230,7 +268,7 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Enhanced Why Choose Our Platform Section with Horizontal Scroll */}
+      {/* Enhanced Why Choose Our Platform Section with Auto-scrolling Carousel */}
       <section id="about" className="py-20 px-4 bg-background relative overflow-hidden">
         <div className="container mx-auto">
           <div className="text-center mb-16 animate-fade-in">
@@ -240,42 +278,33 @@ const Index = () => {
             </p>
           </div>
           
-          {/* Horizontal Scrolling Container */}
-          <div className="relative">
-            <div className="flex gap-6 overflow-x-auto pb-6 scroll-smooth" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(156, 163, 175, 0.5) transparent' }}>
-              {enhancedFeatures.map((feature, index) => (
-                <Card 
-                  key={index} 
-                  className="min-w-[300px] text-center border-none shadow-lg hover:shadow-xl transition-all duration-500 animate-fade-in hover-lift group relative overflow-hidden bg-card/90 backdrop-blur-sm flex-shrink-0" 
-                  style={{ animationDelay: `${index * 0.1 + 0.3}s` }}
-                >
-                  {/* Card shimmer effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="absolute inset-0 animate-shimmer"></div>
+          {/* Auto-scrolling Carousel */}
+          <div className="relative max-w-6xl mx-auto">
+            <div className="overflow-hidden" ref={featuresEmblaRef}>
+              <div className="flex">
+                {enhancedFeatures.map((feature, index) => (
+                  <div key={index} className="flex-[0_0_300px] min-w-0 pl-4">
+                    <Card className="h-full text-center border-none shadow-lg hover:shadow-xl transition-all duration-500 animate-fade-in hover-lift group relative overflow-hidden bg-card/90 backdrop-blur-sm">
+                      {/* Card shimmer effect */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div className="absolute inset-0 animate-shimmer"></div>
+                      </div>
+                      <CardHeader className="relative z-10">
+                        <div className="mx-auto w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mb-4 animate-gradient group-hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
+                          <feature.icon className="w-8 h-8 text-white group-hover:animate-bounce" />
+                        </div>
+                        <CardTitle className="text-xl font-semibold group-hover:text-primary-600 transition-colors duration-300 min-h-[3rem] flex items-center justify-center">
+                          {feature.title}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="relative z-10">
+                        <p className="text-muted-foreground">{feature.description}</p>
+                      </CardContent>
+                    </Card>
                   </div>
-                  <CardHeader className="relative z-10">
-                    <div className="mx-auto w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mb-4 animate-gradient group-hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
-                      <feature.icon className="w-8 h-8 text-white group-hover:animate-bounce" />
-                    </div>
-                    <CardTitle className="text-xl font-semibold group-hover:text-primary-600 transition-colors duration-300 min-h-[3rem] flex items-center justify-center">
-                      {feature.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="relative z-10">
-                    <p className="text-muted-foreground">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
+                ))}
+              </div>
             </div>
-            
-            {/* Gradient fade edges for scroll indication */}
-            <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-background to-transparent pointer-events-none z-10"></div>
-            <div className="absolute top-0 right-0 w-20 h-full bg-gradient-to-l from-background to-transparent pointer-events-none z-10"></div>
-          </div>
-          
-          {/* Scroll indicator */}
-          <div className="text-center mt-8 animate-fade-in" style={{ animationDelay: '1s' }}>
-            <p className="text-muted-foreground text-sm">← Scroll to explore more features →</p>
           </div>
         </div>
       </section>
@@ -312,7 +341,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials Section with parallax effect */}
+      {/* Testimonials Section with Auto-scrolling Carousel */}
       <section id="testimonials" className="py-20 px-4 bg-background relative">
         <div className="container mx-auto">
           <div className="text-center mb-16 animate-fade-in">
@@ -321,12 +350,20 @@ const Index = () => {
               Join thousands of satisfied learners who achieved their goals
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="hover-lift">
-                <TestimonialCard testimonial={testimonial} index={index} />
+          
+          {/* Auto-scrolling Testimonials Carousel */}
+          <div className="relative max-w-6xl mx-auto">
+            <div className="overflow-hidden" ref={testimonialsEmblaRef}>
+              <div className="flex">
+                {testimonials.map((testimonial, index) => (
+                  <div key={index} className="flex-[0_0_350px] min-w-0 pl-4">
+                    <div className="hover-lift h-full">
+                      <TestimonialCard testimonial={testimonial} index={index} />
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
