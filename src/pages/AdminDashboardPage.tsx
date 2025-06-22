@@ -4,6 +4,7 @@ import AdminSidebar from '@/components/admin/AdminSidebar';
 import { useSearchParams } from 'react-router-dom';
 import UserManagement from '@/components/admin/UserManagement';
 import CourseManagement from '@/components/admin/CourseManagement';
+import ExpertManagement from '@/components/admin/ExpertManagement';
 import HRVerification from '@/components/admin/HRVerification';
 import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 import SystemSettings from '@/components/admin/SystemSettings';
@@ -20,6 +21,8 @@ const AdminDashboardPage = () => {
         return <UserManagement />;
       case 'courses':
         return <CourseManagement />;
+      case 'experts':
+        return <ExpertManagement />;
       case 'hr-verification':
         return <HRVerification />;
       case 'settings':

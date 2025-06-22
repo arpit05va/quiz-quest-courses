@@ -11,7 +11,8 @@ import {
   Shield,
   TrendingUp,
   FileText,
-  Bell
+  Bell,
+  GraduationCap
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -39,6 +40,12 @@ const AdminSidebar = ({ activeTab }: AdminSidebarProps) => {
       label: 'Course Management',
       icon: BookOpen,
       description: 'Courses & enrollments'
+    },
+    {
+      id: 'experts',
+      label: 'Expert Management',
+      icon: GraduationCap,
+      description: 'Expert verification & performance'
     },
     {
       id: 'hr-verification',
@@ -110,6 +117,10 @@ const AdminSidebar = ({ activeTab }: AdminSidebarProps) => {
           <div className="flex justify-between">
             <span>Total Courses</span>
             <span className="font-medium">128</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Active Experts</span>
+            <span className="font-medium">95</span>
           </div>
           <div className="flex justify-between">
             <span>Pending HRs</span>
