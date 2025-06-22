@@ -4,9 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Search, Play, Users, Clock, Star, BookOpen, Award, Zap, Briefcase, UserCheck, MessageCircle, TrendingUp, Shield, Target } from 'lucide-react';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
@@ -16,19 +13,25 @@ import Footer from '@/components/Footer';
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentFeatureIndex, setCurrentFeatureIndex] = useState(0);
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
   const navigate = useNavigate();
 
-  // Auto-scrolling carousel for features
-  const [featuresEmblaRef] = useEmblaCarousel(
-    { loop: true, align: 'start' },
-    [Autoplay({ delay: 3000 })]
-  );
+  // Auto-scroll features every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentFeatureIndex((prev) => (prev + 1) % enhancedFeatures.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
-  // Auto-scrolling carousel for testimonials
-  const [testimonialsEmblaRef] = useEmblaCarousel(
-    { loop: true, align: 'start' },
-    [Autoplay({ delay: 4000 })]
-  );
+  // Auto-scroll testimonials every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   const courses = [
     {
@@ -211,6 +214,22 @@ const Index = () => {
     navigate(route);
   };
 
+  const getVisibleFeatures = () => {
+    const visible = [];
+    for (let i = 0; i < 3; i++) {
+      visible.push(enhancedFeatures[(currentFeatureIndex + i) % enhancedFeatures.length]);
+    }
+    return visible;
+  };
+
+  const getVisibleTestimonials = () => {
+    const visible = [];
+    for (let i = 0; i < 3; i++) {
+      visible.push(testimonials[(currentTestimonialIndex + i) % testimonials.length]);
+    }
+    return visible;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 relative overflow-hidden">
       {/* Animated background particles */}
@@ -280,7 +299,7 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Enhanced Why Choose Our Platform Section with Auto-scrolling Carousel */}
+      {/* Enhanced Why Choose Our Platform Section with Auto-scrolling */}
       <section id="about" className="py-20 px-4 bg-background relative overflow-hidden">
         <div className="container mx-auto">
           <div className="text-center mb-16 animate-fade-in">
@@ -290,32 +309,28 @@ const Index = () => {
             </p>
           </div>
           
-          {/* Auto-scrolling Carousel */}
+          {/* Auto-scrolling Feature Cards */}
           <div className="relative max-w-6xl mx-auto">
-            <div className="overflow-hidden" ref={featuresEmblaRef}>
-              <div className="flex">
-                {enhancedFeatures.map((feature, index) => (
-                  <div key={index} className="flex-[0_0_300px] min-w-0 pl-4">
-                    <Card className="h-full text-center border-none shadow-lg hover:shadow-xl transition-all duration-500 animate-fade-in hover-lift group relative overflow-hidden bg-card/90 backdrop-blur-sm">
-                      {/* Card shimmer effect */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="absolute inset-0 animate-shimmer"></div>
-                      </div>
-                      <CardHeader className="relative z-10">
-                        <div className="mx-auto w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mb-4 animate-gradient group-hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
-                          <feature.icon className="w-8 h-8 text-white group-hover:animate-bounce" />
-                        </div>
-                        <CardTitle className="text-xl font-semibold group-hover:text-primary-600 transition-colors duration-300 min-h-[3rem] flex items-center justify-center">
-                          {feature.title}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="relative z-10">
-                        <p className="text-muted-foreground">{feature.description}</p>
-                      </CardContent>
-                    </Card>
+            <div className="grid md:grid-cols-3 gap-8">
+              {getVisibleFeatures().map((feature, index) => (
+                <Card key={`${feature.title}-${index}`} className="text-center border-none shadow-lg hover:shadow-xl transition-all duration-500 animate-fade-in hover-lift group relative overflow-hidden bg-card/90 backdrop-blur-sm">
+                  {/* Card shimmer effect */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute inset-0 animate-shimmer"></div>
                   </div>
-                ))}
-              </div>
+                  <CardHeader className="relative z-10">
+                    <div className="mx-auto w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mb-4 animate-gradient group-hover:animate-pulse-glow transition-all duration-300 group-hover:scale-110">
+                      <feature.icon className="w-8 h-8 text-white group-hover:animate-bounce" />
+                    </div>
+                    <CardTitle className="text-xl font-semibold group-hover:text-primary-600 transition-colors duration-300 min-h-[3rem] flex items-center justify-center">
+                      {feature.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="relative z-10">
+                    <p className="text-muted-foreground">{feature.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         </div>
@@ -353,7 +368,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials Section with Auto-scrolling Carousel */}
+      {/* Testimonials Section with Auto-scrolling */}
       <section id="testimonials" className="py-20 px-4 bg-background relative">
         <div className="container mx-auto">
           <div className="text-center mb-16 animate-fade-in">
@@ -363,18 +378,14 @@ const Index = () => {
             </p>
           </div>
           
-          {/* Auto-scrolling Testimonials Carousel */}
+          {/* Auto-scrolling Testimonials */}
           <div className="relative max-w-6xl mx-auto">
-            <div className="overflow-hidden" ref={testimonialsEmblaRef}>
-              <div className="flex">
-                {testimonials.map((testimonial, index) => (
-                  <div key={index} className="flex-[0_0_350px] min-w-0 pl-4">
-                    <div className="hover-lift h-full">
-                      <TestimonialCard testimonial={testimonial} index={index} />
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {getVisibleTestimonials().map((testimonial, index) => (
+                <div key={`${testimonial.name}-${index}`} className="hover-lift h-full">
+                  <TestimonialCard testimonial={testimonial} index={index} />
+                </div>
+              ))}
             </div>
           </div>
         </div>
