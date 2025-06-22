@@ -8,6 +8,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 import { 
   ArrowLeft, 
@@ -31,7 +34,11 @@ import {
   MoreVertical,
   FileText,
   Trophy,
-  Users
+  Users,
+  RotateCcw,
+  Plus,
+  Type,
+  Palette
 } from 'lucide-react';
 
 interface ProblemDetailProps {
@@ -50,6 +57,10 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ problemId }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
   const [isStarred, setIsStarred] = useState(false);
+  const [activeTestCase, setActiveTestCase] = useState(0);
+  const [customTestCases, setCustomTestCases] = useState<string[]>([]);
+  const [fontSize, setFontSize] = useState(14);
+  const [editorTheme, setEditorTheme] = useState('light');
 
   // Mock problem data
   const problemData = {
@@ -90,6 +101,11 @@ You can return the answer in any order.`,
         "-10^9 <= nums[i] <= 10^9",
         "-10^9 <= target <= 10^9",
         "Only one valid answer exists."
+      ],
+      testCases: [
+        "nums = [2,7,11,15]\ntarget = 9",
+        "nums = [3,2,4]\ntarget = 6",
+        "nums = [3,3]\ntarget = 6"
       ],
       solution: `The brute force approach would be to check every pair of numbers, but that would be O(n²).
 
@@ -147,6 +163,10 @@ All occurrences of a character must be replaced with another character while pre
         "1 <= s.length <= 5 * 10^4",
         "t.length == s.length",
         "s and t consist of any valid ascii character."
+      ],
+      testCases: [
+        's = "egg"\nt = "add"',
+        's = "foo"\nt = "bar"'
       ],
       solution: `We need to track the mapping between characters in both directions.
 
@@ -279,14 +299,26 @@ var twoSum = function(nums, target) {
     toast.success('Code copied to clipboard!');
   };
 
+  const handleResetCode = () => {
+    setCode(starterCodes[selectedLanguage as keyof typeof starterCodes] || '');
+    toast.success('Code reset to starter template');
+  };
+
+  const handleAddTestCase = () => {
+    setCustomTestCases([...customTestCases, '']);
+    toast.success('New test case added');
+  };
+
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'Easy': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';  
-      case 'Hard': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
+      case 'Easy': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300';
+      case 'Medium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300';  
+      case 'Hard': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300';
     }
   };
+
+  const allTestCases = [...problem.testCases, ...customTestCases];
 
   return (
     <div className="min-h-screen bg-background">
@@ -378,9 +410,62 @@ var twoSum = function(nums, target) {
                 </SelectContent>
               </Select>
 
-              <Button variant="ghost" size="sm" className="hover:bg-muted">
-                <Settings className="w-4 h-4" />
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="sm" className="hover:bg-muted">
+                    <Settings className="w-4 h-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Editor Settings</DialogTitle>
+                    <DialogDescription>
+                      Customize your coding environment
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="fontSize" className="text-right flex items-center">
+                        <Type className="w-4 h-4 mr-2" />
+                        Font Size
+                      </Label>
+                      <div className="col-span-3">
+                        <Slider
+                          id="fontSize"
+                          min={10}
+                          max={24}
+                          step={1}
+                          value={[fontSize]}
+                          onValueChange={(value) => setFontSize(value[0])}
+                          className="w-full"
+                        />
+                        <span className="text-sm text-muted-foreground">{fontSize}px</span>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="theme" className="text-right flex items-center">
+                        <Palette className="w-4 h-4 mr-2" />
+                        Theme
+                      </Label>
+                      <div className="col-span-3">
+                        <Select value={editorTheme} onValueChange={setEditorTheme}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="monokai">Monokai</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Save preferences</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
@@ -390,8 +475,8 @@ var twoSum = function(nums, target) {
         <div className="grid lg:grid-cols-2 gap-6 h-[calc(100vh-8rem)]">
           {/* Left Panel - Problem Content */}
           <div className="flex flex-col">
-            <Card className="flex-1 border-border">
-              <CardHeader className="pb-4">
+            <Card className="flex-1 border-border overflow-hidden">
+              <CardHeader className="pb-4 border-b">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <h1 className="text-2xl font-bold">{problem.id}. {problem.title}</h1>
@@ -419,9 +504,9 @@ var twoSum = function(nums, target) {
                 </div>
               </CardHeader>
               
-              <CardContent className="flex-1 p-0">
+              <CardContent className="flex-1 p-0 overflow-hidden">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-                  <TabsList className="grid w-full grid-cols-4 mx-6">
+                  <TabsList className="grid w-full grid-cols-4 mx-6 mt-4">
                     <TabsTrigger value="description" className="flex items-center space-x-2">
                       <FileText className="w-4 h-4" />
                       <span>Description</span>
@@ -440,7 +525,7 @@ var twoSum = function(nums, target) {
                     </TabsTrigger>
                   </TabsList>
                   
-                  <div className="flex-1 px-6 pb-6">
+                  <div className="flex-1 px-6 pb-6 overflow-hidden">
                     <TabsContent value="description" className="h-full mt-4">
                       <ScrollArea className="h-full">
                         <div className="space-y-6 pr-4">
@@ -561,8 +646,8 @@ var twoSum = function(nums, target) {
           {/* Right Panel - Code Editor and Testing */}
           <div className="flex flex-col space-y-4">
             {/* Code Editor */}
-            <Card className="flex-1 border-border">
-              <CardHeader className="pb-3 bg-gray-50 dark:bg-gray-900/50">
+            <Card className="flex-1 border-border overflow-hidden">
+              <CardHeader className="pb-3 bg-muted/30 border-b">
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center space-x-2 text-sm">
                     <Code className="w-4 h-4" />
@@ -575,6 +660,9 @@ var twoSum = function(nums, target) {
                     </Badge>
                   </CardTitle>
                   <div className="flex items-center space-x-2">
+                    <Button variant="ghost" size="sm" className="hover:bg-muted h-8" onClick={handleResetCode}>
+                      <RotateCcw className="w-3 h-3" />
+                    </Button>
                     <Button variant="ghost" size="sm" className="hover:bg-muted h-8" onClick={handleCopyCode}>
                       <Copy className="w-3 h-3" />
                     </Button>
@@ -584,20 +672,27 @@ var twoSum = function(nums, target) {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="flex-1 p-0">
+              <CardContent className="flex-1 p-0 overflow-hidden">
                 <div className="relative h-full">
                   <Textarea
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
-                    className="font-mono text-sm h-full min-h-[350px] resize-none border-0 bg-gray-50 dark:bg-gray-900/50 rounded-none focus:ring-0 p-4"
+                    className={`font-mono h-full min-h-[400px] resize-none border-0 rounded-none focus:ring-0 p-4 ${
+                      editorTheme === 'dark' 
+                        ? 'bg-gray-900 text-gray-100' 
+                        : editorTheme === 'monokai'
+                        ? 'bg-gray-800 text-green-400'
+                        : 'bg-gray-50 text-gray-900'
+                    }`}
                     placeholder="Write your code here..."
                     style={{ 
+                      fontSize: `${fontSize}px`,
                       lineHeight: '1.5',
-                      fontFamily: 'JetBrains Mono, Consolas, Monaco, monospace'
+                      fontFamily: 'JetBrains Mono, Consolas, Monaco, "Courier New", monospace'
                     }}
                   />
                   <div className="absolute bottom-2 right-2 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded">
-                    Ln 1, Col 1
+                    Ln {code.split('\n').length}, Col {code.split('\n').pop()?.length || 0}
                   </div>
                 </div>
               </CardContent>
@@ -607,7 +702,7 @@ var twoSum = function(nums, target) {
             <Card className="border-border">
               <CardContent className="p-0">
                 <Tabs defaultValue="testcase" className="w-full">
-                  <div className="flex items-center justify-between px-4 py-3 border-b">
+                  <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/20">
                     <TabsList className="h-8">
                       <TabsTrigger value="testcase" className="text-xs">Testcase</TabsTrigger>
                       <TabsTrigger value="result" className="text-xs">Test Result</TabsTrigger>
@@ -645,25 +740,56 @@ var twoSum = function(nums, target) {
                   <TabsContent value="testcase" className="p-4">
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium mb-2 block">Case 1</label>
+                        <label className="text-sm font-medium mb-2 block">
+                          Case {activeTestCase + 1}
+                        </label>
                         <Textarea
-                          value="nums = [2,7,11,15]\ntarget = 9"
-                          readOnly
-                          className="font-mono text-sm h-16 bg-muted/20 border-muted resize-none"
+                          value={allTestCases[activeTestCase] || ''}
+                          onChange={(e) => {
+                            if (activeTestCase >= problem.testCases.length) {
+                              const customIndex = activeTestCase - problem.testCases.length;
+                              const newCustomCases = [...customTestCases];
+                              newCustomCases[customIndex] = e.target.value;
+                              setCustomTestCases(newCustomCases);
+                            }
+                          }}
+                          readOnly={activeTestCase < problem.testCases.length}
+                          className={`font-mono text-sm h-20 resize-none ${
+                            activeTestCase < problem.testCases.length 
+                              ? 'bg-muted/20 border-muted' 
+                              : 'bg-background border-input'
+                          }`}
+                          placeholder={activeTestCase >= problem.testCases.length ? "Enter your custom test case..." : ""}
                         />
                       </div>
                       
-                      <div className="flex space-x-2">
-                        <Button variant="outline" size="sm" className="flex-1 bg-blue-50 border-blue-200 text-blue-700">
-                          Case 1
+                      <div className="flex space-x-2 overflow-x-auto pb-2">
+                        {allTestCases.map((_, index) => (
+                          <Button 
+                            key={index}
+                            variant={activeTestCase === index ? "default" : "outline"} 
+                            size="sm" 
+                            className={`flex-shrink-0 ${
+                              activeTestCase === index 
+                                ? 'bg-blue-600 text-white' 
+                                : 'hover:bg-muted'
+                            }`}
+                            onClick={() => setActiveTestCase(index)}
+                          >
+                            Case {index + 1}
+                            {index >= problem.testCases.length && (
+                              <span className="ml-1 text-xs opacity-70">(Custom)</span>
+                            )}
+                          </Button>
+                        ))}
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="flex-shrink-0"
+                          onClick={handleAddTestCase}
+                        >
+                          <Plus className="w-3 h-3" />
                         </Button>
-                        <Button variant="outline" size="sm" className="flex-1">
-                          Case 2
-                        </Button>
-                        <Button variant="outline" size="sm" className="flex-1">
-                          Case 3
-                        </Button>
-                        <Button variant="outline" size="sm">+</Button>
                       </div>
                     </div>
                   </TabsContent>
