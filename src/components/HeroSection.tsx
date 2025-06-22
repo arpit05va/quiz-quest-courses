@@ -1,8 +1,10 @@
 
 import { Button } from '@/components/ui/button';
 import { Users, Star, BookOpen } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   return (
     <section className="relative py-20 px-4 overflow-hidden bg-gradient-to-br from-background via-background/90 to-muted/30">
       {/* Animated background elements */}
@@ -48,6 +50,7 @@ const HeroSection = () => {
               <Button 
                 size="lg" 
                 className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-bounce-in hover-lift group relative overflow-hidden"
+                 onClick={() => navigate("/courses")}
                 style={{ animationDelay: '0.7s' }}
               >
                 <span className="relative z-10">Start Learning Today</span>
@@ -56,6 +59,7 @@ const HeroSection = () => {
               <Button 
                 variant="outline" 
                 size="lg"
+                onClick={() => navigate("/courses")}
                 className="border-2 border-border hover:border-primary bg-background/80 backdrop-blur-sm hover:bg-primary hover:text-primary-foreground px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300 animate-bounce-in hover-lift group"
                 style={{ animationDelay: '0.8s' }}
               >
