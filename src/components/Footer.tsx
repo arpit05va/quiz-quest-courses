@@ -1,5 +1,6 @@
 
 import { BookOpen, Mail, Phone, MapPin, Code, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import AnimatedSocialLogos from './AnimatedSocialLogos';
 
 const Footer = () => {
@@ -84,12 +85,21 @@ const Footer = () => {
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-                    >
-                      {link.name}
-                    </a>
+                    {link.href.startsWith('#') ? (
+                      <a
+                        href={link.href}
+                        className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                      >
+                        {link.name}
+                      </a>
+                    ) : (
+                      <Link
+                        to={link.href}
+                        className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                      >
+                        {link.name}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
