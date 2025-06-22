@@ -240,14 +240,13 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 relative overflow-hidden">
+    <div className="min-h-screen bg-background">
       {/* Animated background particles */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary-500/20 rounded-full animate-pulse"></div>
         <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-secondary-500/20 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
         <div className="absolute top-1/2 left-3/4 w-3 h-3 bg-primary-500/10 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
-      
       <Header />
       <div id="home">
         <HeroSection />
