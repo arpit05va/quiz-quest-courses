@@ -18,6 +18,8 @@ import ArticleDetail from './pages/ArticleDetail';
 import QuizzesPage from './pages/QuizzesPage';
 import QuizDetailPage from './pages/QuizDetailPage';
 import QuizSummaryPage from './pages/QuizSummaryPage';
+import ProblemsPage from './pages/ProblemsPage';
+import ProblemDetailPage from './pages/ProblemDetailPage';
 import StudentPanelPage from './pages/StudentPanelPage';
 import RecruiterPanelPage from './pages/RecruiterPanelPage';
 import UserProfilePage from './pages/UserProfilePage';
@@ -51,6 +53,8 @@ function App() {
             <Route path="/quiz/:id" element={<QuizDetailPage />} />
             <Route path="/quiz/:id/summary" element={<QuizSummaryPage />} />
             <Route path="/quiz/:id/retake" element={<QuizDetailPage />} />
+            <Route path="/problems" element={<ProblemsPage />} />
+            <Route path="/problem/:id" element={<ProblemDetailPage />} />
             <Route path="/dashboard/student" element={<StudentPanelPage />} />
             <Route path="/dashboard/recruiter" element={<RecruiterPanelPage />} />
             <Route path="/dashboard/profile" element={<UserProfilePage />} />
