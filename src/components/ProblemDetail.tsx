@@ -10,7 +10,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   ArrowLeft, 
-  ArrowRight, 
   Play, 
   Send, 
   Settings, 
@@ -20,7 +19,14 @@ import {
   XCircle,
   Clock,
   Star,
-  Code
+  Code,
+  BookOpen,
+  Lightbulb,
+  MessageSquare,
+  ThumbsUp,
+  ThumbsDown,
+  Share2,
+  Copy
 } from 'lucide-react';
 
 interface ProblemDetailProps {
@@ -35,6 +41,7 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ problemId }) => {
   const [testResults, setTestResults] = useState<any[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeTab, setActiveTab] = useState('description');
 
   // Mock problem data
   const problemData = {
@@ -43,6 +50,8 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ problemId }) => {
       title: "Two Sum",
       difficulty: "Easy",
       category: "Array",
+      likes: 1250,
+      dislikes: 85,
       description: `Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
 
 You may assume that each input would have exactly one solution, and you may not use the same element twice.
@@ -65,6 +74,30 @@ You can return the answer in any order.`,
         "-10^9 <= nums[i] <= 10^9",
         "-10^9 <= target <= 10^9",
         "Only one valid answer exists."
+      ],
+      solution: `The brute force approach would be to check every pair of numbers, but that would be O(n²).
+
+A better approach is to use a hash map to store the numbers we've seen and their indices. For each number, we check if its complement (target - current number) exists in the hash map.
+
+**Time Complexity:** O(n)
+**Space Complexity:** O(n)`,
+      discussions: [
+        {
+          id: 1,
+          author: "developer123",
+          content: "Great problem for beginners! The hash map approach is elegant.",
+          likes: 45,
+          replies: 3,
+          time: "2 hours ago"
+        },
+        {
+          id: 2,
+          author: "codemaster",
+          content: "Can we solve this without extra space? What about sorting first?",
+          likes: 12,
+          replies: 1,
+          time: "5 hours ago"
+        }
       ]
     },
     205: {
@@ -72,6 +105,8 @@ You can return the answer in any order.`,
       title: "Isomorphic Strings",
       difficulty: "Easy", 
       category: "String",
+      likes: 892,
+      dislikes: 156,
       description: `Given two strings s and t, determine if they are isomorphic.
 
 Two strings s and t are isomorphic if the characters in s can be replaced to get t.
@@ -93,6 +128,24 @@ All occurrences of a character must be replaced with another character while pre
         "1 <= s.length <= 5 * 10^4",
         "t.length == s.length",
         "s and t consist of any valid ascii character."
+      ],
+      solution: `We need to track the mapping between characters in both directions.
+
+Use two hash maps:
+1. One for mapping characters from s to t
+2. One for mapping characters from t to s
+
+**Time Complexity:** O(n)
+**Space Complexity:** O(1) since we have at most 256 ASCII characters`,
+      discussions: [
+        {
+          id: 1,
+          author: "stringexpert",
+          content: "Two hash maps are essential here to check bidirectional mapping.",
+          likes: 28,
+          replies: 2,
+          time: "1 hour ago"
+        }
       ]
     }
   };
@@ -141,7 +194,6 @@ var isIsomorphic = function(s, t) {
 
   const handleRunCode = () => {
     setIsRunning(true);
-    // Simulate API call
     setTimeout(() => {
       setTestResults([
         { input: 's = "egg", t = "add"', expected: 'true', actual: 'true', passed: true },
@@ -154,49 +206,70 @@ var isIsomorphic = function(s, t) {
 
   const handleSubmit = () => {
     setIsSubmitting(true);
-    // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
-      // Navigate to submission result or show success message
     }, 3000);
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'Easy': return 'bg-green-100 text-green-800';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800';  
-      case 'Hard': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Easy': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+      case 'Medium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';  
+      case 'Hard': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
-      {/* Header */}
-      <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
+    <div className="min-h-screen bg-background">
+      {/* Enhanced Header */}
+      <header className="bg-card border-b border-border sticky top-0 z-50 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/problems')}
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 hover:bg-muted"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>Problem List</span>
+                <span>Problems</span>
               </Button>
               
+              <div className="h-6 w-px bg-border" />
+              
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="hover:bg-muted">
                   <ChevronLeft className="w-4 h-4" />
+                  <span className="ml-1">Prev</span>
                 </Button>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                  <span className="mr-1">Next</span>
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                  <ThumbsUp className="w-4 h-4" />
+                  <span className="ml-1">{problem.likes}</span>
+                </Button>
+                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                  <ThumbsDown className="w-4 h-4" />
+                  <span className="ml-1">{problem.dislikes}</span>
+                </Button>
+                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                  <Star className="w-4 h-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                  <Share2 className="w-4 h-4" />
+                </Button>
+              </div>
+              
+              <div className="h-6 w-px bg-border" />
+              
               <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
                 <SelectTrigger className="w-32">
                   <SelectValue />
@@ -210,7 +283,7 @@ var isIsomorphic = function(s, t) {
                 </SelectContent>
               </Select>
 
-              <Button variant="outline" size="sm">
+              <Button variant="ghost" size="sm" className="hover:bg-muted">
                 <Settings className="w-4 h-4" />
               </Button>
             </div>
@@ -220,10 +293,10 @@ var isIsomorphic = function(s, t) {
 
       <div className="container mx-auto px-4 py-6">
         <div className="grid lg:grid-cols-2 gap-6 h-[calc(100vh-8rem)]">
-          {/* Problem Description Panel */}
+          {/* Left Panel - Problem Content */}
           <div className="flex flex-col">
-            <Card className="border-none shadow-lg flex-1">
-              <CardHeader>
+            <Card className="flex-1 border-border">
+              <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <h1 className="text-2xl font-bold">{problem.id}. {problem.title}</h1>
@@ -232,75 +305,151 @@ var isIsomorphic = function(s, t) {
                     </Badge>
                     <Badge variant="outline">{problem.category}</Badge>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Button variant="ghost" size="sm">
-                      <Star className="w-4 h-4" />
-                    </Button>
-                  </div>
                 </div>
               </CardHeader>
-              <CardContent className="flex-1">
-                <ScrollArea className="h-full">
-                  <div className="space-y-6 pr-4">
-                    <div>
-                      <h3 className="font-semibold mb-3">Description</h3>
-                      <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                        {problem.description}
-                      </p>
-                    </div>
+              
+              <CardContent className="flex-1 p-0">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
+                  <TabsList className="grid w-full grid-cols-3 mx-6">
+                    <TabsTrigger value="description" className="flex items-center space-x-2">
+                      <BookOpen className="w-4 h-4" />
+                      <span>Description</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="solution" className="flex items-center space-x-2">
+                      <Lightbulb className="w-4 h-4" />
+                      <span>Solution</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="discussion" className="flex items-center space-x-2">
+                      <MessageSquare className="w-4 h-4" />
+                      <span>Discussion</span>
+                    </TabsTrigger>
+                  </TabsList>
+                  
+                  <div className="flex-1 px-6 pb-6">
+                    <TabsContent value="description" className="h-full mt-4">
+                      <ScrollArea className="h-full">
+                        <div className="space-y-6 pr-4">
+                          <div>
+                            <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                              {problem.description}
+                            </p>
+                          </div>
 
-                    <div>
-                      <h3 className="font-semibold mb-3">Examples</h3>
-                      <div className="space-y-4">
-                        {problem.examples.map((example, index) => (
-                          <div key={index} className="p-4 bg-muted/50 rounded-lg">
-                            <p className="font-medium mb-2">Example {index + 1}:</p>
-                            <div className="space-y-2 text-sm">
-                              <div>
-                                <span className="font-medium">Input: </span>
-                                <code className="bg-muted px-2 py-1 rounded">{example.input}</code>
-                              </div>
-                              <div>
-                                <span className="font-medium">Output: </span>
-                                <code className="bg-muted px-2 py-1 rounded">{example.output}</code>
-                              </div>
-                              {example.explanation && (
-                                <div>
-                                  <span className="font-medium">Explanation: </span>
-                                  <span className="text-muted-foreground">{example.explanation}</span>
+                          <div>
+                            <h3 className="font-semibold mb-3 text-lg">Examples</h3>
+                            <div className="space-y-4">
+                              {problem.examples.map((example, index) => (
+                                <div key={index} className="p-4 bg-muted/30 rounded-lg border">
+                                  <p className="font-medium mb-3">Example {index + 1}:</p>
+                                  <div className="space-y-2 text-sm">
+                                    <div className="grid gap-2">
+                                      <div>
+                                        <span className="font-medium text-foreground">Input: </span>
+                                        <code className="bg-muted px-2 py-1 rounded text-xs font-mono">
+                                          {example.input}
+                                        </code>
+                                      </div>
+                                      <div>
+                                        <span className="font-medium text-foreground">Output: </span>
+                                        <code className="bg-muted px-2 py-1 rounded text-xs font-mono">
+                                          {example.output}
+                                        </code>
+                                      </div>
+                                      {example.explanation && (
+                                        <div>
+                                          <span className="font-medium text-foreground">Explanation: </span>
+                                          <span className="text-muted-foreground">{example.explanation}</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
-                              )}
+                              ))}
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    </div>
 
-                    <div>
-                      <h3 className="font-semibold mb-3">Constraints</h3>
-                      <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                        {problem.constraints.map((constraint, index) => (
-                          <li key={index} className="text-sm">{constraint}</li>
-                        ))}
-                      </ul>
-                    </div>
+                          <div>
+                            <h3 className="font-semibold mb-3 text-lg">Constraints</h3>
+                            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                              {problem.constraints.map((constraint, index) => (
+                                <li key={index} className="text-sm font-mono">{constraint}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </ScrollArea>
+                    </TabsContent>
+                    
+                    <TabsContent value="solution" className="h-full mt-4">
+                      <ScrollArea className="h-full">
+                        <div className="space-y-4 pr-4">
+                          <div className="p-6 bg-muted/30 rounded-lg border">
+                            <h3 className="font-semibold mb-3 text-lg flex items-center">
+                              <Lightbulb className="w-5 h-5 mr-2 text-yellow-500" />
+                              Solution Approach
+                            </h3>
+                            <div className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                              {problem.solution}
+                            </div>
+                          </div>
+                          
+                          <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <p className="text-sm text-blue-800 dark:text-blue-300">
+                              💡 <strong>Hint:</strong> Try to think about what data structure would help you 
+                              look up values efficiently.
+                            </p>
+                          </div>
+                        </div>
+                      </ScrollArea>
+                    </TabsContent>
+                    
+                    <TabsContent value="discussion" className="h-full mt-4">
+                      <ScrollArea className="h-full">
+                        <div className="space-y-4 pr-4">
+                          {problem.discussions.map((discussion) => (
+                            <div key={discussion.id} className="p-4 border rounded-lg bg-card">
+                              <div className="flex items-start justify-between mb-2">
+                                <div className="flex items-center space-x-2">
+                                  <span className="font-medium">{discussion.author}</span>
+                                  <span className="text-xs text-muted-foreground">{discussion.time}</span>
+                                </div>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-3">{discussion.content}</p>
+                              <div className="flex items-center space-x-4">
+                                <Button variant="ghost" size="sm" className="h-8">
+                                  <ThumbsUp className="w-3 h-3 mr-1" />
+                                  {discussion.likes}
+                                </Button>
+                                <Button variant="ghost" size="sm" className="h-8">
+                                  <MessageSquare className="w-3 h-3 mr-1" />
+                                  {discussion.replies} replies
+                                </Button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    </TabsContent>
                   </div>
-                </ScrollArea>
+                </Tabs>
               </CardContent>
             </Card>
           </div>
 
-          {/* Code Editor and Test Panel */}
+          {/* Right Panel - Code Editor and Testing */}
           <div className="flex flex-col space-y-4">
             {/* Code Editor */}
-            <Card className="border-none shadow-lg flex-1">
+            <Card className="flex-1 border-border">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center space-x-2">
                     <Code className="w-5 h-5" />
-                    <span>Code</span>
+                    <span>Code Editor</span>
                   </CardTitle>
                   <div className="flex items-center space-x-2">
+                    <Button variant="ghost" size="sm" className="hover:bg-muted">
+                      <Copy className="w-4 h-4" />
+                    </Button>
                     <Button 
                       variant="outline" 
                       size="sm"
@@ -330,23 +479,23 @@ var isIsomorphic = function(s, t) {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="flex-1">
+              <CardContent className="flex-1 p-4">
                 <Textarea
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  className="font-mono text-sm h-full min-h-[300px] resize-none"
+                  className="font-mono text-sm h-full min-h-[350px] resize-none bg-muted/20 border-muted"
                   placeholder="Write your code here..."
                 />
               </CardContent>
             </Card>
 
             {/* Test Cases Panel */}
-            <Card className="border-none shadow-lg">
+            <Card className="border-border">
               <CardContent className="p-4">
                 <Tabs defaultValue="testcase" className="w-full">
                   <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="testcase">Testcase</TabsTrigger>
-                    <TabsTrigger value="result">Test Result</TabsTrigger>
+                    <TabsTrigger value="testcase">Test Cases</TabsTrigger>
+                    <TabsTrigger value="result">Results</TabsTrigger>
                   </TabsList>
                   
                   <TabsContent value="testcase" className="mt-4">
@@ -357,7 +506,7 @@ var isIsomorphic = function(s, t) {
                           value={customInput}
                           onChange={(e) => setCustomInput(e.target.value)}
                           placeholder='s = "egg"\nt = "add"'
-                          className="font-mono text-sm h-20"
+                          className="font-mono text-sm h-20 bg-muted/20 border-muted"
                         />
                       </div>
                       
@@ -378,9 +527,9 @@ var isIsomorphic = function(s, t) {
                   
                   <TabsContent value="result" className="mt-4">
                     {testResults.length > 0 ? (
-                      <div className="space-y-3">
+                      <div className="space-y-3 max-h-48 overflow-y-auto">
                         {testResults.map((result, index) => (
-                          <div key={index} className="p-3 border rounded-lg">
+                          <div key={index} className="p-3 border rounded-lg bg-muted/20">
                             <div className="flex items-center justify-between mb-2">
                               <span className="text-sm font-medium">Test Case {index + 1}</span>
                               <div className="flex items-center space-x-2">
@@ -389,12 +538,12 @@ var isIsomorphic = function(s, t) {
                                 ) : (
                                   <XCircle className="w-4 h-4 text-red-600" />
                                 )}
-                                <span className={`text-sm ${result.passed ? 'text-green-600' : 'text-red-600'}`}>
+                                <span className={`text-sm font-medium ${result.passed ? 'text-green-600' : 'text-red-600'}`}>
                                   {result.passed ? 'Passed' : 'Failed'}
                                 </span>
                               </div>
                             </div>
-                            <div className="text-xs space-y-1">
+                            <div className="text-xs space-y-1 font-mono">
                               <div><span className="font-medium">Input:</span> {result.input}</div>
                               <div><span className="font-medium">Expected:</span> {result.expected}</div>
                               <div><span className="font-medium">Actual:</span> {result.actual}</div>
