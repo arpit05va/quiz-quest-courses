@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap, Library, Code, Zap, PlayCircle, Video } from 'lucide-react';
+import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap, Library, Code, Zap, PlayCircle, Video, FileCode } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 
@@ -480,7 +480,7 @@ const Dashboard = () => {
                   code<span className="text-orange-500 group-hover:text-orange-400 transition-colors duration-300">X</span>Mania
                 </span>
                 <span className="text-xs text-muted-foreground font-medium tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
-                  Learn • Code • Excel
+                  Learn • Code • Conquer
                 </span>
               </div>
             </div>
@@ -510,6 +510,10 @@ const Dashboard = () => {
                   <DropdownMenuItem onClick={() => navigate('/articles')}>
                     <FileText className="w-4 h-4 mr-2" />
                     Articles
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/problems')}>
+                    <FileCode className="w-4 h-4 mr-2" />
+                    Practice
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/quizzes')}>
                     <Award className="w-4 h-4 mr-2" />
