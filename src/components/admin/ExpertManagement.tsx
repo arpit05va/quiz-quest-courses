@@ -28,14 +28,10 @@ import {
   XCircle,
   Clock,
   Star,
-  DollarSign,
-  Calendar,
   Users,
   TrendingUp,
   Eye,
-  MessageSquare,
-  Award,
-  AlertCircle
+  MessageSquare
 } from 'lucide-react';
 
 const ExpertManagement = () => {
@@ -123,11 +119,26 @@ const ExpertManagement = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'verified':
-        return <Badge className="bg-green-100 text-green-700 hover:bg-green-100"><CheckCircle className="w-3 h-3 mr-1" />Verified</Badge>;
+        return (
+          <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
+            <CheckCircle className="w-3 h-3 mr-1" />
+            Verified
+          </Badge>
+        );
       case 'pending':
-        return <Badge className="bg-yellow-100 text-yellow-700 hover:bg-yellow-100"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
+        return (
+          <Badge className="bg-yellow-100 text-yellow-700 hover:bg-yellow-100">
+            <Clock className="w-3 h-3 mr-1" />
+            Pending
+          </Badge>
+        );
       case 'rejected':
-        return <Badge className="bg-red-100 text-red-700 hover:bg-red-100"><XCircle className="w-3 h-3 mr-1" />Rejected</Badge>;
+        return (
+          <Badge className="bg-red-100 text-red-700 hover:bg-red-100">
+            <XCircle className="w-3 h-3 mr-1" />
+            Rejected
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">Unknown</Badge>;
     }
@@ -464,7 +475,7 @@ const ExpertManagement = () => {
                   <div className="p-4 bg-muted/30 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium">Response Time</span>
-                      <span className="text-lg font-bold">< 2 hrs</span>
+                      <span className="text-lg font-bold">&lt; 2 hrs</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div className="bg-purple-500 h-2 rounded-full" style={{ width: '88%' }}></div>
