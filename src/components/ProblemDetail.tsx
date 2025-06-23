@@ -685,16 +685,16 @@ var twoSum = function(nums, target) {
                     </div>
                   </CardHeader>
                   <CardContent className="flex-1 p-0 overflow-hidden">
-                    <div className="relative h-full w-full">
+                    <div className="relative h-full">
                       <Textarea
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
-                        className={`font-mono absolute inset-0 w-full h-full resize-none border-0 rounded-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-4 transition-all duration-200 ${
+                        className={`font-mono h-full w-full resize-none border-0 rounded-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-4 transition-all duration-200 ${
                           editorTheme === 'dark' 
-                            ? 'bg-gray-900 text-gray-100 border-gray-700' 
+                            ? 'bg-gray-900 text-gray-100' 
                             : editorTheme === 'monokai'
-                            ? 'bg-gray-800 text-green-400 border-gray-600'
-                            : 'bg-gray-50 text-gray-900 border-gray-200'
+                            ? 'bg-gray-800 text-green-400'
+                            : 'bg-gray-50 text-gray-900'
                         }`}
                         placeholder="Write your code here..."
                         style={{ 
@@ -702,9 +702,7 @@ var twoSum = function(nums, target) {
                           lineHeight: '1.6',
                           fontFamily: 'JetBrains Mono, Consolas, Monaco, "Courier New", monospace',
                           tabSize: 4,
-                          minHeight: '100%',
-                          maxHeight: '100%',
-                          overflow: 'auto'
+                          minHeight: '100%'
                         }}
                       />
                       <div className="absolute bottom-2 right-2 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded">
