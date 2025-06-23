@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { BookOpen, Menu, Code, Zap } from 'lucide-react';
-import LoginDialog from '@/components/LoginDialog';
+import RoleBasedLoginDialog from '@/components/RoleBasedLoginDialog';
 import SignupDialog from '@/components/SignupDialog';
 
 const Header = () => {
@@ -13,8 +13,6 @@ const Header = () => {
   const location = useLocation();
 
   const navigation = [
-    // { name: 'Home', href: '/' },
-    // { name: 'Dashboard', href: '/dashboard' },
     { name: 'Courses', href: '/courses' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' }
@@ -86,7 +84,7 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-4 animate-fade-in" style={{ animationDelay: '0.6s' }}>
             <ThemeToggle />
             <div className="hover-lift">
-              <LoginDialog />
+              <RoleBasedLoginDialog />
             </div>
             <div className="hover-lift">
               <SignupDialog />
@@ -121,7 +119,7 @@ const Header = () => {
                   ))}
                   <div className="pt-6 border-t border-border space-y-4">
                     <div className="animate-bounce-in" style={{ animationDelay: '0.7s' }}>
-                      <LoginDialog />
+                      <RoleBasedLoginDialog />
                     </div>
                     <div className="animate-bounce-in" style={{ animationDelay: '0.8s' }}>
                       <SignupDialog />
