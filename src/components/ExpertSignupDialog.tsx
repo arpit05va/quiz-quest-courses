@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Mail, Lock, Eye, EyeOff, User, Lightbulb, Linkedin, Phone, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -53,13 +54,13 @@ const ExpertSignupDialog = ({ open, onOpenChange }: ExpertSignupDialogProps = {}
   if (open !== undefined) {
     return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[500px] max-h-[90vh] p-0 overflow-hidden">
-          <div className="flex flex-col h-full">
-            <DialogHeader className="p-6 pb-4 flex-shrink-0">
-              <DialogTitle className="text-2xl font-bold text-center">Join as Expert</DialogTitle>
-            </DialogHeader>
-            
-            <div className="flex-1 overflow-y-auto px-6 pb-6">
+        <DialogContent className="sm:max-w-[500px] max-h-[85vh] p-0">
+          <DialogHeader className="p-6 pb-4">
+            <DialogTitle className="text-2xl font-bold text-center">Join as Expert</DialogTitle>
+          </DialogHeader>
+          
+          <ScrollArea className="h-full max-h-[calc(85vh-100px)]">
+            <div className="px-6 pb-6">
               {/* Expert Role Card */}
               <div className="mb-6">
                 <Card className="border-2 border-primary bg-primary/5 shadow-lg">
@@ -227,7 +228,7 @@ const ExpertSignupDialog = ({ open, onOpenChange }: ExpertSignupDialogProps = {}
                 </form>
               </motion.div>
             </div>
-          </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     );
@@ -240,13 +241,13 @@ const ExpertSignupDialog = ({ open, onOpenChange }: ExpertSignupDialogProps = {}
           Sign Up as Expert
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] p-0 overflow-hidden">
-        <div className="flex flex-col h-full">
-          <DialogHeader className="p-6 pb-4 flex-shrink-0">
-            <DialogTitle className="text-2xl font-bold text-center">Join as Expert</DialogTitle>
-          </DialogHeader>
-          
-          <div className="flex-1 overflow-y-auto px-6 pb-6">
+      <DialogContent className="sm:max-w-[500px] max-h-[85vh] p-0">
+        <DialogHeader className="p-6 pb-4">
+          <DialogTitle className="text-2xl font-bold text-center">Join as Expert</DialogTitle>
+        </DialogHeader>
+        
+        <ScrollArea className="h-full max-h-[calc(85vh-100px)]">
+          <div className="px-6 pb-6">
             {/* Expert Role Card */}
             <div className="mb-6">
               <Card className="border-2 border-primary bg-primary/5 shadow-lg">
@@ -414,7 +415,7 @@ const ExpertSignupDialog = ({ open, onOpenChange }: ExpertSignupDialogProps = {}
               </form>
             </motion.div>
           </div>
-        </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
