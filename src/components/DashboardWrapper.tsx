@@ -32,9 +32,7 @@ import {
   MessageSquare,
   Video,
   FileCode,
-  LayoutDashboard,
 } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
 
 interface DashboardWrapperProps {
   children: ReactNode;
@@ -80,10 +78,10 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
               {/* Enhanced Text Logo */}
               <div className="flex flex-col">
                 <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent group-hover:from-purple-500 group-hover:via-blue-500 group-hover:to-cyan-400 transition-all duration-300">
-                  codeXmania
+                  codeXMania
                 </span>
                 <span className="text-xs text-muted-foreground font-medium tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
-                  Learn • Code •Conquer
+                  Learn • Code • Excel
                 </span>
               </div>
             </div>
@@ -95,8 +93,8 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
                 onClick={() => navigate("/dashboard")}
                 className="flex items-center space-x-2"
               >
-                {/* <BookOpen className="w-4 h-4" />
-                <span>Dashboard</span> */}
+                <BookOpen className="w-4 h-4" />
+                <span>Dashboard</span>
               </Button>
 
               {/* Learning Content Dropdown */}
@@ -170,34 +168,15 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
                     <Video className="w-4 h-4 mr-2" />
                     Expert Dashboard
                   </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              {/* Admin Panel*/}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="flex items-center space-x-2"
-                  >
-                    <LayoutDashboard className="w-4 h-4" />
-                    <span>Admin Panel</span>
-                    <ChevronDown className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  className="w-56 bg-background border shadow-lg z-50"
-                >
-                  <DropdownMenuLabel>Admin Panel</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => navigate("/admin/dashboard")}
-                  >
-                    <Users className="w-4 h-4 mr-2" />
-                    Open Admin Dashboard
+                  <DropdownMenuItem>
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    My Messages
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />              
+                  <DropdownMenuItem>
+                    <Calendar className="w-4 h-4 mr-2" />
+                    My Bookings
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -339,9 +318,6 @@ const DashboardWrapper = ({ children, title }: DashboardWrapperProps) => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-
-             {/* Toggle dark/mode */}
-            <ThemeToggle />
 
             {/* User Profile Dropdown */}
             <div className="flex items-center space-x-4">

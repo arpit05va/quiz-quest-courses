@@ -113,7 +113,7 @@ const CourseCard = ({ course, index, isEnrolled = false }: CourseCardProps) => {
         
         <Button 
           onClick={isEnrolled ? handleContinueClick : handleEnrollClick}
-          className={`w-full font-semibold transition-all duration-300 hover:shadow-lg rounded-full relative overflow-hidden group ${
+          className={`w-full font-semibold transition-all duration-300 hover:shadow-lg relative overflow-hidden group ${
             isEnrolled 
               ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white'
               : 'bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white'

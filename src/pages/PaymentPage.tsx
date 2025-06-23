@@ -79,7 +79,7 @@ const PaymentPage = () => {
       setIsProcessing(false);
       
       // Redirect to course content page
-      navigate(`/course/${course.id}`);
+      navigate(`/course/${course.id}/learn`);
     }, 3000);
   };
 

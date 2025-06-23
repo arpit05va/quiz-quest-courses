@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import LoginDialog from '@/components/LoginDialog';
+import RoleBasedLoginDialog from '@/components/RoleBasedLoginDialog';
 
 interface UseAuthCheckReturn {
   isAuthenticated: boolean;
@@ -60,7 +60,7 @@ export const useAuthCheck = (): UseAuthCheckReturn => {
   };
 
   const AuthDialog = () => (
-    <LoginDialog 
+    <RoleBasedLoginDialog 
       open={showLoginDialog} 
       onOpenChange={setShowLoginDialog}
     />
