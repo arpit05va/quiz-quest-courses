@@ -14,10 +14,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap, Library, Code, Zap, PlayCircle, Video, FileCode, Shield, LayoutDashboard } from 'lucide-react';
+import { Search, BookOpen, Clock, Users, Star, LogOut, User, FileText, Award, Settings, ChevronDown, Play, ExternalLink, CheckCircle2, XCircle, Timer, Eye, Heart, Briefcase, Calendar, BarChart3, GraduationCap, Library, Code, Zap, PlayCircle, Video, FileCode } from 'lucide-react';
 import CourseCard from '@/components/CourseCard';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
-import { ThemeToggle } from '@/components/ThemeToggle';
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -478,7 +477,7 @@ const Dashboard = () => {
               {/* Enhanced Text Logo */}
               <div className="flex flex-col">
                 <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent group-hover:from-purple-500 group-hover:via-blue-500 group-hover:to-cyan-400 transition-all duration-300">
-                  code<span className="text-orange-500 group-hover:text-orange-400 transition-colors duration-300">X</span>mania
+                  code<span className="text-orange-500 group-hover:text-orange-400 transition-colors duration-300">X</span>Mania
                 </span>
                 <span className="text-xs text-muted-foreground font-medium tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
                   Learn • Code • Conquer
@@ -487,7 +486,7 @@ const Dashboard = () => {
             </div>
 
             {/* Navigation Tabs - Desktop */}
-            <div className="hidden lg:flex items-center space-x-1">
+            <div className="hidden lg:flex items-center space-x-2">
               {/* Learning Content Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -543,34 +542,6 @@ const Dashboard = () => {
                     <Video className="w-4 h-4 mr-2" />
                     Expert Dashboard
                   </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              {/* Admin Panel*/}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="flex items-center space-x-2"
-                  >
-                    <LayoutDashboard   className="w-4 h-4" />
-                    <span>Admin Panel</span>
-                    <ChevronDown className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  className="w-56 bg-background border shadow-lg z-50"
-                >
-                  <DropdownMenuLabel>Admin Panel</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => navigate("/admin/dashboard")}
-                  >
-                    <Users className="w-4 h-4 mr-2" />
-                    Open Admin Dashboard
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />              
                 </DropdownMenuContent>
               </DropdownMenu>
               
@@ -654,9 +625,6 @@ const Dashboard = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-
-            {/* Toggle dark/mode */}
-            <ThemeToggle />
 
             {/* User Profile Dropdown */}
             <div className="flex items-center space-x-4">
@@ -795,8 +763,9 @@ const Dashboard = () => {
                     Find Experts
                   </Button>
                   <Button 
-                    onClick={() => navigate('/expertconnect/expert')}                  
-                    className="bg-white text-purple-600 hover:bg-gray-100"
+                    onClick={() => navigate('/expertconnect/expert')}
+                    variant="outline"
+                    className="border-white text-white hover:bg-white hover:text-purple-600"
                   >
                     Become Expert
                   </Button>

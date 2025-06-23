@@ -36,7 +36,7 @@ const Index = () => {
   const courses = [
     {
       id: 1,
-      title: 'Web Development',
+      title: 'Introduction to Web Development',
       description: 'Learn HTML, CSS, and JavaScript from scratch with hands-on projects.',
       duration: '12 weeks',
       students: 1250,
@@ -123,15 +123,6 @@ const Index = () => {
   ];
 
   const keyPanels = [
-    {
-      icon: BookOpen,
-      title: 'Courses',
-      description: 'Find jobs that match your skills, apply easily, and prepare with our interview readiness tools.',
-      image: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=500&h=300&fit=crop',
-      bgGradient: 'from-blue-500 to-cyan-500',
-      delay: '0.2s',
-      route: '/courses'
-    },
     {
       icon: Briefcase,
       title: 'Aspirant Panel',
@@ -263,7 +254,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-4 gap-8 max-w-9xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {keyPanels.map((panel, index) => (
               <Card 
                 key={index} 
