@@ -42,7 +42,7 @@ const Header = () => {
     return location.pathname.startsWith(href);
   };
 
-  // Animation variants
+  // Animation variants with correct TypeScript types
   const headerVariants = {
     initial: { y: -100, opacity: 0 },
     animate: { 
@@ -50,7 +50,7 @@ const Header = () => {
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut",
+        ease: [0.25, 0.1, 0.25, 1],
         staggerChildren: 0.1
       }
     }
@@ -63,7 +63,7 @@ const Header = () => {
       rotate: 0,
       transition: {
         duration: 1,
-        ease: "easeOut"
+        ease: [0.25, 0.1, 0.25, 1]
       }
     },
     hover: {
@@ -78,7 +78,7 @@ const Header = () => {
     animate: { 
       y: 0, 
       opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }
     },
     hover: {
       y: -2,
@@ -91,7 +91,7 @@ const Header = () => {
     animate: { 
       scale: 1, 
       opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }
     },
     hover: {
       scale: 1.05,
@@ -251,7 +251,7 @@ const Header = () => {
                     className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500`}
                     initial={{ width: isActiveRoute(item.href) ? '100%' : '0%' }}
                     whileHover={{ width: '100%' }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   />
                 </Link>
               </motion.div>
