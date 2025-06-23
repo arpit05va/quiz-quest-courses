@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Mail, Lock, Eye, EyeOff, User, Lightbulb, Building } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, User, Lightbulb, Building, Linkedin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface RoleBasedLoginDialogProps {
@@ -72,6 +71,11 @@ const RoleBasedLoginDialog = ({ open, onOpenChange }: RoleBasedLoginDialogProps 
   const handleGoogleLogin = () => {
     console.log('Google login attempt for jobseeker');
     handleSuccessfulLogin('jobseeker@gmail.com', 'jobseeker');
+  };
+
+  const handleLinkedInLogin = () => {
+    console.log('LinkedIn login attempt for expert');
+    handleSuccessfulLogin('expert@linkedin.com', 'expert');
   };
 
   const handleExpertLogin = (e: React.FormEvent) => {
@@ -140,7 +144,26 @@ const RoleBasedLoginDialog = ({ open, onOpenChange }: RoleBasedLoginDialogProps 
           >
             <div className="text-center mb-6">
               <h3 className="text-lg font-semibold mb-2">Expert Login</h3>
-              <p className="text-muted-foreground text-sm">Enter your expert credentials</p>
+              <p className="text-muted-foreground text-sm">Choose your preferred login method</p>
+            </div>
+
+            {/* LinkedIn Login Button */}
+            <Button
+              onClick={handleLinkedInLogin}
+              variant="outline"
+              className="w-full flex items-center gap-3 h-12 text-base hover:bg-blue-50 border-2 mb-6"
+            >
+              <Linkedin className="w-5 h-5 text-blue-600" />
+              Continue with LinkedIn
+            </Button>
+
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">Or continue with credentials</span>
+              </div>
             </div>
             
             <form onSubmit={handleExpertLogin} className="space-y-4">
