@@ -321,16 +321,16 @@ var twoSum = function(nums, target) {
   const allTestCases = [...problem.testCases, ...customTestCases];
 
   return (
-    <div className="min-h-screen bg-background animate-fade-in">
-      {/* Enhanced Header */}
-      <header className="bg-card border-b border-border sticky top-0 z-50 backdrop-blur-sm animate-slide-in-top">
-        <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="bg-card border-b border-border sticky top-0 z-50 backdrop-blur-sm">
+        <div className="container mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/problems')}
-                className="flex items-center space-x-2 hover:bg-muted transition-all duration-200 hover:scale-105"
+                className="flex items-center space-x-2 hover:bg-muted"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Problems</span>
@@ -342,7 +342,6 @@ var twoSum = function(nums, target) {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="hover:bg-muted transition-all duration-200"
                   onClick={handlePrevious}
                   disabled={currentIndex === 0}
                 >
@@ -352,7 +351,6 @@ var twoSum = function(nums, target) {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="hover:bg-muted transition-all duration-200"
                   onClick={handleNext}
                   disabled={currentIndex === problemIds.length - 1}
                 >
@@ -367,7 +365,7 @@ var twoSum = function(nums, target) {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className={`hover:bg-muted transition-all duration-200 hover:scale-105 ${isLiked ? 'text-green-600' : ''}`}
+                  className={`${isLiked ? 'text-green-600' : ''}`}
                   onClick={handleLike}
                 >
                   <ThumbsUp className="w-4 h-4" />
@@ -376,7 +374,7 @@ var twoSum = function(nums, target) {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className={`hover:bg-muted transition-all duration-200 hover:scale-105 ${isDisliked ? 'text-red-600' : ''}`}
+                  className={`${isDisliked ? 'text-red-600' : ''}`}
                   onClick={handleDislike}
                 >
                   <ThumbsDown className="w-4 h-4" />
@@ -385,7 +383,7 @@ var twoSum = function(nums, target) {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className={`hover:bg-muted transition-all duration-200 hover:scale-105 ${isStarred ? 'text-yellow-500' : ''}`}
+                  className={`${isStarred ? 'text-yellow-500' : ''}`}
                   onClick={handleStar}
                 >
                   <Star className={`w-4 h-4 ${isStarred ? 'fill-current' : ''}`} />
@@ -393,7 +391,6 @@ var twoSum = function(nums, target) {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="hover:bg-muted transition-all duration-200 hover:scale-105" 
                   onClick={handleShare}
                 >
                   <Share2 className="w-4 h-4" />
@@ -403,7 +400,7 @@ var twoSum = function(nums, target) {
               <div className="h-6 w-px bg-border" />
               
               <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                <SelectTrigger className="w-32 transition-all duration-200 hover:border-primary">
+                <SelectTrigger className="w-32">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -417,11 +414,11 @@ var twoSum = function(nums, target) {
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm" className="hover:bg-muted transition-all duration-200 hover:scale-105">
+                  <Button variant="ghost" size="sm">
                     <Settings className="w-4 h-4" />
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px] animate-scale-in">
+                <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
                     <DialogTitle>Editor Settings</DialogTitle>
                     <DialogDescription>
@@ -476,27 +473,28 @@ var twoSum = function(nums, target) {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-6 py-6">
         <ResizablePanelGroup
           direction="horizontal"
-          className="h-[calc(100vh-8rem)] rounded-lg border animate-fade-in"
+          className="h-[calc(100vh-8rem)] rounded-lg border"
         >
           {/* Left Panel - Problem Content */}
           <ResizablePanel defaultSize={50} minSize={30}>
-            <Card className="h-full border-0 shadow-none">
-              <CardHeader className="pb-4 border-b">
+            <div className="h-full flex flex-col">
+              {/* Problem Header */}
+              <div className="px-6 py-4 border-b bg-card">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3 animate-slide-in-left">
+                  <div className="flex items-center space-x-3">
                     <h1 className="text-2xl font-bold">{problem.id}. {problem.title}</h1>
                     {problem.solved && (
-                      <div className="flex items-center text-green-600 text-sm font-medium animate-bounce">
+                      <div className="flex items-center text-green-600 text-sm font-medium">
                         <CheckCircle className="w-4 h-4 mr-1" />
                         Solved
                       </div>
                     )}
                   </div>
                 </div>
-                <div className="flex items-center space-x-2 mt-2 animate-slide-in-left">
+                <div className="flex items-center space-x-2 mt-3">
                   <Badge className={getDifficultyColor(problem.difficulty)}>
                     {problem.difficulty}
                   </Badge>
@@ -510,31 +508,34 @@ var twoSum = function(nums, target) {
                     <span className="text-sm text-muted-foreground">Hint</span>
                   </div>
                 </div>
-              </CardHeader>
+              </div>
               
-              <CardContent className="flex-1 p-0 overflow-hidden">
+              {/* Tab Content */}
+              <div className="flex-1 flex flex-col min-h-0">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-                  <TabsList className="grid w-full grid-cols-4 mx-6 mt-4">
-                    <TabsTrigger value="description" className="flex items-center space-x-2 transition-all duration-200">
-                      <FileText className="w-4 h-4" />
-                      <span>Description</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="editorial" className="flex items-center space-x-2 transition-all duration-200">
-                      <BookOpen className="w-4 h-4" />
-                      <span>Editorial</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="solutions" className="flex items-center space-x-2 transition-all duration-200">
-                      <Lightbulb className="w-4 h-4" />
-                      <span>Solutions</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="submissions" className="flex items-center space-x-2 transition-all duration-200">
-                      <Users className="w-4 h-4" />
-                      <span>Submissions</span>
-                    </TabsTrigger>
-                  </TabsList>
+                  <div className="px-6 pt-4 pb-2">
+                    <TabsList className="grid w-full grid-cols-4 h-11">
+                      <TabsTrigger value="description" className="flex items-center space-x-2 text-sm font-medium">
+                        <FileText className="w-4 h-4" />
+                        <span>Description</span>
+                      </TabsTrigger>
+                      <TabsTrigger value="editorial" className="flex items-center space-x-2 text-sm font-medium">
+                        <BookOpen className="w-4 h-4" />
+                        <span>Editorial</span>
+                      </TabsTrigger>
+                      <TabsTrigger value="solutions" className="flex items-center space-x-2 text-sm font-medium">
+                        <Lightbulb className="w-4 h-4" />
+                        <span>Solutions</span>
+                      </TabsTrigger>
+                      <TabsTrigger value="submissions" className="flex items-center space-x-2 text-sm font-medium">
+                        <Users className="w-4 h-4" />
+                        <span>Submissions</span>
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
                   
-                  <div className="flex-1 px-6 pb-6 overflow-hidden">
-                    <TabsContent value="description" className="h-full mt-4 animate-fade-in">
+                  <div className="flex-1 px-6 pb-6 min-h-0">
+                    <TabsContent value="description" className="h-full m-0">
                       <ScrollArea className="h-full">
                         <div className="space-y-6 pr-4">
                           <div>
@@ -544,29 +545,29 @@ var twoSum = function(nums, target) {
                           </div>
 
                           <div>
-                            <h3 className="font-semibold mb-3 text-lg">Examples</h3>
+                            <h3 className="font-semibold mb-4 text-lg">Examples</h3>
                             <div className="space-y-4">
                               {problem.examples.map((example, index) => (
-                                <div key={index} className="p-4 bg-muted/20 rounded-lg border transition-all duration-200 hover:shadow-md hover-scale">
+                                <div key={index} className="p-4 bg-muted/20 rounded-lg border">
                                   <p className="font-medium mb-3">Example {index + 1}:</p>
-                                  <div className="space-y-2 text-sm font-mono">
+                                  <div className="space-y-2 text-sm">
                                     <div className="grid gap-2">
                                       <div>
                                         <span className="font-medium text-foreground">Input: </span>
-                                        <code className="bg-muted px-2 py-1 rounded text-xs">
+                                        <code className="bg-muted px-2 py-1 rounded text-xs font-mono">
                                           {example.input}
                                         </code>
                                       </div>
                                       <div>
                                         <span className="font-medium text-foreground">Output: </span>
-                                        <code className="bg-muted px-2 py-1 rounded text-xs">
+                                        <code className="bg-muted px-2 py-1 rounded text-xs font-mono">
                                           {example.output}
                                         </code>
                                       </div>
                                       {example.explanation && (
                                         <div>
                                           <span className="font-medium text-foreground">Explanation: </span>
-                                          <span className="text-muted-foreground font-sans">{example.explanation}</span>
+                                          <span className="text-muted-foreground">{example.explanation}</span>
                                         </div>
                                       )}
                                     </div>
@@ -577,7 +578,7 @@ var twoSum = function(nums, target) {
                           </div>
 
                           <div>
-                            <h3 className="font-semibold mb-3 text-lg">Constraints</h3>
+                            <h3 className="font-semibold mb-4 text-lg">Constraints</h3>
                             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                               {problem.constraints.map((constraint, index) => (
                                 <li key={index} className="text-sm font-mono">{constraint}</li>
@@ -587,10 +588,10 @@ var twoSum = function(nums, target) {
 
                           {problem.companies && (
                             <div>
-                              <h3 className="font-semibold mb-3 text-lg">Companies</h3>
+                              <h3 className="font-semibold mb-4 text-lg">Companies</h3>
                               <div className="flex flex-wrap gap-2">
                                 {problem.companies.map((company, index) => (
-                                  <Badge key={index} variant="secondary" className="text-xs transition-all duration-200 hover-scale">
+                                  <Badge key={index} variant="secondary" className="text-xs">
                                     {company}
                                   </Badge>
                                 ))}
@@ -601,7 +602,7 @@ var twoSum = function(nums, target) {
                       </ScrollArea>
                     </TabsContent>
                     
-                    <TabsContent value="editorial" className="h-full mt-4 animate-fade-in">
+                    <TabsContent value="editorial" className="h-full m-0">
                       <ScrollArea className="h-full">
                         <div className="space-y-4 pr-4">
                           <div className="p-6 bg-muted/30 rounded-lg border">
@@ -624,31 +625,27 @@ var twoSum = function(nums, target) {
                       </ScrollArea>
                     </TabsContent>
                     
-                    <TabsContent value="solutions" className="h-full mt-4 animate-fade-in">
-                      <ScrollArea className="h-full">
-                        <div className="space-y-4 pr-4">
-                          <div className="text-center text-muted-foreground py-8">
-                            <Code className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                            <p>Community solutions will appear here</p>
-                          </div>
+                    <TabsContent value="solutions" className="h-full m-0">
+                      <div className="h-full flex items-center justify-center">
+                        <div className="text-center text-muted-foreground">
+                          <Code className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                          <p>Community solutions will appear here</p>
                         </div>
-                      </ScrollArea>
+                      </div>
                     </TabsContent>
 
-                    <TabsContent value="submissions" className="h-full mt-4 animate-fade-in">
-                      <ScrollArea className="h-full">
-                        <div className="space-y-4 pr-4">
-                          <div className="text-center text-muted-foreground py-8">
-                            <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                            <p>Your submissions will appear here</p>
-                          </div>
+                    <TabsContent value="submissions" className="h-full m-0">
+                      <div className="h-full flex items-center justify-center">
+                        <div className="text-center text-muted-foreground">
+                          <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                          <p>Your submissions will appear here</p>
                         </div>
-                      </ScrollArea>
+                      </div>
                     </TabsContent>
                   </div>
                 </Tabs>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </ResizablePanel>
 
           <ResizableHandle withHandle />
@@ -658,200 +655,193 @@ var twoSum = function(nums, target) {
             <ResizablePanelGroup direction="vertical">
               {/* Code Editor */}
               <ResizablePanel defaultSize={70} minSize={40}>
-                <Card className="h-full border-0 shadow-none">
-                  <CardHeader className="pb-3 bg-muted/30 border-b">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="flex items-center space-x-2 text-sm">
-                        <Code className="w-4 h-4" />
-                        <span>Code</span>
-                        <Badge variant="outline" className="text-xs font-mono">
-                          {selectedLanguage}
-                        </Badge>
-                        <Badge variant="outline" className="text-xs">
-                          Auto
-                        </Badge>
-                      </CardTitle>
-                      <div className="flex items-center space-x-2">
-                        <Button variant="ghost" size="sm" className="hover:bg-muted h-8 transition-all duration-200 hover:scale-105" onClick={handleResetCode}>
-                          <RotateCcw className="w-3 h-3" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="hover:bg-muted h-8 transition-all duration-200 hover:scale-105" onClick={handleCopyCode}>
-                          <Copy className="w-3 h-3" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="hover:bg-muted h-8 transition-all duration-200 hover:scale-105">
-                          <MoreVertical className="w-3 h-3" />
-                        </Button>
-                      </div>
+                <div className="h-full flex flex-col">
+                  <div className="px-4 py-3 bg-muted/30 border-b flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Code className="w-4 h-4" />
+                      <span className="text-sm font-medium">Code</span>
+                      <Badge variant="outline" className="text-xs font-mono">
+                        {selectedLanguage}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs">
+                        Auto
+                      </Badge>
                     </div>
-                  </CardHeader>
-                  <CardContent className="flex-1 p-0 overflow-hidden">
-                    <div className="relative h-full">
-                      <Textarea
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
-                        className={`font-mono h-full w-full resize-none border-0 rounded-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-4 transition-all duration-200 ${
-                          editorTheme === 'dark' 
-                            ? 'bg-gray-900 text-gray-100' 
-                            : editorTheme === 'monokai'
-                            ? 'bg-gray-800 text-green-400'
-                            : 'bg-gray-50 text-gray-900'
-                        }`}
-                        placeholder="Write your code here..."
-                        style={{ 
-                          fontSize: `${fontSize}px`,
-                          lineHeight: '1.6',
-                          fontFamily: 'JetBrains Mono, Consolas, Monaco, "Courier New", monospace',
-                          tabSize: 4,
-                          minHeight: '100%'
-                        }}
-                      />
-                      <div className="absolute bottom-2 right-2 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded">
-                        Ln {code.split('\n').length}, Col {code.split('\n').pop()?.length || 0}
-                      </div>
+                    <div className="flex items-center space-x-2">
+                      <Button variant="ghost" size="sm" className="h-8" onClick={handleResetCode}>
+                        <RotateCcw className="w-3 h-3" />
+                      </Button>
+                      <Button variant="ghost" size="sm" className="h-8" onClick={handleCopyCode}>
+                        <Copy className="w-3 h-3" />
+                      </Button>
+                      <Button variant="ghost" size="sm" className="h-8">
+                        <MoreVertical className="w-3 h-3" />
+                      </Button>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                  
+                  <div className="flex-1 relative">
+                    <Textarea
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                      className={`absolute inset-0 w-full h-full resize-none border-0 rounded-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-4 font-mono ${
+                        editorTheme === 'dark' 
+                          ? 'bg-gray-900 text-gray-100' 
+                          : editorTheme === 'monokai'
+                          ? 'bg-gray-800 text-green-400'
+                          : 'bg-gray-50 text-gray-900'
+                      }`}
+                      placeholder="Write your code here..."
+                      style={{ 
+                        fontSize: `${fontSize}px`,
+                        lineHeight: '1.6',
+                        fontFamily: 'JetBrains Mono, Consolas, Monaco, "Courier New", monospace'
+                      }}
+                    />
+                    <div className="absolute bottom-2 right-2 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded">
+                      Ln {code.split('\n').length}, Col {code.split('\n').pop()?.length || 0}
+                    </div>
+                  </div>
+                </div>
               </ResizablePanel>
 
               <ResizableHandle withHandle />
 
               {/* Test Cases and Console */}
               <ResizablePanel defaultSize={30} minSize={20}>
-                <Card className="h-full border-0 shadow-none">
-                  <CardContent className="p-0 h-full">
-                    <Tabs defaultValue="testcase" className="w-full h-full flex flex-col">
-                      <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/20">
-                        <TabsList className="h-8">
-                          <TabsTrigger value="testcase" className="text-xs transition-all duration-200">Testcase</TabsTrigger>
-                          <TabsTrigger value="result" className="text-xs transition-all duration-200">Test Result</TabsTrigger>
-                        </TabsList>
-                        <div className="flex items-center space-x-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={handleRunCode}
-                            disabled={isRunning}
-                            className="flex items-center space-x-2 h-8 transition-all duration-200 hover:scale-105"
-                          >
-                            {isRunning ? (
-                              <Clock className="w-3 h-3 animate-spin" />
-                            ) : (
-                              <Play className="w-3 h-3" />
-                            )}
-                            <span>{isRunning ? 'Running...' : 'Run'}</span>
-                          </Button>
-                          <Button 
-                            onClick={handleSubmit}
-                            disabled={isSubmitting}
-                            className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 h-8 transition-all duration-200 hover:scale-105"
-                          >
-                            {isSubmitting ? (
-                              <Clock className="w-3 h-3 animate-spin" />
-                            ) : (
-                              <Send className="w-3 h-3" />
-                            )}
-                            <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
-                          </Button>
-                        </div>
+                <div className="h-full flex flex-col">
+                  <Tabs defaultValue="testcase" className="h-full flex flex-col">
+                    <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/20">
+                      <TabsList className="h-8">
+                        <TabsTrigger value="testcase" className="text-xs">Testcase</TabsTrigger>
+                        <TabsTrigger value="result" className="text-xs">Test Result</TabsTrigger>
+                      </TabsList>
+                      <div className="flex items-center space-x-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={handleRunCode}
+                          disabled={isRunning}
+                          className="flex items-center space-x-2 h-8"
+                        >
+                          {isRunning ? (
+                            <Clock className="w-3 h-3 animate-spin" />
+                          ) : (
+                            <Play className="w-3 h-3" />
+                          )}
+                          <span>{isRunning ? 'Running...' : 'Run'}</span>
+                        </Button>
+                        <Button 
+                          onClick={handleSubmit}
+                          disabled={isSubmitting}
+                          className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 h-8"
+                        >
+                          {isSubmitting ? (
+                            <Clock className="w-3 h-3 animate-spin" />
+                          ) : (
+                            <Send className="w-3 h-3" />
+                          )}
+                          <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
+                        </Button>
                       </div>
-                      
-                      <div className="flex-1 overflow-hidden">
-                        <TabsContent value="testcase" className="p-4 h-full animate-fade-in">
-                          <div className="space-y-4 h-full flex flex-col">
-                            <div className="flex-1">
-                              <label className="text-sm font-medium mb-2 block">
-                                Case {activeTestCase + 1}
-                              </label>
-                              <Textarea
-                                value={allTestCases[activeTestCase] || ''}
-                                onChange={(e) => {
-                                  if (activeTestCase >= problem.testCases.length) {
-                                    const customIndex = activeTestCase - problem.testCases.length;
-                                    const newCustomCases = [...customTestCases];
-                                    newCustomCases[customIndex] = e.target.value;
-                                    setCustomTestCases(newCustomCases);
-                                  }
-                                }}
-                                readOnly={activeTestCase < problem.testCases.length}
-                                className={`font-mono text-sm h-20 resize-none transition-all duration-200 ${
-                                  activeTestCase < problem.testCases.length 
-                                    ? 'bg-muted/20 border-muted focus-visible:ring-0' 
-                                    : 'bg-background border-input focus-visible:ring-1 focus-visible:ring-ring'
-                                }`}
-                                placeholder={activeTestCase >= problem.testCases.length ? "Enter your custom test case..." : ""}
-                              />
-                            </div>
-                            
-                            <div className="flex space-x-2 overflow-x-auto pb-2">
-                              {allTestCases.map((_, index) => (
-                                <Button 
-                                  key={index}
-                                  variant={activeTestCase === index ? "default" : "outline"} 
-                                  size="sm" 
-                                  className={`flex-shrink-0 transition-all duration-200 hover:scale-105 ${
-                                    activeTestCase === index 
-                                      ? 'bg-blue-600 text-white' 
-                                      : 'hover:bg-muted'
-                                  }`}
-                                  onClick={() => setActiveTestCase(index)}
-                                >
-                                  Case {index + 1}
-                                  {index >= problem.testCases.length && (
-                                    <span className="ml-1 text-xs opacity-70">(Custom)</span>
-                                  )}
-                                </Button>
-                              ))}
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className="flex-shrink-0 transition-all duration-200 hover:scale-105"
-                                onClick={handleAddTestCase}
-                              >
-                                <Plus className="w-3 h-3" />
-                              </Button>
-                            </div>
+                    </div>
+                    
+                    <div className="flex-1 min-h-0">
+                      <TabsContent value="testcase" className="p-4 h-full m-0">
+                        <div className="space-y-4 h-full flex flex-col">
+                          <div className="flex-1">
+                            <label className="text-sm font-medium mb-2 block">
+                              Case {activeTestCase + 1}
+                            </label>
+                            <Textarea
+                              value={allTestCases[activeTestCase] || ''}
+                              onChange={(e) => {
+                                if (activeTestCase >= problem.testCases.length) {
+                                  const customIndex = activeTestCase - problem.testCases.length;
+                                  const newCustomCases = [...customTestCases];
+                                  newCustomCases[customIndex] = e.target.value;
+                                  setCustomTestCases(newCustomCases);
+                                }
+                              }}
+                              readOnly={activeTestCase < problem.testCases.length}
+                              className={`font-mono text-sm h-20 resize-none ${
+                                activeTestCase < problem.testCases.length 
+                                  ? 'bg-muted/20 border-muted focus-visible:ring-0' 
+                                  : 'bg-background border-input focus-visible:ring-1 focus-visible:ring-ring'
+                              }`}
+                              placeholder={activeTestCase >= problem.testCases.length ? "Enter your custom test case..." : ""}
+                            />
                           </div>
-                        </TabsContent>
-                        
-                        <TabsContent value="result" className="p-4 h-full animate-fade-in">
-                          {testResults.length > 0 ? (
-                            <ScrollArea className="h-full">
-                              <div className="space-y-3 pr-4">
-                                {testResults.map((result, index) => (
-                                  <div key={index} className="p-3 border rounded-lg bg-muted/20 transition-all duration-200 hover:shadow-md animate-scale-in">
-                                    <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm font-medium">Case {index + 1}</span>
-                                      <div className="flex items-center space-x-2">
-                                        {result.passed ? (
-                                          <CheckCircle className="w-4 h-4 text-green-600" />
-                                        ) : (
-                                          <XCircle className="w-4 h-4 text-red-600" />
-                                        )}
-                                        <span className={`text-sm font-medium ${result.passed ? 'text-green-600' : 'text-red-600'}`}>
-                                          {result.passed ? 'Passed' : 'Failed'}
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <div className="text-xs space-y-1 font-mono">
-                                      <div><span className="font-medium">Input:</span> {result.input}</div>
-                                      <div><span className="font-medium">Expected:</span> {result.expected}</div>
-                                      <div><span className="font-medium">Output:</span> {result.actual}</div>
+                          
+                          <div className="flex space-x-2 overflow-x-auto pb-2">
+                            {allTestCases.map((_, index) => (
+                              <Button 
+                                key={index}
+                                variant={activeTestCase === index ? "default" : "outline"} 
+                                size="sm" 
+                                className={`flex-shrink-0 ${
+                                  activeTestCase === index 
+                                    ? 'bg-blue-600 text-white' 
+                                    : 'hover:bg-muted'
+                                }`}
+                                onClick={() => setActiveTestCase(index)}
+                              >
+                                Case {index + 1}
+                                {index >= problem.testCases.length && (
+                                  <span className="ml-1 text-xs opacity-70">(Custom)</span>
+                                )}
+                              </Button>
+                            ))}
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="flex-shrink-0"
+                              onClick={handleAddTestCase}
+                            >
+                              <Plus className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      </TabsContent>
+                      
+                      <TabsContent value="result" className="p-4 h-full m-0">
+                        {testResults.length > 0 ? (
+                          <ScrollArea className="h-full">
+                            <div className="space-y-3 pr-4">
+                              {testResults.map((result, index) => (
+                                <div key={index} className="p-3 border rounded-lg bg-muted/20">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm font-medium">Case {index + 1}</span>
+                                    <div className="flex items-center space-x-2">
+                                      {result.passed ? (
+                                        <CheckCircle className="w-4 h-4 text-green-600" />
+                                      ) : (
+                                        <XCircle className="w-4 h-4 text-red-600" />
+                                      )}
+                                      <span className={`text-sm font-medium ${result.passed ? 'text-green-600' : 'text-red-600'}`}>
+                                        {result.passed ? 'Passed' : 'Failed'}
+                                      </span>
                                     </div>
                                   </div>
-                                ))}
-                              </div>
-                            </ScrollArea>
-                          ) : (
-                            <div className="text-center text-muted-foreground py-8 h-full flex flex-col items-center justify-center">
-                              <Play className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                              <p>You must run your code first</p>
+                                  <div className="text-xs space-y-1 font-mono">
+                                    <div><span className="font-medium">Input:</span> {result.input}</div>
+                                    <div><span className="font-medium">Expected:</span> {result.expected}</div>
+                                    <div><span className="font-medium">Output:</span> {result.actual}</div>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
-                          )}
-                        </TabsContent>
-                      </div>
-                    </Tabs>
-                  </CardContent>
-                </Card>
+                          </ScrollArea>
+                        ) : (
+                          <div className="h-full flex flex-col items-center justify-center text-center text-muted-foreground">
+                            <Play className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                            <p>You must run your code first</p>
+                          </div>
+                        )}
+                      </TabsContent>
+                    </div>
+                  </Tabs>
+                </div>
               </ResizablePanel>
             </ResizablePanelGroup>
           </ResizablePanel>
