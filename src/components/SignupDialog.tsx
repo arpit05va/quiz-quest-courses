@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -163,6 +162,33 @@ const SignupDialog = ({ open, onOpenChange }: SignupDialogProps = {}) => {
       toast({
         title: "Signup Failed",
         description: "Failed to signup with Google. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLinkedInSignup = async () => {
+    setIsLoading(true);
+    try {
+      console.log('Initiating LinkedIn OAuth signup for expert');
+      
+      // Simulate LinkedIn OAuth flow
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const mockLinkedInUser = {
+        email: 'expert@linkedin.com',
+        name: 'Jane Expert'
+      };
+      
+      handleSuccessfulSignup(mockLinkedInUser.email, 'expert');
+      
+    } catch (error) {
+      console.error('LinkedIn signup error:', error);
+      toast({
+        title: "Signup Failed",
+        description: "Failed to signup with LinkedIn. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -770,13 +796,13 @@ const SignupDialog = ({ open, onOpenChange }: SignupDialogProps = {}) => {
   if (open !== undefined) {
     return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[500px] max-h-[90vh] p-0 overflow-hidden">
-          <DialogHeader className="p-6 pb-4 flex-shrink-0">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] p-0 flex flex-col">
+          <DialogHeader className="px-6 py-4 flex-shrink-0 border-b">
             <DialogTitle className="text-2xl font-bold text-center">Join Our Platform</DialogTitle>
           </DialogHeader>
           
           {/* Role Selection Cards - Fixed Header */}
-          <div className="px-6 pb-4 flex-shrink-0">
+          <div className="px-6 py-4 flex-shrink-0 border-b">
             <div className="grid grid-cols-3 gap-3">
               {roleOptions.map((role) => {
                 const IconComponent = role.icon;
@@ -815,8 +841,8 @@ const SignupDialog = ({ open, onOpenChange }: SignupDialogProps = {}) => {
           </div>
           
           {/* Scrollable Form Content */}
-          <ScrollArea className="flex-1 px-6">
-            <div className="pb-6">
+          <ScrollArea className="flex-1 min-h-0">
+            <div className="px-6 py-4">
               <AnimatePresence mode="wait">
                 {renderSignupForm()}
               </AnimatePresence>
@@ -824,7 +850,7 @@ const SignupDialog = ({ open, onOpenChange }: SignupDialogProps = {}) => {
           </ScrollArea>
 
           {/* Fixed Footer */}
-          <div className="p-6 pt-4 border-t bg-background flex-shrink-0">
+          <div className="px-6 py-4 border-t bg-background flex-shrink-0">
             <div className="text-center text-sm text-muted-foreground">
               Already have an account?{' '}
               <button 
@@ -847,13 +873,13 @@ const SignupDialog = ({ open, onOpenChange }: SignupDialogProps = {}) => {
           Sign Up
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] p-0 overflow-hidden">
-        <DialogHeader className="p-6 pb-4 flex-shrink-0">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] p-0 flex flex-col">
+        <DialogHeader className="px-6 py-4 flex-shrink-0 border-b">
           <DialogTitle className="text-2xl font-bold text-center">Join Our Platform</DialogTitle>
         </DialogHeader>
         
         {/* Role Selection Cards - Fixed Header */}
-        <div className="px-6 pb-4 flex-shrink-0">
+        <div className="px-6 py-4 flex-shrink-0 border-b">
           <div className="grid grid-cols-3 gap-3">
             {roleOptions.map((role) => {
               const IconComponent = role.icon;
@@ -892,8 +918,8 @@ const SignupDialog = ({ open, onOpenChange }: SignupDialogProps = {}) => {
         </div>
         
         {/* Scrollable Form Content */}
-        <ScrollArea className="flex-1 px-6">
-          <div className="pb-6">
+        <ScrollArea className="flex-1 min-h-0">
+          <div className="px-6 py-4">
             <AnimatePresence mode="wait">
               {renderSignupForm()}
             </AnimatePresence>
@@ -901,7 +927,7 @@ const SignupDialog = ({ open, onOpenChange }: SignupDialogProps = {}) => {
         </ScrollArea>
 
         {/* Fixed Footer */}
-        <div className="p-6 pt-4 border-t bg-background flex-shrink-0">
+        <div className="px-6 py-4 border-t bg-background flex-shrink-0">
           <div className="text-center text-sm text-muted-foreground">
             Already have an account?{' '}
             <button 
