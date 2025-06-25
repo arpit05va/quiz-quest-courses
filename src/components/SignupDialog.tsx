@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { User, Mail, Lock, GraduationCap, UserCheck, AlertCircle, CheckCircle, Lightbulb, Building } from 'lucide-react';
+import { User, Mail, Lock, GraduationCap, UserCheck, AlertCircle, CheckCircle, Lightbulb, Building, Globe, Phone, Linkedin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 
@@ -771,13 +771,13 @@ const SignupDialog = ({ open, onOpenChange }: SignupDialogProps = {}) => {
     return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-[500px] max-h-[90vh] p-0 overflow-hidden">
-          <div className="p-6">
-            <DialogHeader className="mb-6">
-              <DialogTitle className="text-2xl font-bold text-center">Join Our Platform</DialogTitle>
-            </DialogHeader>
-            
-            {/* Role Selection Cards */}
-            <div className="grid grid-cols-3 gap-3 mb-6">
+          <DialogHeader className="p-6 pb-4 flex-shrink-0">
+            <DialogTitle className="text-2xl font-bold text-center">Join Our Platform</DialogTitle>
+          </DialogHeader>
+          
+          {/* Role Selection Cards - Fixed Header */}
+          <div className="px-6 pb-4 flex-shrink-0">
+            <div className="grid grid-cols-3 gap-3">
               {roleOptions.map((role) => {
                 const IconComponent = role.icon;
                 const isSelected = selectedRole === role.id;
@@ -812,17 +812,20 @@ const SignupDialog = ({ open, onOpenChange }: SignupDialogProps = {}) => {
                 );
               })}
             </div>
-            
-            {/* Signup Form with ScrollArea */}
-            <ScrollArea className="max-h-[calc(90vh-300px)]">
-              <div className="pr-6">
-                <AnimatePresence mode="wait">
-                  {renderSignupForm()}
-                </AnimatePresence>
-              </div>
-            </ScrollArea>
+          </div>
+          
+          {/* Scrollable Form Content */}
+          <ScrollArea className="flex-1 px-6">
+            <div className="pb-6">
+              <AnimatePresence mode="wait">
+                {renderSignupForm()}
+              </AnimatePresence>
+            </div>
+          </ScrollArea>
 
-            <div className="text-center text-sm text-muted-foreground mt-4 pt-4 border-t">
+          {/* Fixed Footer */}
+          <div className="p-6 pt-4 border-t bg-background flex-shrink-0">
+            <div className="text-center text-sm text-muted-foreground">
               Already have an account?{' '}
               <button 
                 onClick={() => setIsOpen(false)} 
@@ -845,13 +848,13 @@ const SignupDialog = ({ open, onOpenChange }: SignupDialogProps = {}) => {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] p-0 overflow-hidden">
-        <div className="p-6">
-          <DialogHeader className="mb-6">
-            <DialogTitle className="text-2xl font-bold text-center">Join Our Platform</DialogTitle>
-          </DialogHeader>
-          
-          {/* Role Selection Cards */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
+        <DialogHeader className="p-6 pb-4 flex-shrink-0">
+          <DialogTitle className="text-2xl font-bold text-center">Join Our Platform</DialogTitle>
+        </DialogHeader>
+        
+        {/* Role Selection Cards - Fixed Header */}
+        <div className="px-6 pb-4 flex-shrink-0">
+          <div className="grid grid-cols-3 gap-3">
             {roleOptions.map((role) => {
               const IconComponent = role.icon;
               const isSelected = selectedRole === role.id;
@@ -886,17 +889,20 @@ const SignupDialog = ({ open, onOpenChange }: SignupDialogProps = {}) => {
               );
             })}
           </div>
-          
-          {/* Signup Form with ScrollArea */}
-          <ScrollArea className="max-h-[calc(90vh-300px)]">
-            <div className="pr-6">
-              <AnimatePresence mode="wait">
-                {renderSignupForm()}
-              </AnimatePresence>
-            </div>
-          </ScrollArea>
+        </div>
+        
+        {/* Scrollable Form Content */}
+        <ScrollArea className="flex-1 px-6">
+          <div className="pb-6">
+            <AnimatePresence mode="wait">
+              {renderSignupForm()}
+            </AnimatePresence>
+          </div>
+        </ScrollArea>
 
-          <div className="text-center text-sm text-muted-foreground mt-4 pt-4 border-t">
+        {/* Fixed Footer */}
+        <div className="p-6 pt-4 border-t bg-background flex-shrink-0">
+          <div className="text-center text-sm text-muted-foreground">
             Already have an account?{' '}
             <button 
               onClick={() => setIsOpen(false)} 
