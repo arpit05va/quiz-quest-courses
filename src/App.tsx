@@ -29,6 +29,11 @@ import AspirantPanelPage from './pages/AspirantPanelPage';
 import HRPanelPage from './pages/HRPanelPage';
 import ExpertConnectPage from './pages/ExpertConnectPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
+import HelpCenter from './pages/HelpCenter';
+import FAQs from './pages/FAQs';
+import Community from './pages/Community';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -65,6 +70,11 @@ function App() {
             <Route path="/hr-panel" element={<HRPanelPage />} />
             <Route path="/expert-connect" element={<ExpertConnectPage />} />
             <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+            <Route path="/help-center" element={<HelpCenter />} />
+            <Route path="/faqs" element={<FAQs />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

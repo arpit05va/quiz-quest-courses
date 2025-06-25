@@ -13,11 +13,11 @@ const Footer = () => {
       { name: 'Contact', href: '/contact' }
     ],
     'Support': [
-      { name: 'Help Center', href: '#' },
-      { name: 'FAQs', href: '#' },
-      { name: 'Community', href: '#' },
-      { name: 'Terms of Service', href: '#' },
-      { name: 'Privacy Policy', href: '#' }
+      { name: 'Help Center', href: '/help-center' },
+      { name: 'FAQs', href: '/faqs' },
+      { name: 'Community', href: '/community' },
+      { name: 'Terms of Service', href: '/terms-of-service' },
+      { name: 'Privacy Policy', href: '/privacy-policy' }
     ],
     'Categories': [
       { name: 'Programming', href: '#' },
