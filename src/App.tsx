@@ -1,7 +1,7 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './components/ThemeProvider';
 import { Toaster } from './components/ui/sonner';
+import ScrollToTop from './components/ScrollToTop';
 import Index from './pages/Index';
 import Dashboard from './pages/Dashboard';
 import About from './pages/About';
@@ -40,6 +40,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Router>
+        <ScrollToTop />
         <div className="min-h-screen">
           <Routes>
             <Route path="/" element={<Index />} />
