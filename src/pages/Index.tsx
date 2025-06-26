@@ -40,41 +40,25 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Animation variants - ensuring cards stay visible after animation
+  // Animation variants - simplified without transitions in variants
   const fadeInUp = {
     hidden: { opacity: 0, y: 60 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
-    }
+    visible: { opacity: 1, y: 0 }
   };
 
   const fadeInLeft = {
     hidden: { opacity: 0, x: -60 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
-    }
+    visible: { opacity: 1, x: 0 }
   };
 
   const fadeInRight = {
     hidden: { opacity: 0, x: 60 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
-    }
+    visible: { opacity: 1, x: 0 }
   };
 
   const scaleIn = {
     hidden: { opacity: 0, scale: 0.8 },
-    visible: { 
-      opacity: 1, 
-      scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" }
-    }
+    visible: { opacity: 1, scale: 1 }
   };
 
   const staggerContainer = {
@@ -304,6 +288,7 @@ const Index = () => {
           initial="hidden"
           animate="visible"
           variants={fadeInUp}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <HeroSection />
         </motion.div>
@@ -315,11 +300,14 @@ const Index = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: false, amount: 0.3 }}
+        variants={fadeInUp}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="container mx-auto">
           <motion.div 
             className="text-center mb-16"
             variants={fadeInUp}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <h2 className="text-4xl font-bold text-foreground mb-4">Explore Our Key Panels</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -338,6 +326,7 @@ const Index = () => {
               <motion.div
                 key={index}
                 variants={index % 2 === 0 ? fadeInLeft : fadeInRight}
+                transition={{ duration: 0.6, ease: "easeOut" }}
                 whileHover={{ scale: 1.05, y: -10 }}
               >
                 <Card className="group cursor-pointer border-none shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden bg-card/80 backdrop-blur-sm h-full">
@@ -394,11 +383,14 @@ const Index = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: false, amount: 0.3 }}
+        variants={fadeInUp}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="container mx-auto">
           <motion.div 
             className="text-center mb-16"
             variants={fadeInUp}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <h2 className="text-4xl font-bold text-foreground mb-4">Why Choose Our Platform?</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -418,6 +410,7 @@ const Index = () => {
                 <motion.div
                   key={`${feature.title}-${index}`}
                   variants={scaleIn}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
                   whileHover={{ scale: 1.05, y: -5 }}
                   style={{ opacity: 1 }}
                 >
@@ -454,12 +447,15 @@ const Index = () => {
         className="py-20 px-4 bg-muted/30 relative"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: false, amount: 0.3 }}
+        variants={fadeInUp}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="container mx-auto">
           <motion.div 
             className="text-center mb-16"
             variants={fadeInUp}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <h2 className="text-4xl font-bold text-foreground mb-4">Popular Courses</h2>
             <p className="text-xl text-muted-foreground mb-8">
@@ -469,6 +465,7 @@ const Index = () => {
             <motion.div 
               className="max-w-md mx-auto mb-8"
               variants={scaleIn}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
               <div className="relative group">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 group-focus-within:text-primary-500 transition-colors duration-300" />
@@ -488,12 +485,13 @@ const Index = () => {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: false, amount: 0.2 }}
           >
             {filteredCourses.map((course, index) => (
               <motion.div
                 key={course.id}
                 variants={fadeInUp}
+                transition={{ duration: 0.6, ease: "easeOut" }}
                 whileHover={{ scale: 1.05, y: -10 }}
               >
                 <CourseCard course={course} index={index} />
@@ -510,11 +508,14 @@ const Index = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: false, amount: 0.3 }}
+        variants={fadeInUp}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="container mx-auto">
           <motion.div 
             className="text-center mb-16"
             variants={fadeInUp}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <h2 className="text-4xl font-bold text-foreground mb-4">What Our Students Say</h2>
             <p className="text-xl text-muted-foreground">
@@ -534,6 +535,7 @@ const Index = () => {
                 <motion.div 
                   key={`${testimonial.name}-${index}`}
                   variants={index % 2 === 0 ? fadeInLeft : fadeInRight}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
                   whileHover={{ scale: 1.03, y: -5 }}
                   className="h-full"
                   style={{ opacity: 1 }}
@@ -553,11 +555,14 @@ const Index = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.5 }}
+        variants={fadeInUp}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-secondary-600 animate-gradient"></div>
         <div className="container mx-auto text-center relative z-10">
           <motion.div 
             variants={fadeInUp}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <h2 className="text-4xl font-bold text-white mb-4">Stay Updated</h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
@@ -567,6 +572,7 @@ const Index = () => {
           <motion.div 
             className="max-w-md mx-auto flex gap-4"
             variants={scaleIn}
+            transition={{ duration: 0.5, ease: "easeOut" }}
           >
             <Input
               type="email"
