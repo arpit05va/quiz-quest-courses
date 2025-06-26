@@ -32,7 +32,7 @@ const HeroSection = () => {
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
+        ease: [0.25, 0.1, 0.25, 1]
       }
     }
   };
@@ -44,7 +44,7 @@ const HeroSection = () => {
       opacity: 1,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
+        ease: [0.25, 0.1, 0.25, 1],
         delay: 0.8
       }
     }
@@ -207,18 +207,17 @@ const HeroSection = () => {
               <motion.div 
                 className="absolute top-1/2 -right-8 bg-gradient-to-r from-secondary to-primary text-white rounded-full p-3 shadow-lg cursor-pointer border-2 border-white/20"
                 initial={{ scale: 0, rotate: 0 }}
-                animate={{ scale: 1, rotate: 360 }}
-                transition={{ duration: 0.8, delay: 1.4 }}
-                whileHover={{ scale: 1.1 }}
                 animate={{ 
                   scale: 1, 
                   rotate: [0, 360],
                   y: [0, -10, 0]
                 }}
                 transition={{
+                  scale: { duration: 0.8, delay: 1.4 },
                   rotate: { duration: 10, repeat: Infinity, ease: "linear" },
                   y: { duration: 3, repeat: Infinity, ease: "easeInOut" }
                 }}
+                whileHover={{ scale: 1.1 }}
               >
                 <Star className="w-6 h-6" />
               </motion.div>

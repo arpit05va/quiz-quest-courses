@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Search, Play, Users, Clock, Star, BookOpen, Award, Zap, Briefcase, UserCheck, MessageCircle, TrendingUp, Shield, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
@@ -47,7 +46,7 @@ const Index = () => {
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }
     }
   };
 
@@ -56,7 +55,7 @@ const Index = () => {
     visible: { 
       opacity: 1, 
       x: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }
     }
   };
 
@@ -65,7 +64,7 @@ const Index = () => {
     visible: { 
       opacity: 1, 
       x: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }
     }
   };
 
@@ -74,7 +73,7 @@ const Index = () => {
     visible: { 
       opacity: 1, 
       scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" }
+      transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }
     }
   };
 
