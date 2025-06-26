@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -46,8 +45,7 @@ const Index = () => {
     hidden: { opacity: 0, y: 60 },
     visible: { 
       opacity: 1, 
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
+      y: 0
     }
   };
 
@@ -55,8 +53,7 @@ const Index = () => {
     hidden: { opacity: 0, x: -60 },
     visible: { 
       opacity: 1, 
-      x: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
+      x: 0
     }
   };
 
@@ -64,8 +61,7 @@ const Index = () => {
     hidden: { opacity: 0, x: 60 },
     visible: { 
       opacity: 1, 
-      x: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
+      x: 0
     }
   };
 
@@ -73,8 +69,7 @@ const Index = () => {
     hidden: { opacity: 0, scale: 0.8 },
     visible: { 
       opacity: 1, 
-      scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" }
+      scale: 1
     }
   };
 
@@ -305,6 +300,7 @@ const Index = () => {
           initial="hidden"
           animate="visible"
           variants={fadeInUp}
+          transition={{ duration: 0.6 }}
         >
           <HeroSection />
         </motion.div>
@@ -321,6 +317,7 @@ const Index = () => {
           <motion.div 
             className="text-center mb-16"
             variants={fadeInUp}
+            transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl font-bold text-foreground mb-4">Explore Our Key Panels</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -339,8 +336,8 @@ const Index = () => {
               <motion.div
                 key={index}
                 variants={index % 2 === 0 ? fadeInLeft : fadeInRight}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
                 whileHover={{ scale: 1.05, y: -10 }}
-                transition={{ type: "spring", stiffness: 300 }}
               >
                 <Card className="group cursor-pointer border-none shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden bg-card/80 backdrop-blur-sm h-full">
                   <div className={`absolute inset-0 bg-gradient-to-br ${panel.bgGradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
@@ -401,6 +398,7 @@ const Index = () => {
           <motion.div 
             className="text-center mb-16"
             variants={fadeInUp}
+            transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl font-bold text-foreground mb-4">Why Choose Our Platform?</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -420,8 +418,8 @@ const Index = () => {
                 <motion.div
                   key={`${feature.title}-${index}`}
                   variants={scaleIn}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ scale: 1.05, y: -5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
                 >
                   <Card className="text-center border-none shadow-lg hover:shadow-xl transition-all duration-500 group relative overflow-hidden bg-card/90 backdrop-blur-sm h-full">
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -462,6 +460,7 @@ const Index = () => {
           <motion.div 
             className="text-center mb-16"
             variants={fadeInUp}
+            transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl font-bold text-foreground mb-4">Popular Courses</h2>
             <p className="text-xl text-muted-foreground mb-8">
@@ -471,6 +470,7 @@ const Index = () => {
             <motion.div 
               className="max-w-md mx-auto mb-8"
               variants={scaleIn}
+              transition={{ duration: 0.5 }}
             >
               <div className="relative group">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5 group-focus-within:text-primary-500 transition-colors duration-300" />
@@ -496,8 +496,8 @@ const Index = () => {
               <motion.div
                 key={course.id}
                 variants={fadeInUp}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -10 }}
-                transition={{ type: "spring", stiffness: 300 }}
               >
                 <CourseCard course={course} index={index} />
               </motion.div>
@@ -518,6 +518,7 @@ const Index = () => {
           <motion.div 
             className="text-center mb-16"
             variants={fadeInUp}
+            transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl font-bold text-foreground mb-4">What Our Students Say</h2>
             <p className="text-xl text-muted-foreground">
@@ -537,8 +538,8 @@ const Index = () => {
                 <motion.div 
                   key={`${testimonial.name}-${index}`}
                   variants={index % 2 === 0 ? fadeInLeft : fadeInRight}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
                   whileHover={{ scale: 1.03, y: -5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
                   className="h-full"
                 >
                   <TestimonialCard testimonial={testimonial} index={index} />
@@ -559,7 +560,10 @@ const Index = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-secondary-600 animate-gradient"></div>
         <div className="container mx-auto text-center relative z-10">
-          <motion.div variants={fadeInUp}>
+          <motion.div 
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-4xl font-bold text-white mb-4">Stay Updated</h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
               Subscribe to our newsletter for the latest courses, tips, and educational content
@@ -568,6 +572,7 @@ const Index = () => {
           <motion.div 
             className="max-w-md mx-auto flex gap-4"
             variants={scaleIn}
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
             <Input
               type="email"

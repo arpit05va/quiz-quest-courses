@@ -29,11 +29,7 @@ const HeroSection = () => {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
+      opacity: 1
     }
   };
 
@@ -41,12 +37,7 @@ const HeroSection = () => {
     hidden: { scale: 0, opacity: 0 },
     visible: {
       scale: 1,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-        delay: 0.8
-      }
+      opacity: 1
     }
   };
 
@@ -73,11 +64,13 @@ const HeroSection = () => {
             <motion.h1 
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight"
               variants={itemVariants}
+              transition={{ duration: 0.8 }}
             >
               Learn Skills That
               <motion.span 
                 className="block text-primary font-bold mt-2"
                 variants={itemVariants}
+                transition={{ duration: 0.8, delay: 0.2 }}
               >
                 Shape Your Future
               </motion.span>
@@ -86,6 +79,7 @@ const HeroSection = () => {
             <motion.p 
               className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl leading-relaxed"
               variants={itemVariants}
+              transition={{ duration: 0.6, delay: 0.4 }}
             >
               Access thousands of courses taught by industry experts. Learn at your own pace with interactive content, quizzes, and hands-on projects.
             </motion.p>
@@ -104,6 +98,7 @@ const HeroSection = () => {
                   key={index}
                   className="flex items-center space-x-2 cursor-pointer bg-background/50 backdrop-blur-sm px-4 py-2 rounded-full border border-border/50 transition-all duration-300"
                   variants={floatingVariants}
+                  transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -118,7 +113,10 @@ const HeroSection = () => {
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
               variants={containerVariants}
             >
-              <motion.div variants={itemVariants}>
+              <motion.div 
+                variants={itemVariants}
+                transition={{ duration: 0.6, delay: 0.6 }}
+              >
                 <Button 
                   size="lg" 
                   className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group relative overflow-hidden"
@@ -128,7 +126,10 @@ const HeroSection = () => {
                 </Button>
               </motion.div>
               
-              <motion.div variants={itemVariants}>
+              <motion.div 
+                variants={itemVariants}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
                 <Button 
                   variant="outline" 
                   size="lg"
