@@ -43,34 +43,22 @@ const Index = () => {
   // Animation variants
   const fadeInUp = {
     hidden: { opacity: 0, y: 60 },
-    visible: { 
-      opacity: 1, 
-      y: 0
-    }
+    visible: { opacity: 1, y: 0 }
   };
 
   const fadeInLeft = {
     hidden: { opacity: 0, x: -60 },
-    visible: { 
-      opacity: 1, 
-      x: 0
-    }
+    visible: { opacity: 1, x: 0 }
   };
 
   const fadeInRight = {
     hidden: { opacity: 0, x: 60 },
-    visible: { 
-      opacity: 1, 
-      x: 0
-    }
+    visible: { opacity: 1, x: 0 }
   };
 
   const scaleIn = {
     hidden: { opacity: 0, scale: 0.8 },
-    visible: { 
-      opacity: 1, 
-      scale: 1
-    }
+    visible: { opacity: 1, scale: 1 }
   };
 
   const staggerContainer = {
@@ -392,7 +380,7 @@ const Index = () => {
         className="py-20 px-4 bg-background relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: false, amount: 0.3 }}
       >
         <div className="container mx-auto">
           <motion.div 
@@ -411,7 +399,7 @@ const Index = () => {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: false, amount: 0.2 }}
           >
             <div className="grid md:grid-cols-3 gap-8">
               {getVisibleFeatures().map((feature, index) => (
@@ -512,7 +500,7 @@ const Index = () => {
         className="py-20 px-4 bg-background relative"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: false, amount: 0.3 }}
       >
         <div className="container mx-auto">
           <motion.div 
@@ -531,7 +519,7 @@ const Index = () => {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: false, amount: 0.2 }}
           >
             <div className="grid md:grid-cols-3 gap-8">
               {getVisibleTestimonials().map((testimonial, index) => (
