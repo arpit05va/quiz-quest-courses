@@ -11,7 +11,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, 
   Play, 
@@ -38,7 +40,32 @@ import {
   RotateCcw,
   Plus,
   Type,
-  Palette
+  Palette,
+  Zap,
+  Timer,
+  Target,
+  Award,
+  TrendingUp,
+  Activity,
+  Gauge,
+  Calendar,
+  Flame,
+  Shield,
+  Brain,
+  Code2,
+  Database,
+  GitBranch,
+  Sparkles,
+  ChevronDown,
+  ChevronUp,
+  Eye,
+  EyeOff,
+  Volume2,
+  VolumeX,
+  Bookmark,
+  Flag,
+  HelpCircle,
+  RefreshCw
 } from 'lucide-react';
 
 interface ProblemDetailProps {
@@ -61,6 +88,17 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ problemId }) => {
   const [customTestCases, setCustomTestCases] = useState<string[]>([]);
   const [fontSize, setFontSize] = useState(14);
   const [editorTheme, setEditorTheme] = useState('light');
+  const [showHints, setShowHints] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [showSolution, setShowSolution] = useState(false);
+  const [problemStats, setProblemStats] = useState({
+    difficulty: 'Easy',
+    acceptance: 67,
+    submissions: 561,
+    solved: true
+  });
 
   // Mock problem data
   const problemData = {
@@ -74,6 +112,8 @@ const ProblemDetail: React.FC<ProblemDetailProps> = ({ problemId }) => {
       likes: 1250,
       dislikes: 85,
       solved: true,
+      acceptance: 67.3,
+      submissions: 561,
       description: `Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
 
 You may assume that each input would have exactly one solution, and you may not use the same element twice.
@@ -113,6 +153,11 @@ A better approach is to use a hash map to store the numbers we've seen and their
 
 **Time Complexity:** O(n)
 **Space Complexity:** O(n)`,
+      hints: [
+        "Think about what data structure would help you look up values efficiently.",
+        "For each number, you need to find its complement (target - current number).",
+        "A hash map can store numbers and their indices for O(1) lookup time."
+      ],
       discussions: [
         {
           id: 1,
@@ -142,6 +187,8 @@ A better approach is to use a hash map to store the numbers we've seen and their
       likes: 892,
       dislikes: 156,
       solved: false,
+      acceptance: 45.2,
+      submissions: 892,
       description: `Given two strings s and t, determine if they are isomorphic.
 
 Two strings s and t are isomorphic if the characters in s can be replaced to get t.
@@ -176,6 +223,11 @@ Use two hash maps:
 
 **Time Complexity:** O(n)
 **Space Complexity:** O(1) since we have at most 256 ASCII characters`,
+      hints: [
+        "Two hash maps are essential here to check bidirectional mapping.",
+        "Make sure each character maps to exactly one other character.",
+        "Check both directions: s to t and t to s."
+      ],
       discussions: [
         {
           id: 1,
@@ -232,6 +284,23 @@ var twoSum = function(nums, target) {
   React.useEffect(() => {
     setCode(starterCodes[selectedLanguage as keyof typeof starterCodes] || '');
   }, [selectedLanguage]);
+
+  // Timer effect
+  React.useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isTimerRunning) {
+      interval = setInterval(() => {
+        setTimer(prev => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isTimerRunning]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   const handleRunCode = () => {
     setIsRunning(true);
@@ -309,6 +378,21 @@ var twoSum = function(nums, target) {
     toast.success('New test case added');
   };
 
+  const toggleTimer = () => {
+    setIsTimerRunning(!isTimerRunning);
+    if (!isTimerRunning) {
+      toast.success('Timer started');
+    } else {
+      toast.success('Timer paused');
+    }
+  };
+
+  const resetTimer = () => {
+    setTimer(0);
+    setIsTimerRunning(false);
+    toast.success('Timer reset');
+  };
+
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'Easy': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300';
@@ -321,86 +405,123 @@ var twoSum = function(nums, target) {
   const allTestCases = [...problem.testCases, ...customTestCases];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-card border-b border-border sticky top-0 z-50 backdrop-blur-sm">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      {/* Enhanced Header with Gradient */}
+      <motion.header 
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="bg-gradient-to-r from-card via-card to-card/90 border-b border-border/50 sticky top-0 z-50 backdrop-blur-xl shadow-lg"
+      >
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate('/problems')}
-                className="flex items-center space-x-2 hover:bg-muted"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Problems</span>
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button 
+                  variant="ghost" 
+                  onClick={() => navigate('/problems')}
+                  className="flex items-center space-x-2 hover:bg-muted/80 transition-all duration-200"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Problems</span>
+                </Button>
+              </motion.div>
               
-              <div className="h-6 w-px bg-border" />
+              <div className="h-6 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
               
               <div className="flex items-center space-x-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={handlePrevious}
-                  disabled={currentIndex === 0}
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  <span className="ml-1">Prev</span>
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={handleNext}
-                  disabled={currentIndex === problemIds.length - 1}
-                >
-                  <span className="mr-1">Next</span>
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handlePrevious}
+                    disabled={currentIndex === 0}
+                    className="hover:bg-muted/80"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    <span className="ml-1">Prev</span>
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handleNext}
+                    disabled={currentIndex === problemIds.length - 1}
+                    className="hover:bg-muted/80"
+                  >
+                    <span className="mr-1">Next</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </motion.div>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
+              {/* Enhanced Timer */}
+              <motion.div 
+                className="flex items-center space-x-2 bg-muted/30 rounded-lg px-3 py-1.5"
+                whileHover={{ scale: 1.02 }}
+              >
+                <Timer className="w-4 h-4 text-primary" />
+                <span className="font-mono text-sm font-medium">{formatTime(timer)}</span>
+                <Button variant="ghost" size="sm" onClick={toggleTimer} className="h-6 w-6 p-0">
+                  {isTimerRunning ? <Timer className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+                </Button>
+                <Button variant="ghost" size="sm" onClick={resetTimer} className="h-6 w-6 p-0">
+                  <RotateCcw className="w-3 h-3" />
+                </Button>
+              </motion.div>
+
+              {/* Enhanced Action Buttons */}
               <div className="flex items-center space-x-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className={`${isLiked ? 'text-green-600' : ''}`}
-                  onClick={handleLike}
-                >
-                  <ThumbsUp className="w-4 h-4" />
-                  <span className="ml-1">{problem.likes + (isLiked ? 1 : 0)}</span>
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className={`${isDisliked ? 'text-red-600' : ''}`}
-                  onClick={handleDislike}
-                >
-                  <ThumbsDown className="w-4 h-4" />
-                  <span className="ml-1">{problem.dislikes + (isDisliked ? 1 : 0)}</span>
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className={`${isStarred ? 'text-yellow-500' : ''}`}
-                  onClick={handleStar}
-                >
-                  <Star className={`w-4 h-4 ${isStarred ? 'fill-current' : ''}`} />
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={handleShare}
-                >
-                  <Share2 className="w-4 h-4" />
-                </Button>
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className={`${isLiked ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : 'hover:bg-muted/80'}`}
+                    onClick={handleLike}
+                  >
+                    <ThumbsUp className="w-4 h-4" />
+                    <span className="ml-1">{problem.likes + (isLiked ? 1 : 0)}</span>
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className={`${isDisliked ? 'text-red-600 bg-red-50 dark:bg-red-900/20' : 'hover:bg-muted/80'}`}
+                    onClick={handleDislike}
+                  >
+                    <ThumbsDown className="w-4 h-4" />
+                    <span className="ml-1">{problem.dislikes + (isDisliked ? 1 : 0)}</span>
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className={`${isStarred ? 'text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20' : 'hover:bg-muted/80'}`}
+                    onClick={handleStar}
+                  >
+                    <Star className={`w-4 h-4 ${isStarred ? 'fill-current' : ''}`} />
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handleShare}
+                    className="hover:bg-muted/80"
+                  >
+                    <Share2 className="w-4 h-4" />
+                  </Button>
+                </motion.div>
               </div>
               
-              <div className="h-6 w-px bg-border" />
+              <div className="h-6 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
               
               <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                <SelectTrigger className="w-32">
+                <SelectTrigger className="w-32 bg-muted/30 border-border/50">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -414,18 +535,23 @@ var twoSum = function(nums, target) {
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm">
-                    <Settings className="w-4 h-4" />
-                  </Button>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button variant="ghost" size="sm" className="hover:bg-muted/80">
+                      <Settings className="w-4 h-4" />
+                    </Button>
+                  </motion.div>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Editor Settings</DialogTitle>
+                    <DialogTitle className="flex items-center space-x-2">
+                      <Settings className="w-5 h-5" />
+                      <span>Editor Settings</span>
+                    </DialogTitle>
                     <DialogDescription>
-                      Customize your coding environment
+                      Customize your coding environment for better productivity
                     </DialogDescription>
                   </DialogHeader>
-                  <div className="grid gap-4 py-4">
+                  <div className="grid gap-6 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="fontSize" className="text-right flex items-center">
                         <Type className="w-4 h-4 mr-2" />
@@ -464,71 +590,157 @@ var twoSum = function(nums, target) {
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button type="submit">Save preferences</Button>
+                    <Button type="submit" className="bg-primary hover:bg-primary/90">
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Save preferences
+                    </Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
             </div>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       <div className="container mx-auto px-6 py-6">
         <ResizablePanelGroup
           direction="horizontal"
-          className="h-[calc(100vh-8rem)] rounded-lg border"
+          className="h-[calc(100vh-8rem)] rounded-xl border border-border/50 shadow-2xl overflow-hidden bg-card/50 backdrop-blur-sm"
         >
-          {/* Left Panel - Problem Content */}
+          {/* Enhanced Left Panel - Problem Content */}
           <ResizablePanel defaultSize={50} minSize={30}>
             <div className="h-full flex flex-col">
-              {/* Problem Header */}
-              <div className="px-6 py-4 border-b bg-card">
-                <div className="flex items-center justify-between">
+              {/* Enhanced Problem Header with Stats */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="px-6 py-4 border-b bg-gradient-to-r from-card via-card to-muted/10"
+              >
+                <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
-                    <h1 className="text-2xl font-bold">{problem.id}. {problem.title}</h1>
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                      {problem.id}. {problem.title}
+                    </h1>
                     {problem.solved && (
-                      <div className="flex items-center text-green-600 text-sm font-medium">
+                      <motion.div 
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="flex items-center text-green-600 text-sm font-medium bg-green-50 dark:bg-green-900/20 px-3 py-1 rounded-full"
+                      >
                         <CheckCircle className="w-4 h-4 mr-1" />
                         Solved
-                      </div>
+                      </motion.div>
                     )}
                   </div>
                 </div>
-                <div className="flex items-center space-x-2 mt-3">
-                  <Badge className={getDifficultyColor(problem.difficulty)}>
-                    {problem.difficulty}
-                  </Badge>
-                  {problem.topics.map(topic => (
-                    <Badge key={topic} variant="outline" className="text-xs">
-                      {topic}
+
+                {/* Enhanced Stats Cards */}
+                <div className="grid grid-cols-4 gap-4 mb-4">
+                  <motion.div 
+                    whileHover={{ scale: 1.02 }}
+                    className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 p-3 rounded-lg border border-green-200 dark:border-green-800"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <Gauge className="w-5 h-5 text-green-600" />
+                      <div>
+                        <div className="text-lg font-bold text-green-700 dark:text-green-300">{problem.acceptance}%</div>
+                        <div className="text-xs text-green-600">Acceptance</div>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div 
+                    whileHover={{ scale: 1.02 }}
+                    className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <Activity className="w-5 h-5 text-blue-600" />
+                      <div>
+                        <div className="text-lg font-bold text-blue-700 dark:text-blue-300">{problem.submissions}</div>
+                        <div className="text-xs text-blue-600">Submissions</div>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div 
+                    whileHover={{ scale: 1.02 }}
+                    className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 p-3 rounded-lg border border-purple-200 dark:border-purple-800"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <Users className="w-5 h-5 text-purple-600" />
+                      <div>
+                        <div className="text-lg font-bold text-purple-700 dark:text-purple-300">{problem.likes}</div>
+                        <div className="text-xs text-purple-600">Likes</div>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div 
+                    whileHover={{ scale: 1.02 }}
+                    className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 p-3 rounded-lg border border-orange-200 dark:border-orange-800"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <Trophy className="w-5 h-5 text-orange-600" />
+                      <div>
+                        <div className="text-lg font-bold text-orange-700 dark:text-orange-300">#{problem.id}</div>
+                        <div className="text-xs text-orange-600">Problem</div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Badge className={getDifficultyColor(problem.difficulty)}>
+                      {problem.difficulty}
                     </Badge>
-                  ))}
-                  <div className="flex items-center space-x-1">
-                    <Trophy className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Hint</span>
+                    {problem.topics.map(topic => (
+                      <Badge key={topic} variant="outline" className="text-xs hover:bg-muted/50">
+                        {topic}
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowHints(!showHints)}
+                      className="text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
+                    >
+                      <Lightbulb className="w-4 h-4 mr-1" />
+                      Hints
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsBookmarked(!isBookmarked)}
+                      className={isBookmarked ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/20' : ''}
+                    >
+                      <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
+                    </Button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
               
-              {/* Tab Content */}
+              {/* Enhanced Tab Content */}
               <div className="flex-1 flex flex-col min-h-0">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
                   <div className="px-6 pt-4 pb-2">
-                    <TabsList className="grid w-full grid-cols-4 h-11">
-                      <TabsTrigger value="description" className="flex items-center space-x-2 text-sm font-medium">
+                    <TabsList className="grid w-full grid-cols-4 bg-muted/30">
+                      <TabsTrigger value="description" className="flex items-center space-x-2 text-sm font-medium data-[state=active]:bg-background">
                         <FileText className="w-4 h-4" />
                         <span>Description</span>
                       </TabsTrigger>
-                      <TabsTrigger value="editorial" className="flex items-center space-x-2 text-sm font-medium">
+                      <TabsTrigger value="editorial" className="flex items-center space-x-2 text-sm font-medium data-[state=active]:bg-background">
                         <BookOpen className="w-4 h-4" />
                         <span>Editorial</span>
                       </TabsTrigger>
-                      <TabsTrigger value="solutions" className="flex items-center space-x-2 text-sm font-medium">
-                        <Lightbulb className="w-4 h-4" />
+                      <TabsTrigger value="solutions" className="flex items-center space-x-2 text-sm font-medium data-[state=active]:bg-background">
+                        <Code2 className="w-4 h-4" />
                         <span>Solutions</span>
                       </TabsTrigger>
-                      <TabsTrigger value="submissions" className="flex items-center space-x-2 text-sm font-medium">
-                        <Users className="w-4 h-4" />
+                      <TabsTrigger value="submissions" className="flex items-center space-x-2 text-sm font-medium data-[state=active]:bg-background">
+                        <TrendingUp className="w-4 h-4" />
                         <span>Submissions</span>
                       </TabsTrigger>
                     </TabsList>
@@ -538,65 +750,147 @@ var twoSum = function(nums, target) {
                     <TabsContent value="description" className="h-full m-0">
                       <ScrollArea className="h-full">
                         <div className="space-y-6 pr-4">
-                          <div>
-                            <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                          {/* Hints Section */}
+                          <AnimatePresence>
+                            {showHints && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800"
+                              >
+                                <h3 className="font-semibold mb-3 text-lg flex items-center">
+                                  <Lightbulb className="w-5 h-5 mr-2" />
+                                  Hints
+                                </h3>
+                                <div className="space-y-2">
+                                  {problem.hints?.map((hint, index) => (
+                                    <motion.div
+                                      key={index}
+                                      initial={{ opacity: 0, x: -20 }}
+                                      animate={{ opacity: 1, x: 0 }}
+                                      transition={{ delay: index * 0.1 }}
+                                      className="flex items-start space-x-2"
+                                    >
+                                      <span className="text-yellow-600 font-bold">{index + 1}.</span>
+                                      <span className="text-yellow-700 dark:text-yellow-300">{hint}</span>
+                                    </motion.div>
+                                  ))}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                          >
+                            <p className="text-muted-foreground leading-relaxed whitespace-pre-line text-base">
                               {problem.description}
                             </p>
-                          </div>
+                          </motion.div>
 
-                          <div>
-                            <h3 className="font-semibold mb-4 text-lg">Examples</h3>
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                          >
+                            <h3 className="font-semibold mb-4 text-lg flex items-center">
+                              <Code className="w-5 h-5 mr-2 text-primary" />
+                              Examples
+                            </h3>
                             <div className="space-y-4">
                               {problem.examples.map((example, index) => (
-                                <div key={index} className="p-4 bg-muted/20 rounded-lg border">
-                                  <p className="font-medium mb-3">Example {index + 1}:</p>
-                                  <div className="space-y-2 text-sm">
-                                    <div className="grid gap-2">
-                                      <div>
-                                        <span className="font-medium text-foreground">Input: </span>
-                                        <code className="bg-muted px-2 py-1 rounded text-xs font-mono">
+                                <motion.div
+                                  key={index}
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: 0.1 + index * 0.05 }}
+                                  whileHover={{ scale: 1.01 }}
+                                  className="p-4 bg-gradient-to-br from-muted/30 to-muted/10 rounded-lg border border-border/50 hover:border-border shadow-sm hover:shadow-md transition-all duration-200"
+                                >
+                                  <p className="font-medium mb-3 flex items-center">
+                                    <span className="bg-primary/10 text-primary px-2 py-1 rounded text-sm mr-2">
+                                      Example {index + 1}
+                                    </span>
+                                  </p>
+                                  <div className="space-y-3 text-sm">
+                                    <div className="grid gap-3">
+                                      <div className="flex items-start space-x-2">
+                                        <span className="font-medium text-blue-600 dark:text-blue-400 min-w-[60px]">Input:</span>
+                                        <code className="bg-blue-50 dark:bg-blue-900/20 px-3 py-1.5 rounded text-xs font-mono border flex-1">
                                           {example.input}
                                         </code>
                                       </div>
-                                      <div>
-                                        <span className="font-medium text-foreground">Output: </span>
-                                        <code className="bg-muted px-2 py-1 rounded text-xs font-mono">
+                                      <div className="flex items-start space-x-2">
+                                        <span className="font-medium text-green-600 dark:text-green-400 min-w-[60px]">Output:</span>
+                                        <code className="bg-green-50 dark:bg-green-900/20 px-3 py-1.5 rounded text-xs font-mono border flex-1">
                                           {example.output}
                                         </code>
                                       </div>
                                       {example.explanation && (
-                                        <div>
-                                          <span className="font-medium text-foreground">Explanation: </span>
-                                          <span className="text-muted-foreground">{example.explanation}</span>
+                                        <div className="flex items-start space-x-2">
+                                          <span className="font-medium text-purple-600 dark:text-purple-400 min-w-[60px]">Explain:</span>
+                                          <span className="text-muted-foreground flex-1">{example.explanation}</span>
                                         </div>
                                       )}
                                     </div>
                                   </div>
-                                </div>
+                                </motion.div>
                               ))}
                             </div>
-                          </div>
+                          </motion.div>
 
-                          <div>
-                            <h3 className="font-semibold mb-4 text-lg">Constraints</h3>
-                            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                          >
+                            <h3 className="font-semibold mb-4 text-lg flex items-center">
+                              <Shield className="w-5 h-5 text-orange-600" />
+                              Constraints
+                            </h3>
+                            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
                               {problem.constraints.map((constraint, index) => (
-                                <li key={index} className="text-sm font-mono">{constraint}</li>
+                                <motion.li 
+                                  key={index} 
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: 0.2 + index * 0.05 }}
+                                  className="text-sm font-mono bg-muted/20 p-2 rounded border-l-2 border-orange-300 dark:border-orange-600"
+                                >
+                                  {constraint}
+                                </motion.li>
                               ))}
                             </ul>
-                          </div>
+                          </motion.div>
 
                           {problem.companies && (
-                            <div>
-                              <h3 className="font-semibold mb-4 text-lg">Companies</h3>
+                            <motion.div
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.3 }}
+                            >
+                              <h3 className="font-semibold mb-4 text-lg flex items-center">
+                                <Briefcase className="w-5 h-5 text-indigo-600" />
+                                Companies
+                              </h3>
                               <div className="flex flex-wrap gap-2">
                                 {problem.companies.map((company, index) => (
-                                  <Badge key={index} variant="secondary" className="text-xs">
-                                    {company}
-                                  </Badge>
+                                  <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: 0.3 + index * 0.05 }}
+                                    whileHover={{ scale: 1.05 }}
+                                  >
+                                    <Badge variant="secondary" className="text-xs bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800">
+                                      {company}
+                                    </Badge>
+                                  </motion.div>
                                 ))}
                               </div>
-                            </div>
+                            </motion.div>
                           )}
                         </div>
                       </ScrollArea>
@@ -605,41 +899,63 @@ var twoSum = function(nums, target) {
                     <TabsContent value="editorial" className="h-full m-0">
                       <ScrollArea className="h-full">
                         <div className="space-y-4 pr-4">
-                          <div className="p-6 bg-muted/30 rounded-lg border">
+                          <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="p-6 bg-gradient-to-br from-muted/30 to-muted/10 rounded-lg border border-border/50"
+                          >
                             <h3 className="font-semibold mb-3 text-lg flex items-center">
-                              <Lightbulb className="w-5 h-5 mr-2 text-yellow-500" />
+                              <Brain className="w-5 h-5 mr-2 text-purple-600" />
                               Solution Approach
                             </h3>
                             <div className="text-muted-foreground leading-relaxed whitespace-pre-line">
                               {problem.solution}
                             </div>
-                          </div>
+                          </motion.div>
                           
-                          <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
-                            <p className="text-sm text-blue-800 dark:text-blue-300">
-                              💡 <strong>Hint:</strong> Try to think about what data structure would help you 
-                              look up values efficiently.
+                          <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="p-4 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 rounded-lg border border-blue-200 dark:border-blue-800"
+                          >
+                            <p className="text-sm text-blue-800 dark:text-blue-300 flex items-start space-x-2">
+                              <Lightbulb className="w-4 h-4 mt-0.5 text-yellow-500" />
+                              <span>
+                                <strong>Hint:</strong> Try to think about what data structure would help you 
+                                look up values efficiently.
+                              </span>
                             </p>
-                          </div>
+                          </motion.div>
                         </div>
                       </ScrollArea>
                     </TabsContent>
                     
                     <TabsContent value="solutions" className="h-full m-0">
                       <div className="h-full flex items-center justify-center">
-                        <div className="text-center text-muted-foreground">
-                          <Code className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                          <p>Community solutions will appear here</p>
-                        </div>
+                        <motion.div 
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="text-center text-muted-foreground"
+                        >
+                          <Code2 className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                          <p className="text-lg font-medium">Community Solutions</p>
+                          <p className="text-sm">Explore different approaches from the community</p>
+                        </motion.div>
                       </div>
                     </TabsContent>
 
                     <TabsContent value="submissions" className="h-full m-0">
                       <div className="h-full flex items-center justify-center">
-                        <div className="text-center text-muted-foreground">
-                          <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                          <p>Your submissions will appear here</p>
-                        </div>
+                        <motion.div 
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="text-center text-muted-foreground"
+                        >
+                          <TrendingUp className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                          <p className="text-lg font-medium">Your Submissions</p>
+                          <p className="text-sm">Track your submission history and progress</p>
+                        </motion.div>
                       </div>
                     </TabsContent>
                   </div>
@@ -648,101 +964,126 @@ var twoSum = function(nums, target) {
             </div>
           </ResizablePanel>
 
-          <ResizableHandle withHandle />
+          <ResizableHandle withHandle className="bg-border/50 hover:bg-border transition-colors" />
 
-          {/* Right Panel - Code Editor and Testing */}
+          {/* Enhanced Right Panel - Code Editor and Testing */}
           <ResizablePanel defaultSize={50} minSize={30}>
             <ResizablePanelGroup direction="vertical">
-              {/* Code Editor */}
+              {/* Enhanced Code Editor */}
               <ResizablePanel defaultSize={70} minSize={40}>
                 <div className="h-full flex flex-col">
-                  <div className="px-4 py-3 bg-muted/30 border-b flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Code className="w-4 h-4" />
-                      <span className="text-sm font-medium">Code</span>
-                      <Badge variant="outline" className="text-xs font-mono">
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="px-4 py-3 bg-gradient-to-r from-muted/30 to-muted/20 border-b border-border/50 flex items-center justify-between"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-2">
+                        <motion.div 
+                          whileHover={{ rotate: 180 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Code className="w-4 h-4 text-primary" />
+                        </motion.div>
+                        <span className="text-sm font-medium">Code Editor</span>
+                      </div>
+                      <Badge variant="outline" className="text-xs font-mono bg-primary/5 border-primary/20">
                         {selectedLanguage}
                       </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        Auto
+                      <Badge variant="outline" className="text-xs bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800">
+                        Auto-Complete
                       </Badge>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Button variant="ghost" size="sm" className="h-8" onClick={handleResetCode}>
-                        <RotateCcw className="w-3 h-3" />
-                      </Button>
-                      <Button variant="ghost" size="sm" className="h-8" onClick={handleCopyCode}>
-                        <Copy className="w-3 h-3" />
-                      </Button>
-                      <Button variant="ghost" size="sm" className="h-8">
-                        <MoreVertical className="w-3 h-3" />
-                      </Button>
+                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                        <Button variant="ghost" size="sm" className="h-8 hover:bg-muted/80" onClick={handleResetCode}>
+                          <RotateCcw className="w-3 h-3" />
+                        </Button>
+                      </motion.div>
+                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                        <Button variant="ghost" size="sm" className="h-8 hover:bg-muted/80" onClick={handleCopyCode}>
+                          <Copy className="w-3 h-3" />
+                        </Button>
+                      </motion.div>
+                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                        <Button variant="ghost" size="sm" className="h-8 hover:bg-muted/80">
+                          <MoreVertical className="w-3 h-3" />
+                        </Button>
+                      </motion.div>
                     </div>
-                  </div>
+                  </motion.div>
                   
-                  <div className="flex-1 relative">
+                  <div className="flex-1 relative overflow-hidden">
                     <Textarea
                       value={code}
                       onChange={(e) => setCode(e.target.value)}
-                      className={`absolute inset-0 w-full h-full resize-none border-0 rounded-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-4 font-mono ${
+                      className={`absolute inset-0 w-full h-full resize-none border-0 rounded-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-4 font-mono transition-all duration-200 ${
                         editorTheme === 'dark' 
                           ? 'bg-gray-900 text-gray-100' 
                           : editorTheme === 'monokai'
                           ? 'bg-gray-800 text-green-400'
-                          : 'bg-gray-50 text-gray-900'
+                          : 'bg-gradient-to-br from-gray-50 to-white text-gray-900'
                       }`}
-                      placeholder="Write your code here..."
+                      placeholder="Write your solution here... 💡"
                       style={{ 
                         fontSize: `${fontSize}px`,
                         lineHeight: '1.6',
                         fontFamily: 'JetBrains Mono, Consolas, Monaco, "Courier New", monospace'
                       }}
                     />
-                    <div className="absolute bottom-2 right-2 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded">
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="absolute bottom-2 right-2 text-xs text-muted-foreground bg-background/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border/50"
+                    >
                       Ln {code.split('\n').length}, Col {code.split('\n').pop()?.length || 0}
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
               </ResizablePanel>
 
-              <ResizableHandle withHandle />
+              <ResizableHandle withHandle className="bg-border/50 hover:bg-border transition-colors" />
 
-              {/* Test Cases and Console */}
+              {/* Enhanced Test Cases and Console */}
               <ResizablePanel defaultSize={30} minSize={20}>
                 <div className="h-full flex flex-col">
                   <Tabs defaultValue="testcase" className="h-full flex flex-col">
-                    <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/20">
-                      <TabsList className="h-8">
-                        <TabsTrigger value="testcase" className="text-xs">Testcase</TabsTrigger>
-                        <TabsTrigger value="result" className="text-xs">Test Result</TabsTrigger>
+                    <div className="flex items-center justify-between px-4 py-3 border-b bg-gradient-to-r from-muted/20 to-muted/10">
+                      <TabsList className="bg-muted/50">
+                        <TabsTrigger value="testcase" className="text-xs data-[state=active]:bg-background">Test Cases</TabsTrigger>
+                        <TabsTrigger value="result" className="text-xs data-[state=active]:bg-background">Results</TabsTrigger>
                       </TabsList>
                       <div className="flex items-center space-x-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={handleRunCode}
-                          disabled={isRunning}
-                          className="flex items-center space-x-2 h-8"
-                        >
-                          {isRunning ? (
-                            <Clock className="w-3 h-3 animate-spin" />
-                          ) : (
-                            <Play className="w-3 h-3" />
-                          )}
-                          <span>{isRunning ? 'Running...' : 'Run'}</span>
-                        </Button>
-                        <Button 
-                          onClick={handleSubmit}
-                          disabled={isSubmitting}
-                          className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 h-8"
-                        >
-                          {isSubmitting ? (
-                            <Clock className="w-3 h-3 animate-spin" />
-                          ) : (
-                            <Send className="w-3 h-3" />
-                          )}
-                          <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
-                        </Button>
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={handleRunCode}
+                            disabled={isRunning}
+                            className="flex items-center space-x-2 h-8 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30"
+                          >
+                            {isRunning ? (
+                              <RefreshCw className="w-3 h-3 animate-spin" />
+                            ) : (
+                              <Play className="w-3 h-3" />
+                            )}
+                            <span>{isRunning ? 'Running...' : 'Run'}</span>
+                          </Button>
+                        </motion.div>
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                          <Button 
+                            onClick={handleSubmit}
+                            disabled={isSubmitting}
+                            className="flex items-center space-x-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 h-8 shadow-lg"
+                          >
+                            {isSubmitting ? (
+                              <RefreshCw className="w-3 h-3 animate-spin" />
+                            ) : (
+                              <Send className="w-3 h-3" />
+                            )}
+                            <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
+                          </Button>
+                        </motion.div>
                       </div>
                     </div>
                     
@@ -750,8 +1091,9 @@ var twoSum = function(nums, target) {
                       <TabsContent value="testcase" className="p-4 h-full m-0">
                         <div className="space-y-4 h-full flex flex-col">
                           <div className="flex-1">
-                            <label className="text-sm font-medium mb-2 block">
-                              Case {activeTestCase + 1}
+                            <label className="text-sm font-medium mb-2 block flex items-center">
+                              <Target className="w-4 h-4 mr-2 text-primary" />
+                              Test Case {activeTestCase + 1}
                             </label>
                             <Textarea
                               value={allTestCases[activeTestCase] || ''}
@@ -764,10 +1106,10 @@ var twoSum = function(nums, target) {
                                 }
                               }}
                               readOnly={activeTestCase < problem.testCases.length}
-                              className={`font-mono text-sm h-20 resize-none ${
+                              className={`font-mono text-sm h-20 resize-none transition-all duration-200 ${
                                 activeTestCase < problem.testCases.length 
                                   ? 'bg-muted/20 border-muted focus-visible:ring-0' 
-                                  : 'bg-background border-input focus-visible:ring-1 focus-visible:ring-ring'
+                                  : 'bg-background border-input focus-visible:ring-1 focus-visible:ring-primary'
                               }`}
                               placeholder={activeTestCase >= problem.testCases.length ? "Enter your custom test case..." : ""}
                             />
@@ -775,31 +1117,38 @@ var twoSum = function(nums, target) {
                           
                           <div className="flex space-x-2 overflow-x-auto pb-2">
                             {allTestCases.map((_, index) => (
-                              <Button 
+                              <motion.div
                                 key={index}
-                                variant={activeTestCase === index ? "default" : "outline"} 
-                                size="sm" 
-                                className={`flex-shrink-0 ${
-                                  activeTestCase === index 
-                                    ? 'bg-blue-600 text-white' 
-                                    : 'hover:bg-muted'
-                                }`}
-                                onClick={() => setActiveTestCase(index)}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                               >
-                                Case {index + 1}
-                                {index >= problem.testCases.length && (
-                                  <span className="ml-1 text-xs opacity-70">(Custom)</span>
-                                )}
-                              </Button>
+                                <Button 
+                                  variant={activeTestCase === index ? "default" : "outline"} 
+                                  size="sm" 
+                                  className={`flex-shrink-0 transition-all duration-200 ${
+                                    activeTestCase === index 
+                                      ? 'bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg' 
+                                      : 'hover:bg-muted/80'
+                                  }`}
+                                  onClick={() => setActiveTestCase(index)}
+                                >
+                                  Case {index + 1}
+                                  {index >= problem.testCases.length && (
+                                    <span className="ml-1 text-xs opacity-70">(Custom)</span>
+                                  )}
+                                </Button>
+                              </motion.div>
                             ))}
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="flex-shrink-0"
-                              onClick={handleAddTestCase}
-                            >
-                              <Plus className="w-3 h-3" />
-                            </Button>
+                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="flex-shrink-0 border-dashed hover:bg-muted/80"
+                                onClick={handleAddTestCase}
+                              >
+                                <Plus className="w-3 h-3" />
+                              </Button>
+                            </motion.div>
                           </div>
                         </div>
                       </TabsContent>
@@ -809,34 +1158,73 @@ var twoSum = function(nums, target) {
                           <ScrollArea className="h-full">
                             <div className="space-y-3 pr-4">
                               {testResults.map((result, index) => (
-                                <div key={index} className="p-3 border rounded-lg bg-muted/20">
+                                <motion.div
+                                  key={index}
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: index * 0.1 }}
+                                  className={`p-3 border rounded-lg transition-all duration-200 ${
+                                    result.passed 
+                                      ? 'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800' 
+                                      : 'bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border-red-200 dark:border-red-800'
+                                  }`}
+                                >
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-medium">Case {index + 1}</span>
+                                    <span className="text-sm font-medium flex items-center">
+                                      <span className="mr-2">Test Case {index + 1}</span>
+                                    </span>
                                     <div className="flex items-center space-x-2">
                                       {result.passed ? (
-                                        <CheckCircle className="w-4 h-4 text-green-600" />
+                                        <motion.div
+                                          initial={{ scale: 0 }}
+                                          animate={{ scale: 1 }}
+                                          className="flex items-center space-x-1"
+                                        >
+                                          <CheckCircle className="w-4 h-4 text-green-600" />
+                                          <span className="text-sm font-medium text-green-600">Passed</span>
+                                        </motion.div>
                                       ) : (
-                                        <XCircle className="w-4 h-4 text-red-600" />
+                                        <motion.div
+                                          initial={{ scale: 0 }}
+                                          animate={{ scale: 1 }}
+                                          className="flex items-center space-x-1"
+                                        >
+                                          <XCircle className="w-4 h-4 text-red-600" />
+                                          <span className="text-sm font-medium text-red-600">Failed</span>
+                                        </motion.div>
                                       )}
-                                      <span className={`text-sm font-medium ${result.passed ? 'text-green-600' : 'text-red-600'}`}>
-                                        {result.passed ? 'Passed' : 'Failed'}
-                                      </span>
                                     </div>
                                   </div>
-                                  <div className="text-xs space-y-1 font-mono">
-                                    <div><span className="font-medium">Input:</span> {result.input}</div>
-                                    <div><span className="font-medium">Expected:</span> {result.expected}</div>
-                                    <div><span className="font-medium">Output:</span> {result.actual}</div>
+                                  <div className="text-xs space-y-2 font-mono">
+                                    <div className="flex items-start space-x-2">
+                                      <span className="font-medium text-blue-600 min-w-[60px]">Input:</span>
+                                      <code className="bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded flex-1">{result.input}</code>
+                                    </div>
+                                    <div className="flex items-start space-x-2">
+                                      <span className="font-medium text-purple-600 min-w-[60px]">Expected:</span>
+                                      <code className="bg-purple-50 dark:bg-purple-900/20 px-2 py-1 rounded flex-1">{result.expected}</code>
+                                    </div>
+                                    <div className="flex items-start space-x-2">
+                                      <span className="font-medium text-orange-600 min-w-[60px]">Output:</span>
+                                      <code className="bg-orange-50 dark:bg-orange-900/20 px-2 py-1 rounded flex-1">{result.actual}</code>
+                                    </div>
                                   </div>
-                                </div>
+                                </motion.div>
                               ))}
                             </div>
                           </ScrollArea>
                         ) : (
-                          <div className="h-full flex flex-col items-center justify-center text-center text-muted-foreground">
-                            <Play className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                            <p>You must run your code first</p>
-                          </div>
+                          <motion.div 
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="h-full flex flex-col items-center justify-center text-center text-muted-foreground"
+                          >
+                            <div className="bg-muted/20 rounded-full p-4 mb-4">
+                              <Play className="w-8 h-8 opacity-50" />
+                            </div>
+                            <p className="font-medium mb-1">Ready to test your solution?</p>
+                            <p className="text-sm">Run your code to see the results</p>
+                          </motion.div>
                         )}
                       </TabsContent>
                     </div>
