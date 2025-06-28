@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { Search, Play, Users, Clock, Star, BookOpen, Award, Zap, Briefcase, UserCheck, MessageCircle, TrendingUp, Shield, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -12,6 +13,7 @@ import HeroSection from '@/components/HeroSection';
 import CourseCard from '@/components/CourseCard';
 import TestimonialCard from '@/components/TestimonialCard';
 import Footer from '@/components/Footer';
+import Autoplay from 'embla-carousel-autoplay';
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -19,26 +21,12 @@ const Index = () => {
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
   const navigate = useNavigate();
   
-  // Refs for scroll animations
+  // Refs for scroll animations and carousels
   const heroRef = useRef(null);
+  const featuresAutoplay = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
+  const testimonialsAutoplay = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-
-  // Auto-scroll features every 3 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentFeatureIndex((prev) => (prev + 1) % enhancedFeatures.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Auto-scroll testimonials every 4 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Animation variants - simplified for better visibility
   const fadeInUp = {
@@ -376,7 +364,7 @@ const Index = () => {
         </div>
       </motion.section>
       
-      {/* Enhanced Why Choose Our Platform Section - Always Visible */}
+      {/* Enhanced Why Choose Our Platform Section - Auto-Sliding Carousel */}
       <section 
         id="about" 
         className="py-20 px-4 bg-background relative overflow-hidden"
@@ -397,45 +385,57 @@ const Index = () => {
           </motion.div>
           
           <div className="relative max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-8">
-              {getVisibleFeatures().map((feature, index) => (
-                <motion.div
-                  key={`${feature.title}-${index}`}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.3 }}
-                  variants={scaleIn}
-                  transition={{ 
-                    duration: 0.5, 
-                    ease: [0.23, 1, 0.32, 1],
-                    delay: index * 0.1 
-                  }}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="opacity-100"
-                >
-                  <Card className="text-center border-none shadow-lg hover:shadow-xl transition-all duration-500 group relative overflow-hidden bg-card/90 backdrop-blur-sm h-full opacity-100">
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                      <div className="absolute inset-0 animate-shimmer"></div>
-                    </div>
-                    <CardHeader className="relative z-10">
-                      <motion.div 
-                        className="mx-auto w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110"
-                        whileHover={{ rotate: 180 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        <feature.icon className="w-8 h-8 text-white" />
-                      </motion.div>
-                      <CardTitle className="text-xl font-semibold group-hover:text-primary-600 transition-colors duration-300 min-h-[3rem] flex items-center justify-center">
-                        {feature.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="relative z-10">
-                      <p className="text-muted-foreground">{feature.description}</p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              plugins={[featuresAutoplay.current]}
+              className="w-full"
+              onMouseEnter={() => featuresAutoplay.current.stop()}
+              onMouseLeave={() => featuresAutoplay.current.reset()}
+            >
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {enhancedFeatures.map((feature, index) => (
+                  <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                    <motion.div
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.3 }}
+                      variants={scaleIn}
+                      transition={{ 
+                        duration: 0.5, 
+                        ease: [0.23, 1, 0.32, 1],
+                        delay: index * 0.1 
+                      }}
+                      whileHover={{ scale: 1.05, y: -5 }}
+                      className="h-full"
+                    >
+                      <Card className="text-center border-none shadow-lg hover:shadow-xl transition-all duration-500 group relative overflow-hidden bg-card/90 backdrop-blur-sm h-full">
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                          <div className="absolute inset-0 animate-shimmer"></div>
+                        </div>
+                        <CardHeader className="relative z-10">
+                          <motion.div 
+                            className="mx-auto w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110"
+                            whileHover={{ rotate: 180 }}
+                            transition={{ duration: 0.5 }}
+                          >
+                            <feature.icon className="w-8 h-8 text-white" />
+                          </motion.div>
+                          <CardTitle className="text-xl font-semibold group-hover:text-primary-600 transition-colors duration-300 min-h-[3rem] flex items-center justify-center">
+                            {feature.title}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="relative z-10">
+                          <p className="text-muted-foreground">{feature.description}</p>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
           </div>
         </div>
       </section>
@@ -500,7 +500,7 @@ const Index = () => {
         </div>
       </motion.section>
 
-      {/* Testimonials Section - Always Visible */}
+      {/* Testimonials Section - Auto-Sliding Carousel */}
       <section 
         id="testimonials" 
         className="py-20 px-4 bg-background relative"
@@ -521,26 +521,38 @@ const Index = () => {
           </motion.div>
           
           <div className="relative max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-8">
-              {getVisibleTestimonials().map((testimonial, index) => (
-                <motion.div 
-                  key={`${testimonial.name}-${index}`}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.3 }}
-                  variants={index % 2 === 0 ? fadeInLeft : fadeInRight}
-                  transition={{ 
-                    duration: 0.6, 
-                    ease: [0.23, 1, 0.32, 1],
-                    delay: index * 0.1
-                  }}
-                  whileHover={{ scale: 1.03, y: -5 }}
-                  className="h-full opacity-100"
-                >
-                  <TestimonialCard testimonial={testimonial} index={index} />
-                </motion.div>
-              ))}
-            </div>
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              plugins={[testimonialsAutoplay.current]}
+              className="w-full"
+              onMouseEnter={() => testimonialsAutoplay.current.stop()}
+              onMouseLeave={() => testimonialsAutoplay.current.reset()}
+            >
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {testimonials.map((testimonial, index) => (
+                  <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                    <motion.div 
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.3 }}
+                      variants={index % 2 === 0 ? fadeInLeft : fadeInRight}
+                      transition={{ 
+                        duration: 0.6, 
+                        ease: [0.23, 1, 0.32, 1],
+                        delay: index * 0.1
+                      }}
+                      whileHover={{ scale: 1.03, y: -5 }}
+                      className="h-full"
+                    >
+                      <TestimonialCard testimonial={testimonial} index={index} />
+                    </motion.div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
           </div>
         </div>
       </section>
