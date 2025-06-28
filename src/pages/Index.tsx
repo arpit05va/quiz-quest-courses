@@ -17,14 +17,12 @@ import Autoplay from 'embla-carousel-autoplay';
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentFeatureIndex, setCurrentFeatureIndex] = useState(0);
-  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
   const navigate = useNavigate();
   
   // Refs for scroll animations and carousels
   const heroRef = useRef(null);
-  const featuresAutoplay = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
-  const testimonialsAutoplay = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
+  const featuresAutoplay = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
+  const testimonialsAutoplay = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
 
@@ -241,21 +239,12 @@ const Index = () => {
     navigate(route);
   };
 
-  const getVisibleFeatures = () => {
-    const visible = [];
-    for (let i = 0; i < 3; i++) {
-      visible.push(enhancedFeatures[(currentFeatureIndex + i) % enhancedFeatures.length]);
-    }
-    return visible;
-  };
-
-  const getVisibleTestimonials = () => {
-    const visible = [];
-    for (let i = 0; i < 3; i++) {
-      visible.push(testimonials[(currentTestimonialIndex + i) % testimonials.length]);
-    }
-    return visible;
-  };
+  // Reset autoplay plugins when component mounts
+  useEffect(() => {
+    console.log('Setting up autoplay plugins');
+    featuresAutoplay.current.reset();
+    testimonialsAutoplay.current.reset();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -389,28 +378,24 @@ const Index = () => {
               opts={{
                 align: "start",
                 loop: true,
+                skipSnaps: false,
+                dragFree: true,
               }}
               plugins={[featuresAutoplay.current]}
               className="w-full"
-              onMouseEnter={() => featuresAutoplay.current.stop()}
-              onMouseLeave={() => featuresAutoplay.current.reset()}
+              onMouseEnter={() => {
+                console.log('Features carousel hover - stopping autoplay');
+                featuresAutoplay.current.stop();
+              }}
+              onMouseLeave={() => {
+                console.log('Features carousel leave - starting autoplay');
+                featuresAutoplay.current.reset();
+              }}
             >
               <CarouselContent className="-ml-2 md:-ml-4">
                 {enhancedFeatures.map((feature, index) => (
                   <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                    <motion.div
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true, amount: 0.3 }}
-                      variants={scaleIn}
-                      transition={{ 
-                        duration: 0.5, 
-                        ease: [0.23, 1, 0.32, 1],
-                        delay: index * 0.1 
-                      }}
-                      whileHover={{ scale: 1.05, y: -5 }}
-                      className="h-full"
-                    >
+                    <div className="h-full">
                       <Card className="text-center border-none shadow-lg hover:shadow-xl transition-all duration-500 group relative overflow-hidden bg-card/90 backdrop-blur-sm h-full">
                         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                           <div className="absolute inset-0 animate-shimmer"></div>
@@ -431,7 +416,7 @@ const Index = () => {
                           <p className="text-muted-foreground">{feature.description}</p>
                         </CardContent>
                       </Card>
-                    </motion.div>
+                    </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
@@ -525,30 +510,26 @@ const Index = () => {
               opts={{
                 align: "start",
                 loop: true,
+                skipSnaps: false,
+                dragFree: true,
               }}
               plugins={[testimonialsAutoplay.current]}
               className="w-full"
-              onMouseEnter={() => testimonialsAutoplay.current.stop()}
-              onMouseLeave={() => testimonialsAutoplay.current.reset()}
+              onMouseEnter={() => {
+                console.log('Testimonials carousel hover - stopping autoplay');
+                testimonialsAutoplay.current.stop();
+              }}
+              onMouseLeave={() => {
+                console.log('Testimonials carousel leave - starting autoplay');
+                testimonialsAutoplay.current.reset();
+              }}
             >
               <CarouselContent className="-ml-2 md:-ml-4">
                 {testimonials.map((testimonial, index) => (
                   <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                    <motion.div 
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true, amount: 0.3 }}
-                      variants={index % 2 === 0 ? fadeInLeft : fadeInRight}
-                      transition={{ 
-                        duration: 0.6, 
-                        ease: [0.23, 1, 0.32, 1],
-                        delay: index * 0.1
-                      }}
-                      whileHover={{ scale: 1.03, y: -5 }}
-                      className="h-full"
-                    >
+                    <div className="h-full">
                       <TestimonialCard testimonial={testimonial} index={index} />
-                    </motion.div>
+                    </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
