@@ -65,7 +65,8 @@ import {
   Bookmark,
   Flag,
   HelpCircle,
-  RefreshCw
+  RefreshCw,
+  Briefcase
 } from 'lucide-react';
 
 interface ProblemDetailProps {
